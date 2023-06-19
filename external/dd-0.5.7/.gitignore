@@ -1,0 +1,9 @@
+*.o
+*.pyc
+__pycache__
+*.so
+*.a
+html/
+*.lo
+*.Plo
+.deps
