@@ -13,7 +13,7 @@ class AigerCoiCluster:
         self.N = max(map(lambda i: i//2, self.nodex))
         self.coix = [self.bddMgr.false for i in range(self.N+1)]
         self.init_pix()
-        self.pox = [ self.coix[i//2] for i in self.aiger.get_po_fanins()]
+        self.po_coix = [ self.coix[i//2] for i in self.aiger.get_po_fanins()]
         pass
     def init_pix(self):
         for i in self.nodex:
@@ -32,11 +32,18 @@ class AigerCoiCluster:
                 pass
             pass
         pass
+    def compute_base_cluster(self):
+        # 
+        for i,j in zip(self.po_coix[:-1], self.po_coix[1:]):
+            print(i.support)
+            print(j.support)
+            #x =  j 
+            print('result', x.support)
     pass
 if __name__ == '__main__':
 
    f = 'mock/c.aig'
-#   f = 'mock/d.aig'
+   f = 'mock/d.aig'
 #   f = '/home/long/uu/pyaig/benchmarks/iscas-89/blif/c6288.aig'
    a = pyaig.aig_io.read_aiger(f)
    acc = AigerCoiCluster(a)
@@ -46,6 +53,9 @@ if __name__ == '__main__':
    list(map(print, bx))
    
    print('pox')
-   pox = [natsorted(i.support) for i in acc.pox]
-   list(map(print, pox))
+   po_coix = [natsorted(i.support) for i in acc.po_coix]
+   
+   list(map(print, po_coix))
+
+   acc.compute_base_cluster()
    pass
