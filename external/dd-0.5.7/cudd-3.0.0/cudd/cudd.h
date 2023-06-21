@@ -965,6 +965,7 @@ extern int Cudd_bddIsVarToBeGrouped(DdManager *dd, int index);
 extern int Cudd_bddSetVarToBeUngrouped(DdManager *dd, int index);
 extern int Cudd_bddIsVarToBeUngrouped(DdManager *dd, int index);
 extern int Cudd_bddIsVarHardGroup(DdManager *dd, int index);
+extern size_t lj_Cudd_ddNodeConvert(DdNode * node) ;
 #ifdef MTR_H_
 extern MtrNode * Cudd_ReadTree(DdManager *dd);
 extern void Cudd_SetTree(DdManager *dd, MtrNode *tree);
@@ -981,3 +982,5 @@ extern MtrNode * Cudd_MakeZddTreeNode(DdManager *dd, unsigned int low, unsigned 
 #endif
 
 #endif /* CUDD_H_ */
+
+

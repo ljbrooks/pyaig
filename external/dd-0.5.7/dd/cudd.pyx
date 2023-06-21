@@ -68,6 +68,7 @@ cdef extern from 'cuddInt.h':
         DdManager *unique, int index, DdNode *T, DdNode *E)
 cdef extern from 'cudd.h':
     # node
+
     ctypedef unsigned int DdHalfWord
     cdef struct DdNode:
         DdHalfWord index
@@ -193,6 +194,7 @@ cdef extern from 'cudd.h':
     cdef void Cudd_DisableGarbageCollection(DdManager *dd)
     cdef int Cudd_GarbageCollectionEnabled(DdManager * dd)
     cdef unsigned int Cudd_ReadLooseUpTo(DdManager *dd)
+    cdef size_t lj_Cudd_ddNodeConvert(DdNode * node) 
     cdef void Cudd_SetLooseUpTo(DdManager *dd, unsigned int lut)
     # quantification
     cdef DdNode *Cudd_bddExistAbstract(
@@ -208,6 +210,7 @@ cdef extern from '_cudd_addendum.c':
     cdef DdNode *Cudd_bddTransferRename(
         DdManager *ddSource, DdManager *ddDestination,
         DdNode *f, int *renaming)
+
 cdef CUDD_UNIQUE_SLOTS = 2**8
 cdef CUDD_CACHE_SLOTS = 2**18
 cdef CUDD_REORDER_GROUP_SIFT = 14
@@ -943,7 +946,14 @@ cdef class BDD(object):
         finally:
             PyMem_Free(x)
         return wrap(self, r)
+    cpdef Function cofactor(self, Function f, Function cube):
+        r = Cudd_Cofactor(self.manager, f.node, cube.node)
+        if r is NULL:
+            raise RuntimeError(
+                'cofactor failed')
+        return wrap(self, r)
 
+        
     cpdef Function _cofactor(self, Function f, values):
         """Return the cofactor f|_g."""
         assert self.manager == f.manager
@@ -1721,6 +1731,7 @@ cpdef count_nodes(functions):
     return k
 
 
+
 cpdef count_nodes_per_level(BDD bdd):
     """Return `dict` that maps each var to a node count."""
     d = dict()
@@ -2067,7 +2078,7 @@ cdef class Function(object):
         Cudd_Ref(node)
 
     def __hash__(self):
-        return int(self)
+        return self.c_addr()
 
     @property
     def _index(self):
@@ -2158,6 +2169,9 @@ cdef class Function(object):
         # avoid future access
         # to deallocated memory
         self.node = NULL
+
+    def c_addr(self):
+        return lj_Cudd_ddNodeConvert(self.node)
 
     def __int__(self):
         # inverse is `BDD._add_int`

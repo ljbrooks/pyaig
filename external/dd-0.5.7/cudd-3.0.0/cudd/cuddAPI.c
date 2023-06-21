@@ -4771,3 +4771,7 @@ addMultiplicityGroups(
     return(1);
 
 } /* end of addMultiplicityGroups */
+
+size_t lj_Cudd_ddNodeConvert(DdNode * node) {
+  return (size_t) node;
+}

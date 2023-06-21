@@ -1,8 +1,30 @@
+from collections import *
+import pydot
+from pathlib import Path
+import random
+from colorwheel import ColorWheel
 import pyaig
 from  natsort import *
 from dd.cudd import BDD
-
+import networkx as nx
 def var(i) : return i//2
+
+
+class Color:
+    def __init__(self, cid, rgb):
+        self.cid , self.rgb = cid, rgb
+        pass
+    def hash(self):
+        return rgb2hash(self.rgb)
+    pass
+
+RED = Color(-1, (255,0,0))
+def rgb2hash(args):
+    r,g,b = args
+    r = ('%x'%r).zfill(2)
+    g = ('%x'%g).zfill(2)
+    b = ('%x'%b).zfill(2)
+    return f'#{r}{g}{b}'
 
 class AigerCoiCluster:
     def __init__(self, aiger, rootx= None):
@@ -10,10 +32,12 @@ class AigerCoiCluster:
         self.bddMgr = BDD()
         if rootx is None: self.rootx = list(aiger.get_po_fanins())
         self.nodex = list(aiger.topological_sort(self.rootx))
-        self.N = max(map(lambda i: i//2, self.nodex))
-        self.coix = [self.bddMgr.false for i in range(self.N+1)]
+        self.N = max(map(lambda i: i//2, self.nodex)) +1
+        self.coix = [self.bddMgr.false for i in range(self.N)]
         self.init_pix()
         self.po_coix = [ self.coix[i//2] for i in self.aiger.get_po_fanins()]
+        self.cw = self.get_colorwheel()
+        self.colorMap = self.assign_color()
         pass
     def init_pix(self):
         for i in self.nodex:
@@ -34,28 +58,104 @@ class AigerCoiCluster:
         pass
     def compute_base_cluster(self):
         # 
-        for i,j in zip(self.po_coix[:-1], self.po_coix[1:]):
+        pox = sorted(self.po_coix, key= lambda i: (len(i), natsorted(i.support)))
+        yield pox[0]
+        print('result', pox[0].support)
+        for i,j in zip(pox[:-1], pox[1:]):
             print(i.support)
             print(j.support)
-            #x =  j 
+            x =self.bddMgr.cofactor(j, ~i)
             print('result', x.support)
+            yield x
+            pass
+        pass
+    
+    def assign_color(self):
+        s = set(filter( lambda i: len(i.support)>1, self.coix))
+        #print('len s', len(s))
+        r =   defaultdict(lambda : RED, dict(zip(s,self.cw)))
+        #print([type(i) for i in r])
+        cx = [ sorted(i.support) for i in s if not isinstance (i,str)]
+        #print(cx)
+        cx = [r[i] for i in self.coix]
+        #print(cx)
+        for i , j in zip(self.coix, cx):
+            #print(i.support, j)
+            pass
+        return cx
+
+    def get_colorwheel(self):
+        s = set(filter( lambda i: len(i.support)>1, self.coix))
+        n = len(s)
+
+        n = n//12 * 12 if n %3 == 0 else n//12*12 + 12
+        #print(n)
+        cw = ColorWheel(color_number = n)
+        
+        cw = list(map(lambda i: Color(*i), enumerate( cw.colors)))
+        
+        # random.seed(0)
+        # random.shuffle(cw)
+        return cw
+    def toDiGraph(self):
+        G = nx.DiGraph()
+        for i  in self.nodex:
+            G.add_node(i//2, color=self.colorMap[i//2].hash() , 
+                       #label= 
+                       label= '%s'% (self.colorMap[i//2].cid) if not self.aiger.is_pi(i) else  '%s/%s'% ( i//2, self.colorMap[i//2].cid)
+                       
+                       )
+            pass
+        for i in self.nodex:
+            for j in self.aiger.get_fanins(i):
+                G.add_edge(j//2, i//2, style="" if j&0x1 == 0 else "dotted")
+                pass
+            pass
+
+        return G
+    def toDot(self, fname):
+        G = self.toDiGraph()
+        p = nx.drawing.nx_pydot.to_pydot(G)
+        S =pydot.Subgraph(rank='same')
+        pix = [str(i//2) for i in self.aiger.get_pis()]
+        for i in pix: S.add_node(pydot.Node(i))
+        p.add_subgraph(S)
+
+        S =pydot.Subgraph(rank='same')
+        pix = [str(i//2) for i in self.aiger.get_po_fanins()]
+        for i in pix: S.add_node(pydot.Node(i))
+        p.add_subgraph(S)
+        open(fname,'w').write(str(p))
+        pass
     pass
 if __name__ == '__main__':
 
    f = 'mock/c.aig'
    f = 'mock/d.aig'
-#   f = '/home/long/uu/pyaig/benchmarks/iscas-89/blif/c6288.aig'
+   f = '/home/long/uu/pyaig/benchmarks/iscas-89/blif/c6288.aig'
+   f = '/home/long/uu/multgen/s.aig'
+   f = 's1.aig'
+   
    a = pyaig.aig_io.read_aiger(f)
    acc = AigerCoiCluster(a)
    bx = set(acc.coix)
    bx = [natsorted(i.support) for i in bx]
    bx = sorted(bx, key = lambda i: (len(i), i))
-   list(map(print, bx))
+   #list(map(print, bx))
    
    print('pox')
    po_coix = [natsorted(i.support) for i in acc.po_coix]
    
    list(map(print, po_coix))
 
-   acc.compute_base_cluster()
+   u = list(acc.compute_base_cluster())
+   u = filter(lambda i: len(i.support)>0, u)
+   print(list(map(lambda i: i.support, u)))
+   # compute coloring
+   cw = acc.assign_color()
+
+   outfname = str(Path(f).name[:-4] )+ '.dot'
+   G = acc.toDot(outfname)
+   #nx.drawing.nx_pydot.write_dot(G,outfname)
+   print('Gen', outfname, 'from', f)
    pass
