@@ -173,11 +173,14 @@ class AGuessGate:
     pass
 if __name__ == '__main__':
 
-    f = 'mock/d.aig'
+
     f = 'm4.aig'
 
     f = '/home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig'
+
+
     f = 'mock/c.aig'
+    f = 'mock/d.aig'
     #f = 'mock/e.aig'
     a = pyaig.aig_io.read_aiger(f)
     ag = AGuessGate(a)
