@@ -152,7 +152,8 @@ class AigerCoiCluster:
     def toDiGraph(self):
         G = nx.DiGraph()
         for i  in self.nodex:
-            G.add_node(i//2, color=self.colorMap[i//2].hash() , 
+            G.add_node(i//2, 
+                       color=self.colorMap[i//2].hash() , 
                        label= '%s/%s'% ( var(i), self.colorMap[var(i)].cid),
                        #label= '%s'% (self.colorMap[i//2].cid) if self.levelx[var(i)]>1 else  '%s/%s'% ( i//2, self.colorMap[i//2].cid),
                        penwidth = 2
