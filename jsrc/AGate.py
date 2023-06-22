@@ -7,8 +7,11 @@ class AGate(list):
         pass
     pass
 class AGate_OR(AGate):
+    shape = 'plain'
     pass
 class AGate_AND(AGate):
+    shape = 'rectangle'
     pass
 class AGate_XOR(AGate):
+    shape = 'diamond'
     pass
