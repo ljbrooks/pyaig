@@ -16,6 +16,8 @@ def edge_style(i):
     return 'dotted' if sign(i) else ""
 def edge_color(i):
     return 'blue' if sign(i) else ""
+def dprint(*args): pass
+    
 class AGuessGate:
 
     def __init__(self, aiger, rootx=None):
@@ -23,17 +25,19 @@ class AGuessGate:
         if rootx is None: self.rootx = list(aiger.get_po_fanins())
         self.acc = AigerCoiCluster (aiger, rootx)
         self.gatex = [ [] for i  in range(self.acc.N)]
+        XOR_FIRST = True
         for i in self.acc.topox:
             assert not sign(i)
-            self.extend_and(i)
+            if not XOR_FIRST : self.extend_and(i)
             if self.acc.levelx[var(i)] >=2:
                 self.identify_xor(i)
                 pass
-            
+            if XOR_FIRST : self.extend_and(i)
             pass
+        
         pass
     def compute_marked(self):
-        marked = [False] * self.acc.N
+        self.marked = marked = [False] * self.acc.N
         for i in self.acc.aiger.get_po_fanins():
             marked[var(i)] = True
         for i in reversed(self.acc.topox):
@@ -45,7 +49,7 @@ class AGuessGate:
                     pass
                 pass
             else:
-                print(gx, i)
+                #print(gx, i)
                 g = gx[0]
                 fanin = g # .covered_litx[1] # 
                 for k in map(var, fanin): marked[k] = True
@@ -94,7 +98,7 @@ class AGuessGate:
 
         poS = set ( self.aiger.get_po_fanins())
         S =pydot.Subgraph(rank='same')
-        pix = [str(i//2) for i in self.acc.nodex if self.acc.levelx[var(i)] == 1 and i not in poS]
+        pix = [str(i//2) for i in self.acc.nodex if self.acc.levelx[var(i)] == 1 and i not in poS and self.marked[var(i)]]
         for i in pix: S.add_node(pydot.Node(i))
         p.add_subgraph(S)  
 
@@ -124,6 +128,8 @@ class AGuessGate:
         print(r)
         pass
     def extend_and(self, lit):
+        if self.acc.levelx[var(lit)]<=1: return # skip
+
         kx = list(self._extend_and_r(lit))
         kkx = [i[1] for i in kx if i[0] == 1]
         mx = [i[1] for i in kx if i[0] == 0]
@@ -135,6 +141,12 @@ class AGuessGate:
             pass
         pass
     def _extend_and_r(self, lit):
+        if len(self.gatex[var(lit)] )>0 and not isinstance(self.gatex[var(lit)][0], AGate_AND):
+            yield 1,lit
+            return 
+        if self.acc.levelx[var(lit)]<=1: 
+            yield (1, lit)      # boundary at level 1
+            return 
         if sign(lit): 
             yield (1, lit)
             return 
@@ -151,18 +163,29 @@ class AGuessGate:
         pass
     def identify_xor(self, lit):
         assert len(list(self.aiger.get_fanins(lit))) == 2
+        if var(lit) == 14:
+            #self.print_gate(lit)
+            pass
         l = self.aiger.get_and_left(lit)
         r = self.aiger.get_and_right(lit)
         l_fanin = sorted(list(self.aiger.get_fanins(l)))
         r_fanin = sorted(list(self.aiger.get_fanins(r)))
+        G = None
         if sign(l) and sign(r) and inv(l_fanin) == r_fanin:
-            self.gatex[var(lit)].append(AGate_XOR([inv(r_fanin[0]), r_fanin[1]], lit, 
+            G = AGate_XOR
+        elif sign(l) and sign(r) and inv(l_fanin) == r_fanin:
+            # not used
+            G = AGate_NXOR
+            pass
+        if not G is None:
+            self.gatex[var(lit)].append(G([inv(r_fanin[0]), r_fanin[1]], lit, 
                                         ([l,r]), # 
                                         ))
                                         
-            print('found ', var(lit), '%s = %s XOR %s' % ( var(lit), 
-                                                           lstr(inv(r_fanin[0])), 
-                                                           lstr(r_fanin[1])
+            print('found ', var(lit), '%s = %s %s %s' % ( var(lit), 
+                                                          lstr(inv(r_fanin[0])), 
+                                                          G.name,
+                                                          lstr(r_fanin[1])
                                                           ))
             self.print_gate(lit)
             
@@ -176,14 +199,23 @@ if __name__ == '__main__':
 
     f = 'm4.aig'
 
-    f = '/home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig'
+
 
 
     f = 'mock/c.aig'
     f = 'mock/d.aig'
+    f = '../../multgen/HC_8_multgen.sv.aig'
+    f = 'KS_8_multgen.sv.aig'
+    f = '/home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig'
+    f = 'WT_USP_KS_8x8_noX_multgen.sv.aig'
+    f = 'b16.aig'
+
+    f = 'mock/d.aig'
+    #f = 'mock/c.aig'
     #f = 'mock/e.aig'
     a = pyaig.aig_io.read_aiger(f)
     ag = AGuessGate(a)
     outfname = str(Path(f).name[:-4] )+ '.dot'
     G = ag.acc.toDot(outfname)
-    ag.toDot('u.dot')
+    print('gen gussed dot:', 'v.dot')
+    ag.toDot('v.dot')
