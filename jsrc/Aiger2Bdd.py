@@ -5,6 +5,7 @@ def lprint(*args):
     pass
 
 class Aiger2Bdd:
+    # compute the Aiger as a BDD at each node
     def __init__(self, aiger, bddMgr= None):
         self.aiger = aiger 
         self.bddMgr = BDD() if bddMgr is None  else bddMgr
@@ -48,7 +49,7 @@ class Aiger2Bdd:
             elif self.aiger.is_and(i):
                 l = self.lit2func(self.aiger.get_and_left(i))
                 r = self.lit2func(self.aiger.get_and_right(i))
-                self.set_func(varId, l &r)
+                self.set_func(varId, l & r)
                 #continue
                 for j in [ x//2 for x in self.aiger.get_fanins(i)]:
                     self.fanin_cnt[j] -=1

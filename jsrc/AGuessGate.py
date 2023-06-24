@@ -19,14 +19,18 @@ def edge_color(i):
 def dprint(*args): pass
     
 class AGuessGate:
-
+    
     def __init__(self, aiger, rootx=None):
         self.aiger , self.rootx = aiger, rootx
         if rootx is None: self.rootx = list(aiger.get_po_fanins())
         self.acc = AigerCoiCluster (aiger, rootx)
         self.gatex = [ [] for i  in range(self.acc.N)]
-        XOR_FIRST = True
+        XOR_FIRST = False
         for i in self.acc.topox:
+            if var(i) == 92:
+                print('special')
+                self.print_gate(i)
+                pass
             assert not sign(i)
             if not XOR_FIRST : self.extend_and(i)
             if self.acc.levelx[var(i)] >=2:
@@ -95,16 +99,19 @@ class AGuessGate:
         pix = [str(i//2) for i in self.aiger.get_pis()]
         for i in pix: S.add_node(pydot.Node(i))
         p.add_subgraph(S)
+        k = set(pix)
 
         poS = set ( self.aiger.get_po_fanins())
         S =pydot.Subgraph(rank='same')
         pix = [str(i//2) for i in self.acc.nodex if self.acc.levelx[var(i)] == 1 and i not in poS and self.marked[var(i)]]
+        k = k | set(pix)
         for i in pix: S.add_node(pydot.Node(i))
         p.add_subgraph(S)  
 
         S =pydot.Subgraph(rank='same')
-        pix = [str(i//2) for i in self.aiger.get_po_fanins()]
-        for i in pix: S.add_node(pydot.Node(i))
+        
+        pox = [str(i//2) for i in self.aiger.get_po_fanins() if str(i//2) not in k]
+        for i in pox: S.add_node(pydot.Node(i))
         p.add_subgraph(S)
 
         print('Gen', fname)
@@ -145,8 +152,9 @@ class AGuessGate:
             yield 1,lit
             return 
         if self.acc.levelx[var(lit)]<=1: 
-            yield (1, lit)      # boundary at level 1
-            return 
+            #yield (1, lit)      # boundary at level 1
+            #return 
+            pass
         if sign(lit): 
             yield (1, lit)
             return 
@@ -163,9 +171,7 @@ class AGuessGate:
         pass
     def identify_xor(self, lit):
         assert len(list(self.aiger.get_fanins(lit))) == 2
-        if var(lit) == 14:
-            #self.print_gate(lit)
-            pass
+
         l = self.aiger.get_and_left(lit)
         r = self.aiger.get_and_right(lit)
         l_fanin = sorted(list(self.aiger.get_fanins(l)))
@@ -211,6 +217,11 @@ if __name__ == '__main__':
     f = 'b16.aig'
 
     f = 'mock/d.aig'
+    f = '/home/long/BK_15_15.aig'
+    f = '/home/long/WT.aig'
+    f = 'kk.aig'
+    f = 'ka.aig'
+#    f = 'k.aig'
     #f = 'mock/c.aig'
     #f = 'mock/e.aig'
     a = pyaig.aig_io.read_aiger(f)

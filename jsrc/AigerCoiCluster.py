@@ -59,15 +59,41 @@ class AigerCoiCluster:
         #print(r)
         # this thing is correct
         return r
-
+    def init_pi_color_level(self):
+        # it is either a multiplier or an ADDer, so hack it, the last
+        # one is the carrie bit if it is an adder
+        pix = list(self.aiger.get_pis())
+        even = lambda i: (i&0x1) ==0
+        carry = None
+        if not even(len(pix)): carry = pix[-1]
+        
+        if carry:
+            s = str(len(pix)//2+1)
+            self.bddMgr.add_var(s)
+            self.coix[var(carry)] = self.bddMgr.var(s)
+            pass
+        
+        input_size = len(pix)//2
+        for k, (i,j) in enumerate(list(zip(pix[:input_size], pix[input_size: input_size*2]))):
+            # this is the paried bits
+            self.bddMgr.add_var(str(k))
+            self.coix[var(i)] = self.bddMgr.var(str(k))
+            self.coix[var(j)] = self.bddMgr.var(str(k))
+            pass
+        
+        pass
     def computer_coix_support_as_bdd(self):
+        self.init_pi_color_level()
         for i in self.nodex:
             v = var(i)
             if  self.aiger.is_const0(i):
                 self.coix[v] = self.bddMgr.false
-            elif self.levelx[v]<=1:
-                self.bddMgr.add_var(str(v))
-                self.coix[v] = self.bddMgr.var(str(v))
+            #elif self.levelx[v]<=1:
+            elif self.aiger.is_pi(i):
+                
+                #self.bddMgr.add_var(str(v)) # this needs be reconsidered
+                #self.coix[v] = self.bddMgr.var(str(v))
+                continue
                 pass
             else:
                 for j in self.aiger.get_fanins(i):
