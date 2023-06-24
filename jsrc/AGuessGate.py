@@ -1,30 +1,19 @@
 import pyaig
+import pdb
 import networkx as nx
 from AigerCoiCluster import *
 from AGate import *
-def var(i) : return i//2
-def lstr(i): return '%s%s'% ('+-'[sign(i)],var(i))
-def sign(lit): return (lit &0x1) == 1
-def ssign(lit): return '+-'[int(sign(lit))]
-def inv(lit) : 
-    if isinstance(lit, int):
-        return lit ^ 0x1
-    assert isinstance(lit, list)
-    return list(map(inv, lit))
-def pure(i): return i ^ (i&0x1)
-def edge_style(i):
-    return 'dotted' if sign(i) else ""
-def edge_color(i):
-    return 'blue' if sign(i) else ""
-def dprint(*args): pass
-    
+from autil.lit_util  import *
 class AGuessGate:
     
     def __init__(self, aiger, rootx=None):
         self.aiger , self.rootx = aiger, rootx
         if rootx is None: self.rootx = list(aiger.get_po_fanins())
+
         self.acc = AigerCoiCluster (aiger, rootx)
         self.gatex = [ [] for i  in range(self.acc.N)]
+
+        self.ppx = self.identify_first_layer_pp()
         XOR_FIRST = False
         for i in self.acc.topox:
             if var(i) == 92:
@@ -40,22 +29,45 @@ class AGuessGate:
             pass
         
         pass
-    def compute_marked(self):
+
+    def identify_first_layer_pp(self):
+        ret = [None] * self.acc.N
+        level1 = filter(lambda i: self.acc.levelx[var(i)] ==1, self.acc.topox)
+        px = filter(lambda i: self.is_pp(i) , level1)
+        for i in px:
+            ret[var(i)] = AGate_PP(self.aiger.get_fanins(i), i)
+            print('PP')
+            self.print_gate0(i)
+            pass
+        return ret
+    def is_pp(self, i):
+        l , r = self.aiger.get_fanins(i)
+        if not sign(l) and not sign(r): return True
+        
+        pass
+    
+    def rewrite_based_on_color_ordering(self):
+        # create a new aiger based on this
+        
+        pass
+
+    def compute_marked(self):  
+        # this is the set to be reordered and then create another AIGER based on this
         self.marked = marked = [False] * self.acc.N
         for i in self.acc.aiger.get_po_fanins():
             marked[var(i)] = True
+            pass
         for i in reversed(self.acc.topox):
             if not marked[var(i)] : continue
             gx = self.gatex[var(i)]
-            if len(gx ) == 0:
+            if len(gx) == 0:
                 for j in map(var, self.acc.aiger.get_fanins(i)):
                     marked[j] = True
                     pass
                 pass
             else:
                 #print(gx, i)
-                g = gx[0]
-                fanin = g # .covered_litx[1] # 
+                fanin = gx[0] # .covered_litx[1] # 
                 for k in map(var, fanin): marked[k] = True
                 pass
             pass
@@ -74,14 +86,14 @@ class AGuessGate:
 
                 G.add_node(var(i), 
                            shape = g.shape,
-                           penwidth = 2, 
+                           penwidth = 2,
                            color = color,
                            label = label
                            ) 
                 fx = g
             else:
                 G.add_node(var(i), 
-                           penwidth = 2,
+                           penwidth = 4 if not self.ppx[var(i)] is None else 2,
                            color = color,
                            label = label)
                 fx = self.acc.aiger.get_fanins(i)
@@ -117,6 +129,12 @@ class AGuessGate:
         print('Gen', fname)
         open(fname, 'w').write(str(p))
         pass
+    def print_gate0(self,lit):
+        l,r = self.aiger.get_fanins(lit)
+        print(f'{var(lit)} := {var(l)} AND {var(r)}')
+        pass
+
+                  
     def print_gate(self,lit):
         l = self.aiger.get_and_left(lit)
         r = self.aiger.get_and_right(lit)
@@ -143,8 +161,18 @@ class AGuessGate:
         if len(kkx)>2:
             print('found wide and%s @%s = AND %s'% (len(kx), var(lit), 
                                                     list(map(lambda i: (i[0], lstr(i[1])),kx))))
-            self.gatex[var(lit)].append(AGate_AND( kkx, [lit], mx))
-                                                  
+            a = AGate_AND( kkx, [lit], mx)
+            self.gatex[var(lit)].append(a)
+            
+            if len(kkx) == 3:
+                #if var(lit) == 86: pdb.set_trace()
+                    
+                r = AGate_Majority3.identify(self.aiger, a)
+                if not r is None:
+                    #assert False
+                    self.gatex[var(lit)] = [r] + self.gatex[var(lit)]
+                    pass
+                pass
             pass
         pass
     def _extend_and_r(self, lit):

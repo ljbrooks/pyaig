@@ -30,7 +30,8 @@ class Aiger2Bdd:
                 self.fanin_cnt[tmp] += 1
                 pass
             pass
-        pass
+        return self.fanin_cnt
+    
     def set_func(self, var, f):
         self.bddx[var]  = f
         lprint('set ', var)

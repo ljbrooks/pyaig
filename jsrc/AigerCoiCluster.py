@@ -27,8 +27,9 @@ def rgb2hash(args):
     return f'#{r}{g}{b}'
 
 class AigerCoiCluster:
-    def __init__(self, aiger, rootx= None):
-        self.aiger , self.rootx = aiger, rootx
+    # cluster is a BDD
+    def __init__(self, aiger, rootx = None , stopx= None): 
+        self.aiger , self.stopx = aiger, stopx
         if rootx is None: self.rootx = list(aiger.get_po_fanins())        
         self.bddMgr = BDD()
         self.bddMgr.configure(reordering=False)
@@ -38,9 +39,10 @@ class AigerCoiCluster:
         self.N = max(map(lambda i: i//2, self.nodex)) +1
         
         self.levelx = self.compute_level()
-        
 
-        self.coix = [self.bddMgr.false for i in range(self.N)]
+        self.coix = [self.bddMgr.false for i in range(self.N)] # as bdd
+        self.coix_support = [None] * self.N
+        
         self.computer_coix_support_as_bdd()
         self.po_coix = [ self.coix[i//2] for i in self.aiger.get_po_fanins()]
         self.cw = self.get_colorwheel()
@@ -59,7 +61,9 @@ class AigerCoiCluster:
         #print(r)
         # this thing is correct
         return r
-    def init_pi_color_level(self):
+
+    
+    def init_pi_color_level(self): # this is a hack, now
         # it is either a multiplier or an ADDer, so hack it, the last
         # one is the carrie bit if it is an adder
         pix = list(self.aiger.get_pis())
@@ -74,6 +78,10 @@ class AigerCoiCluster:
             pass
         
         input_size = len(pix)//2
+
+        # group the adder PI together, actually, there is no need,
+        # just assign the order by the inputs, then it is fine.
+
         for k, (i,j) in enumerate(list(zip(pix[:input_size], pix[input_size: input_size*2]))):
             # this is the paried bits
             self.bddMgr.add_var(str(k))
@@ -135,6 +143,15 @@ class AigerCoiCluster:
             yield x
             pass
         pass
+    
+    def compute_fanout_count(self, topoListOfNodes):
+        fanout_cnt = [0] * max(map(var, topoListOfNodes) )
+        for i in topoListOfNodes:
+            for j in self.aiger.get_fanins(i):
+                fanout_cnt[var(j)] += 1
+                pass
+            pass
+        return fanout_cnt
     
     def assign_color(self):
         
