@@ -32,6 +32,12 @@ class AGate_PP(AGate):          # partial-product
     name = 'PP'
     pass
 
+class AGate_XOR_chain(AGate):
+    shape = 'Mdiamond'
+    name = 'xor_chain'
+    pass
+
+is_xor = lambda a: isinstance(a, AGate_XOR) or isinstance(a, AGate_XOR_chain)
 
 class AGate_Majority3(AGate):          # majority function
     shape = 'box3d'
