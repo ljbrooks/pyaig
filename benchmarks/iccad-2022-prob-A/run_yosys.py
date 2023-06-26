@@ -13,9 +13,9 @@ def run_cmd(cmd):
 
 ax = run_cmd(cmd).split()
 for i in ax:
-    e = 'yosys -p "read_verilog -sv %s ; hierarchy -auto-top ; flatten ; aigmap; write_aiger %s.aig"' % (i,i)
+    e = 'yosys -p "read_verilog -sv %s ; hierarchy -auto-top ; flatten ; aigmap; write_aiger -symbols %s.aig"' % (i,i)
     print(e)
-    #os.system(e)
+    os.system(e)
     pass
 
 

@@ -13,12 +13,29 @@ class AGuessGate:
         self.acc = AigerCoiCluster (aiger, rootx)
         self.gatex = [ [] for i  in range(self.acc.N)]
 
-        self.ppx = self.identify_first_layer_pp()
+        self.ppx = self.identify_first_layer_pp() # prefix
+        self.guess_gates()
+        pass
+    def is_xor(self, i):
+        return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], AGate_XOR)
+    def get_xor(self, i):
+        return self.gatex[var(i)][0]
+    def get_gate(self, i, gate_type):
+        r=  self.gatex[var(i)][0]
+        assert self.is_gate(i, gate_type)
+        return r
+    def is_gate(self, i, gate_type):
+        return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], gate_type)
+    def show_gate(self, i):
+        for j in self.gatex[var(i)]:
+            print(f'var@{var(i)}: ', j.__class__.__name__, j)
+            pass
+    def guess_gates(self):
         XOR_FIRST = False
         for i in self.acc.topox:
             if var(i) == 92:
                 print('special')
-                self.print_gate(i)
+                #self.print_gate(i)
                 pass
             assert not sign(i)
             if not XOR_FIRST : self.extend_and(i)
@@ -27,9 +44,22 @@ class AGuessGate:
                 pass
             if XOR_FIRST : self.extend_and(i)
             pass
-        
+        scanned = defaultdict(set)
+        for i in reversed(self.acc.topox):
+            if var(i) not in scanned[str(AGate_XOR)] and self.is_xor(i):
+                root, faninx, internalx = AGate_XOR_chain.identify(self, i)
+                scanned[str(AGate_XOR)].union( set(map(var, internalx)))
+                pass
+            self.scan_for_chain( i, AGate_Majority3, scanned[str(AGate_Majority3)])
+            pass
+        print(scanned)
         pass
-
+    def scan_for_chain(self, i, gate_type, scanned):
+        if self.is_gate(i, gate_type) and not var(i) in scanned:
+            f, faninx, internalx = Identify_chain(self, i,gate_type)
+            scanned .union(set(map(var, internalx)))
+            pass
+        pass
     def identify_first_layer_pp(self):
         ret = [None] * self.acc.N
         level1 = filter(lambda i: self.acc.levelx[var(i)] ==1, self.acc.topox)
@@ -40,6 +70,7 @@ class AGuessGate:
             self.print_gate0(i)
             pass
         return ret
+
     def is_pp(self, i):
         l , r = self.aiger.get_fanins(i)
         if not sign(l) and not sign(r): return True
@@ -73,6 +104,12 @@ class AGuessGate:
             pass
         return marked
 
+    def get_id_name(self, i):
+        if i in self.aiger._id_to_name:
+            return self.aiger._id_to_name[i].decode('utf-8')
+        else:
+            return str(var(i))
+    
     def toDiGraph(self):
         m = self.compute_marked()
         G = nx.DiGraph()
@@ -80,7 +117,9 @@ class AGuessGate:
             if not m[var(i)] : continue # skip
             shape = ''
             color=self.acc.colorMap[i//2].hash() 
-            label= '%s/%s'% ( var(i), self.acc.colorMap[var(i)].cid)
+            name = self.get_id_name(i) #self.aiger._id_to_name[i] if  i in self.aiger._id_to_name else str(var(i))
+            label= '%s/%s'% ( name, self.acc.colorMap[var(i)].cid)
+
             if len( self.gatex[var(i)]) > 0: 
                 g = self.gatex[var(i)][0] #.covered_litx[1]
 
@@ -170,7 +209,7 @@ class AGuessGate:
                 r = AGate_Majority3.identify(self.aiger, a)
                 if not r is None:
                     #assert False
-                    self.gatex[var(lit)] = [r] + self.gatex[var(lit)]
+                    self.gatex[var(lit)] = [r] + self.gatex[var(lit)] # majority is first one
                     pass
                 pass
             pass
@@ -241,12 +280,14 @@ if __name__ == '__main__':
     f = '../../multgen/HC_8_multgen.sv.aig'
     f = 'KS_8_multgen.sv.aig'
     f = '/home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig'
-    f = 'WT_USP_KS_8x8_noX_multgen.sv.aig'
+
     f = 'b16.aig'
 
     f = 'mock/d.aig'
     f = '/home/long/BK_15_15.aig'
     f = '/home/long/WT.aig'
+    f =  '../benchmarks/iccad-2022-prob-A/links/pa_03.aig'
+    f = 'WT_USP_KS_8x8_noX_multgen.sv.aig'
 #    f = 'kk.aig'
 #    f = 'ka.aig'
 #    f = 'k.aig'
