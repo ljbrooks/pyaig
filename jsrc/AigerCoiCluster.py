@@ -243,7 +243,7 @@ if __name__ == '__main__':
    fx = '''s1.aig s.aig s2.aig mock/d.aig mock/c.aig m4.aig
 /home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig
 '''.split() 
-#   fx = 's2.aig'.split()
+   #   fx = 's2.aig'.split()
    for f in fx:
        
        a = pyaig.aig_io.read_aiger(f)

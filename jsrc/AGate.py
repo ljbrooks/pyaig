@@ -1,13 +1,19 @@
 from collections import *
 import pdb
+from natsort import *
 from functools import *
 from autil.lit_util import *
 class AGate(list):
-    def __init__(self, inputx, outputx, covered_litx=[]):
+    def __init__(self, inputx, outputx, covered_litx):
         list.__init__(self, inputx)
         self.covered_litx = covered_litx
         self.outputx = outputx
+        assert isinstance(outputx, list)
+
         pass
+    @property
+    def internal_gate_cnt(self):
+        return len(self.covered_litx)
     def identify(self, lit):  assert False
 
     pass
@@ -83,11 +89,67 @@ class AGate_Majority3(AGate):          # majority function
         if [i[1] for i in c.items()] != [2]*3 : return None # each appears twice
         b = map(lambda i: i[0] != i[1], ixx)                 # none should appeared under 1,
         if sum(b) != 3: return False
-        return AGate_Majority3( list(map(inv,i2x)),
+
+        print(inv(i2x))
+        #assert False
+        return AGate_Majority3( inv(i2x),
                                 [f],
                                 and3)
     pass
+class AGate_XOR3(AGate):
+    shape = 'invtriangle'
+    name = 'xor3'
+    @staticmethod
+    def identify (ag):
+        is_xor = lambda i: ag.is_gate(i, AGate_XOR)        
+        for i in ag.acc.topox:
+            if is_xor(i): AGate_XOR3._identify(ag,i)
+            pass
 
+        pass
+
+    @staticmethod
+    def _identify (ag, i):
+        
+        is_xor = lambda i: ag.is_gate(i, AGate_XOR)        
+        assert is_xor(i)
+        gate = ag.get_gate(i, AGate_XOR)
+        assert len(gate) == 2
+        for fanin in gate:
+            other = [x for x in gate]
+            other.remove(fanin)
+            assert len(other) == 1
+            if is_xor(fanin):
+                ix = ag.aiger.get_fanins(fanin)
+                r=  AGate_XOR3(ix + other, [i], [fanin])
+                if sign(fanin): inv_one(r)
+                ag.xor3x[var(i)].append(r)
+                ag.inverse_xor3[str(natsorted(r))].append(r)
+                print(f'insert {var(i)} ', str(natsorted(list(map(lstr, r)))))
+                print(f'found xor3  {var(i)} := %s', ' ^ '.join(map(lstr,r)))
+                pass
+            pass
+        pass
+
+
+class AGate_FA(AGate):
+    shape = 'house'
+    name = 'FA'
+    @staticmethod
+    def identify(ag):
+        # i needs be a majority node
+        for i in ag.acc.topox:
+            if ag.is_gate(i, AGate_Majority3):
+                node = ag.get_gate(i, AGate_Majority3)
+                ss = str(natsorted(node))
+                print('try', ss)
+                if ss in ag.inverse_xor3:
+                    print('found, an FA', '+'.join(map(lstr, ss)))
+                    pass
+                pass
+            pass
+        
+        pass
 
 
 def Identify_chain(acc, i, gate_type):

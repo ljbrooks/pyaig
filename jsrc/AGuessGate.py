@@ -1,11 +1,20 @@
-import pyaig
+import pyaig,sys
+from collections import *
 import pdb
 import networkx as nx
 from AigerCoiCluster import *
 from AGate import *
 from autil.lit_util  import *
+
+class VarMap(dict):
+    def __init__(self):
+        pass
+    pass
+def iter(a):
+    if isinstance(a,VarMap):
+        return sorted(a.items(), key=lambda i:i[0])
+    pass
 class AGuessGate:
-    
     def __init__(self, aiger, rootx=None):
         self.aiger , self.rootx = aiger, rootx
         if rootx is None: self.rootx = list(aiger.get_po_fanins())
@@ -14,7 +23,11 @@ class AGuessGate:
         self.gatex = [ [] for i  in range(self.acc.N)]
 
         self.ppx = self.identify_first_layer_pp() # prefix
+        self.xor3x = defaultdict(list)
+        self.inverse_xor3 = defaultdict(list)
         self.guess_gates()
+        self.first_level_xor3=VarMap()
+
         pass
     def is_xor(self, i):
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], AGate_XOR)
@@ -53,6 +66,8 @@ class AGuessGate:
             self.scan_for_chain( i, AGate_Majority3, scanned[str(AGate_Majority3)])
             pass
         print(scanned)
+        AGate_XOR3.identify(self)
+        AGate_FA.identify(self)
         pass
     def scan_for_chain(self, i, gate_type, scanned):
         if self.is_gate(i, gate_type) and not var(i) in scanned:
@@ -65,7 +80,7 @@ class AGuessGate:
         level1 = filter(lambda i: self.acc.levelx[var(i)] ==1, self.acc.topox)
         px = filter(lambda i: self.is_pp(i) , level1)
         for i in px:
-            ret[var(i)] = AGate_PP(self.aiger.get_fanins(i), i)
+            ret[var(i)] = AGate_PP(self.aiger.get_fanins(i), [i], [])
             print('PP')
             self.print_gate0(i)
             pass
@@ -138,7 +153,7 @@ class AGuessGate:
                 fx = self.acc.aiger.get_fanins(i)
                 pass
             for j in fx:
-                G.add_edge(var(j), var(i), style=edge_style(j), color = edge_color(j))
+                G.add_edge(var(j), var(i), style=edge_style(j), color = edge_color(j), penwidth =2)
                 pass
             pass
         return G
@@ -251,8 +266,8 @@ class AGuessGate:
             G = AGate_NXOR
             pass
         if not G is None:
-            self.gatex[var(lit)].append(G([inv(r_fanin[0]), r_fanin[1]], lit, 
-                                        ([l,r]), # 
+            self.gatex[var(lit)].append(G([inv(r_fanin[0]), r_fanin[1]], [lit],
+                                          [l,r], # 
                                         ))
                                         
             print('found ', var(lit), '%s = %s %s %s' % ( var(lit), 
@@ -278,7 +293,7 @@ if __name__ == '__main__':
     f = 'mock/c.aig'
     f = 'mock/d.aig'
     f = '../../multgen/HC_8_multgen.sv.aig'
-    f = 'KS_8_multgen.sv.aig'
+
     f = '/home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig'
 
     f = 'b16.aig'
@@ -288,14 +303,20 @@ if __name__ == '__main__':
     f = '/home/long/WT.aig'
     f =  '../benchmarks/iccad-2022-prob-A/links/pa_03.aig'
     f = 'WT_USP_KS_8x8_noX_multgen.sv.aig'
+    f = '/home/long/uu/genmul/8_8_U_SP_WT_KS_GenMul.v.aig'
+#    f = '/home/long/uu/pyaig/benchmarks/RitircBiereKauers-DATE18-data/benchmarks/aoki/sp-ar-cl-8.aig'
+
 #    f = 'kk.aig'
 #    f = 'ka.aig'
 #    f = 'k.aig'
     #f = 'mock/c.aig'
     #f = 'mock/e.aig'
+    from filex import f
+    if len(sys.argv)>1: f = sys.argv[1]
     a = pyaig.aig_io.read_aiger(f)
     ag = AGuessGate(a)
     outfname = str(Path(f).name[:-4] )+ '.dot'
     G = ag.acc.toDot(outfname)
     print('gen gussed dot:', 'v.dot')
     ag.toDot('v.dot')
+    pass
