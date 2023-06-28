@@ -25,6 +25,8 @@ class AGuessGate:
         self.ppx = self.identify_first_layer_pp() # prefix
         self.xor3x = defaultdict(list)
         self.inverse_xor3 = defaultdict(list)
+        self.HAx = defaultdict(list)
+        self.FAx = defaultdict(list)
         self.guess_gates()
         self.first_level_xor3=VarMap()
 
@@ -68,6 +70,7 @@ class AGuessGate:
         print(scanned)
         AGate_XOR3.identify(self)
         AGate_FA.identify(self)
+        AGate_HA.identify(self)
         pass
     def scan_for_chain(self, i, gate_type, scanned):
         if self.is_gate(i, gate_type) and not var(i) in scanned:
@@ -280,6 +283,9 @@ class AGuessGate:
             return True
         else:
             return False
+        pass
+    def draw_adder_tree(self):
+        # 
         pass
     pass
 if __name__ == '__main__':

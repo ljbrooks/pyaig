@@ -1,5 +1,5 @@
 from collections import *
-import pydot
+import pydot, sys
 from pathlib import Path
 import random
 from colorwheel import ColorWheel
@@ -244,6 +244,7 @@ if __name__ == '__main__':
 /home/long/uu/multgen/c42_USP_KS_4x4_noX_multgen.sv.aig
 '''.split() 
    #   fx = 's2.aig'.split()
+   if len(sys.argv[1:]) > 0: fx = sys.argv[1:]
    for f in fx:
        
        a = pyaig.aig_io.read_aiger(f)

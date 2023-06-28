@@ -8,7 +8,13 @@ def inv(lit) :
     assert isinstance(lit, list)
     return list(map(inv, lit))
 
-def pure(i): return i ^ (i&0x1)
+def pure(lit):
+    i = lit
+    if isinstance(lit, int):
+        return i ^ (i&0x1)
+    assert isinstance(lit, list)
+    return list(map(pure, lit))
+
 def edge_style(i):
     return 'dotted' if sign(i) else ""
 def edge_color(i):

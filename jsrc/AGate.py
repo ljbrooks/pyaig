@@ -92,7 +92,7 @@ class AGate_Majority3(AGate):          # majority function
 
         print(inv(i2x))
         #assert False
-        return AGate_Majority3( inv(i2x),
+        return AGate_Majority3( inv(i2x), # invert the majority
                                 [f],
                                 and3)
     pass
@@ -120,13 +120,14 @@ class AGate_XOR3(AGate):
             other.remove(fanin)
             assert len(other) == 1
             if is_xor(fanin):
-                ix = ag.aiger.get_fanins(fanin)
+                ix = ag.get_gate(fanin, AGate_XOR)
                 r=  AGate_XOR3(ix + other, [i], [fanin])
-                if sign(fanin): inv_one(r)
+                if sign(fanin): inv_one(r) # invert one of the outputs
                 ag.xor3x[var(i)].append(r)
                 ag.inverse_xor3[str(natsorted(r))].append(r)
+                print(list(ag.inverse_xor3.items())[:10])
                 print(f'insert {var(i)} ', str(natsorted(list(map(lstr, r)))))
-                print(f'found xor3  {var(i)} := %s', ' ^ '.join(map(lstr,r)))
+                print(f'found xor3  {var(i)} := %s' % ' ^ '.join(map(lstr,r)))
                 pass
             pass
         pass
@@ -135,22 +136,58 @@ class AGate_XOR3(AGate):
 class AGate_FA(AGate):
     shape = 'house'
     name = 'FA'
+
+    def is_sum_bit(self, i):
+        return i == self[1]
+    def is_carry_bit(self, i):
+        return i == self[0]
+    
     @staticmethod
     def identify(ag):
         # i needs be a majority node
         for i in ag.acc.topox:
             if ag.is_gate(i, AGate_Majority3):
                 node = ag.get_gate(i, AGate_Majority3)
-                ss = str(natsorted(node))
-                print('try', ss)
-                if ss in ag.inverse_xor3:
-                    print('found, an FA', '+'.join(map(lstr, ss)))
+                ss = natsorted(inv(node))
+                print('try',var(i), ss)
+                if str(ss) in ag.inverse_xor3:
+                    print(f'found, an FA @{var(i)}', '+'.join(map(lstr, ss)))
+                    assert len(ag.inverse_xor3[str(ss)]) ==1 
+                    x = ag.inverse_xor3[str(ss)][0]
+                    ag.HAx[var(i)] .append(AGate_FA([node],[i, x], []))
+                    ag.HAx[var(x.outputx[0])] .append(AGate_FA([node],[i, x], []))
                     pass
                 pass
             pass
         
         pass
+    pass
 
+class AGate_HA(AGate):
+    shape = 'house'
+    name = 'FA'
+    @staticmethod
+    def identify(ag):
+        reverse_xor2 = defaultdict(list)
+        xor2x = filter(ag.is_xor, ag.acc.topox)
+        for i in map(ag.get_xor, xor2x):
+            reverse_xor2[str(natsorted(pure(i)))].append(i)
+            print('xor2 insert, ', natsorted(pure(i)), '->', var(i.outputx[0]))
+            pass
+        for i in ag.acc.topox:
+            fin = ag.aiger.get_fanins(i)
+            key = natsorted(pure(fin))
+            print('try ha', key)
+            if str(key) in reverse_xor2:
+                print(f'find half adder: {var(i)} = HA({key})')
+                f = reverse_xor2[key]
+                assert len(f) == 0
+                ag.HAx[var(i)].append(AGate_HA([fin], [i, f], []))
+                pass
+
+            pass
+        pass
+    pass
 
 def Identify_chain(acc, i, gate_type):
     g = acc.gatex[var(i)][0]
