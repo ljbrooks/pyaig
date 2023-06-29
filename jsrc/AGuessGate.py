@@ -6,6 +6,7 @@ from AigerCoiCluster import *
 from AGate import *
 from autil.lit_util  import *
 from DrawAdderTree import *
+import pyaig
 class VarMap(dict):
     def __init__(self):
         pass
@@ -16,6 +17,7 @@ def iter(a):
     pass
 class AGuessGate:
     def __init__(self, aiger, rootx=None):
+        if isinstance(aiger, str) : aiger = pyaig.aig_io.read_aiger(aiger)
         self.aiger , self.rootx = aiger, rootx
         if rootx is None: self.rootx = list(aiger.get_po_fanins())
 

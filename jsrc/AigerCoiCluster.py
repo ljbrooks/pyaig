@@ -84,7 +84,7 @@ class AigerCoiCluster:
         # group the adder PI together, actually, there is no need,
         # just assign the order by the inputs, then it is fine.
 
-        for k, (i,j) in enumerate(list(zip(pix[:input_size], pix[input_size: input_size*2]))):
+        for k, (i,j) in enumerate(list(zip(reversed(pix[:input_size]),reversed( pix[input_size: input_size*2])))):
             # this is the paried bits
             self.bddMgr.add_var(str(k))
             self.coix[var(i)] = self.bddMgr.var(str(k))
@@ -161,7 +161,8 @@ class AigerCoiCluster:
 
         #print('len s', len(s))
         sx = [str(natsorted(i.support)) for i in self.coix]
-        sx = list(natsorted(set(sx)))
+        sx = list(natsorted(set(sx), reverse=True))
+        
         
         r =   defaultdict(lambda : RED, dict(zip(sx,self.cw)))
         for i,j in r.items():

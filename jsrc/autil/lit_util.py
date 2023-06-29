@@ -33,3 +33,5 @@ def inv_one(litx):
         bx = [inv(bx[0])] + bx[:-1]
         pass
     return litx
+def make_lit(v, signbit):
+    return (v<<1) ^ signbit
