@@ -9,3 +9,5 @@ sdist/
 *.egg-info/
 *.egg
 tmpdir
+*.dot
+
