@@ -63,7 +63,8 @@ class AigerCoiCluster:
         # this thing is correct
         return r
 
-    
+    # this is a hack
+    # should do the P/G thing
     def init_pi_color_level(self): # this is a hack, now
         # it is either a multiplier or an ADDer, so hack it, the last
         # one is the carrie bit if it is an adder
