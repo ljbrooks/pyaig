@@ -1,5 +1,5 @@
 from collections import *
-import pdb
+import pdb, pydot
 from natsort import *
 from functools import *
 from autil.lit_util import *
@@ -15,7 +15,7 @@ class AGate(list):
     def internal_gate_cnt(self):
         return len(self.covered_litx)
     def identify(self, lit):  assert False
-
+    def get_edge_label(self, i) : return ''
     pass
 class AGate_OR(AGate):
     name = 'OR'
@@ -122,9 +122,9 @@ class AGate_XOR3(AGate):
             if is_xor(fanin):
                 ix = ag.get_gate(fanin, AGate_XOR)
                 r=  AGate_XOR3(ix + other, [i], [fanin])
-                if sign(fanin): inv_one(r) # invert one of the outputs
+                if sign(fanin): inv_one(r) # invert one of the outputs 
                 ag.xor3x[var(i)].append(r)
-                ag.inverse_xor3[str(natsorted(r))].append(r)
+                ag.inverse_xor3[str(natsorted(pure(r)))].append(r)
                 print(list(ag.inverse_xor3.items())[:10])
                 print(f'insert {var(i)} ', str(natsorted(list(map(lstr, r)))))
                 print(f'found xor3  {var(i)} := %s' % ' ^ '.join(map(lstr,r)))
@@ -134,28 +134,31 @@ class AGate_XOR3(AGate):
 
 
 class AGate_FA(AGate):
-    shape = 'house'
+    shape = 'trapezium'
     name = 'FA'
-
+    edge_label = ['xor','maj']
     def is_sum_bit(self, i):
         return i == self[1]
     def is_carry_bit(self, i):
         return i == self[0]
-    
+    def get_edge_label(self, i):
+        return self.edge_label[ var(i) == var(self.outputx[0])]    
     @staticmethod
     def identify(ag):
         # i needs be a majority node
         for i in ag.acc.topox:
+            #if var(i) == 85: pdb.set_trace()
             if ag.is_gate(i, AGate_Majority3):
                 node = ag.get_gate(i, AGate_Majority3)
-                ss = natsorted(inv(node))
+                ss = natsorted(pure(node))
                 print('try',var(i), ss)
                 if str(ss) in ag.inverse_xor3:
                     print(f'found, an FA @{var(i)}', '+'.join(map(lstr, ss)))
                     assert len(ag.inverse_xor3[str(ss)]) ==1 
                     x = ag.inverse_xor3[str(ss)][0]
-                    ag.HAx[var(i)] .append(AGate_FA([node],[i, x], []))
-                    ag.HAx[var(x.outputx[0])] .append(AGate_FA([node],[i, x], []))
+                    fix = [i for i in node]
+                    ag.HAx[var(i)] .append(AGate_FA(node,[i, x], []))
+                    ag.HAx[var(x.outputx[0])] .append(AGate_FA(node,[i, x], []))
                     pass
                 pass
             pass
@@ -164,8 +167,11 @@ class AGate_FA(AGate):
     pass
 
 class AGate_HA(AGate):
-    shape = 'house'
-    name = 'FA'
+    shape = 'invtriangle'
+    name = 'HA'
+    edge_label = ['c','s']
+    def get_edge_label(self, i):
+        return self.edge_label[ var(i) == var(self.outputx[0])]
     @staticmethod
     def identify(ag):
         reverse_xor2 = defaultdict(list)
@@ -175,14 +181,18 @@ class AGate_HA(AGate):
             print('xor2 insert, ', natsorted(pure(i)), '->', var(i.outputx[0]))
             pass
         for i in ag.acc.topox:
+            if ag.acc.fanout_cnt[var(i)] <=1: continue
             fin = ag.aiger.get_fanins(i)
             key = natsorted(pure(fin))
             print('try ha', key)
             if str(key) in reverse_xor2:
-                print(f'find half adder: {var(i)} = HA({key})')
-                f = reverse_xor2[key]
-                assert len(f) == 0
-                ag.HAx[var(i)].append(AGate_HA([fin], [i, f], []))
+                
+                f = reverse_xor2[str(key)]
+                print(f'find half adder: {var(i)}, {var(f[0].outputx[0])} = HA({key})')
+                assert len(f) == 1
+                new_gate = AGate_HA(fin, [ f[0].outputx[0],i], [])
+                ag.HAx[var(i)].append(new_gate)
+                ag.HAx[var(f[0].outputx[0])].append(new_gate)
                 pass
 
             pass

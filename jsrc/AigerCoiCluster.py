@@ -1,3 +1,4 @@
+import history
 from collections import *
 import pydot, sys
 from pathlib import Path
@@ -47,7 +48,7 @@ class AigerCoiCluster:
         self.po_coix = [ self.coix[i//2] for i in self.aiger.get_po_fanins()]
         self.cw = self.get_colorwheel()
         self.colorMap = self.assign_color()
-
+        self.fanout_cnt = self.compute_fanout_count(self.topox)
         pass
 
     def compute_level(self):
@@ -132,7 +133,7 @@ class AigerCoiCluster:
         pass
     def compute_base_cluster(self):
         #  not used
-        pox = sorted(self.po_coix, key= lambda i: (len(i), natsorted(i.support)))
+        pox = natsorted(self.po_coix, key= lambda i: (len(i), natsorted(i.support)))
         yield pox[0]
         print('result', pox[0].support)
         for i,j in zip(pox[:-1], pox[1:]):
@@ -145,7 +146,7 @@ class AigerCoiCluster:
         pass
     
     def compute_fanout_count(self, topoListOfNodes):
-        fanout_cnt = [0] * max(map(var, topoListOfNodes) )
+        fanout_cnt = [0] * max(map(var, topoListOfNodes) ) +[0]
         for i in topoListOfNodes:
             for j in self.aiger.get_fanins(i):
                 fanout_cnt[var(j)] += 1
@@ -158,18 +159,18 @@ class AigerCoiCluster:
         s = set(filter( lambda i: len(i.support)>1, self.coix))
 
         #print('len s', len(s))
-        sx = [str(sorted(i.support)) for i in self.coix]
-        sx = list(sorted(set(sx)))
+        sx = [str(natsorted(i.support)) for i in self.coix]
+        sx = list(natsorted(set(sx)))
         
         r =   defaultdict(lambda : RED, dict(zip(sx,self.cw)))
         for i,j in r.items():
             #print(i, j.cid, j.rgb, j.hash())
             pass
         #print([type(i) for i in r])
-        cx = [ sorted(i.support) for i in s if not isinstance (i,str)]
+        cx = [ natsorted(i.support) for i in s if not isinstance (i,str)]
         #print('supportx')
         #print(cx)
-        cx = [r[str(sorted(i.support))] for i in self.coix]
+        cx = [r[str(natsorted(i.support))] for i in self.coix]
         #print(cx)
         for i , j in zip(self.coix, cx):
             #print(i.support, j)
@@ -178,8 +179,8 @@ class AigerCoiCluster:
 
     def get_colorwheel(self):
         #s = set(filter( lambda i: len(i.support)>1, self.coix))
-        sx = [str(sorted(i.support)) for i in self.coix]
-        sx = list(sorted(set(sx)))
+        sx = [str(natsorted(i.support)) for i in self.coix]
+        sx = list(natsorted(set(sx)))
         s = sx
         n = len(s)
 
@@ -251,7 +252,7 @@ if __name__ == '__main__':
        acc = AigerCoiCluster(a)
        bx = set(acc.coix)
        bx = [natsorted(i.support) for i in bx]
-       bx = sorted(bx, key = lambda i: (len(i), i))
+       bx = natsorted(bx, key = lambda i: (len(i), i))
        #list(map(print, bx))
        
        print('pox')
@@ -270,3 +271,4 @@ if __name__ == '__main__':
        #nx.drawing.nx_pydot.write_dot(G,outfname)
        print('Gen', outfname, 'from', f)
        pass
+   

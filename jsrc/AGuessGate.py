@@ -5,7 +5,7 @@ import networkx as nx
 from AigerCoiCluster import *
 from AGate import *
 from autil.lit_util  import *
-
+from DrawAdderTree import *
 class VarMap(dict):
     def __init__(self):
         pass
@@ -29,7 +29,7 @@ class AGuessGate:
         self.FAx = defaultdict(list)
         self.guess_gates()
         self.first_level_xor3=VarMap()
-
+        self.draw_adder_tree()
         pass
     def is_xor(self, i):
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], AGate_XOR)
@@ -39,6 +39,15 @@ class AGuessGate:
         r=  self.gatex[var(i)][0]
         assert self.is_gate(i, gate_type)
         return r
+    def get_matched_gate(self,i):
+        get = lambda lx: lx[var(i)][0] if lx[var(i)] else None
+        lxx = [self.FAx, self.HAx, self.gatex]
+        for lx in lxx: 
+            if get(lx) : 
+                print(type(get(lx)))
+                return get(lx)
+            pass
+        return None
     def is_gate(self, i, gate_type):
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], gate_type)
     def show_gate(self, i):
@@ -285,7 +294,7 @@ class AGuessGate:
             return False
         pass
     def draw_adder_tree(self):
-        # 
+        d = DrawAdderTree(self)
         pass
     pass
 if __name__ == '__main__':
