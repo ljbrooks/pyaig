@@ -51,6 +51,7 @@ class DrawAdderTree:
     
             pass
         self.toDot('x.dot')
+        print('x.dot is from DrawAdderTree.py')
         pass
     def toDot(self, fname):
 

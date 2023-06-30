@@ -1,4 +1,6 @@
-import pyaig,sys
+import sys
+sys.path.append('../')
+import pyaig
 from collections import *
 import pdb
 import networkx as nx

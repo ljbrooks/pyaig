@@ -1,6 +1,7 @@
 import history
 from collections import *
 import pydot, sys
+sys.path.append('../')
 from pathlib import Path
 import random
 from colorwheel import ColorWheel
@@ -190,7 +191,7 @@ class AigerCoiCluster:
         #print(n)
         cw = ColorWheel(color_number = n)
         
-        cw = list(map(lambda i: Color(*i), enumerate( cw.colors)))
+        cw = list(map(lambda i: Color(*i), enumerate( cw.colors))) # 
         
         # random.seed(0)
         # random.shuffle(cw)
