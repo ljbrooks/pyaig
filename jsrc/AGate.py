@@ -107,10 +107,14 @@ class AGate_XOR3(AGate):
             pass
 
         pass
+    
+    def num_inverted(self):
+        return sum(map(sign, self.covered_litx))
 
     @staticmethod
     def _identify (ag, i):
-        
+        #i = pure(i)
+        assert not sign(i)
         is_xor = lambda i: ag.is_gate(i, AGate_XOR)        
         assert is_xor(i)
         gate = ag.get_gate(i, AGate_XOR)
@@ -119,10 +123,12 @@ class AGate_XOR3(AGate):
             other = [x for x in gate]
             other.remove(fanin)
             assert len(other) == 1
+            other = other[0] ^ sign(fanin)
+            
             if is_xor(fanin):
                 ix = ag.get_gate(fanin, AGate_XOR)
-                r=  AGate_XOR3(ix + other, [i], [fanin])
-                if sign(fanin): inv_one(r) # invert one of the outputs 
+                #if sign(fanin): inv_one(r) # invert one of the outputs 
+                r=  AGate_XOR3(ix + [other], [i], [fanin])
                 ag.xor3x[var(i)].append(r)
                 ag.inverse_xor3[str(natsorted(pure(r)))].append(r)
                 print(list(ag.inverse_xor3.items())[:10])
@@ -153,6 +159,7 @@ class AGate_FA(AGate):
                 #assert sign(node[0]) == sign(node[1])
                 #assert sign(node[1] == sign(node[2]))
                 ##ss = natsorted(pure(node))
+                sign_cnt = sum(map(sign, node))
                 ss = natsorted(pure(node))
                 print('try',var(i), ss)
                 if str(ss) in ag.inverse_xor3:
@@ -160,7 +167,6 @@ class AGate_FA(AGate):
                     assert len(ag.inverse_xor3[str(ss)]) ==1 
                     x = ag.inverse_xor3[str(ss)][0]
                     fix = [u for u in node]
-                    
                     ag.FAx[var(i)] .append(AGate_FA(node,[i, x.outputx[0]], []))
                     ag.FAx[var(x.outputx[0])] .append(AGate_FA(node,[i, x.outputx[0]], [])) 
                     pass

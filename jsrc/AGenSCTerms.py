@@ -24,6 +24,7 @@ class AGenSCTerms:
         self.identify_g_terms()
         self.gen_terms()
         pass
+    
     def gen_terms(self):
         #print(self.ag.FAx)
         for i in self.topox:
@@ -32,11 +33,12 @@ class AGenSCTerms:
                 if not var(i) in self.ag.xor3x: continue
                 g = self.ag.FAx[var(i)][0]
                 assert len(g)
-                s = g.outputx[0]
-                c = g.outputx[1] 
+                c = g.outputx[0]
+                s = g.outputx[1] 
                 print(g, s,c)
-                print(f'n{var(c)} = c(%s)'% (','.join(map(str,g))))
-                print(f'n{var(s)} = s(%s)'% (','.join(map(str,g))))
+                print(f'n{var(c)} = !c(%s)'% (','.join(map(str,g))))
+                lit_sign = lambda l: '' if not sign(l) else '!'
+                print(f'n{var(s)} = %ss(%s)'% (lit_sign(s),','.join(map(str,g))))
                 pass
             elif var(i)  in self.ag.FAx:
                 pass
@@ -77,5 +79,6 @@ if __name__ == '__main__':
     import filex
 
     f = filex .f
-    
+    if len(sys.argv)>1:
+        f = sys.argv[1]
     asc = AGenSCTerms(f)

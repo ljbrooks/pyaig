@@ -288,6 +288,7 @@ class AGuessGate:
             G = AGate_XOR
         elif sign(l) and sign(r) and inv(l_fanin) == r_fanin:
             # not used
+            assert False
             G = AGate_NXOR
             pass
         if not G is None:

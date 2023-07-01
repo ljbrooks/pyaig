@@ -23,14 +23,14 @@ def dprint(*args): pass
 
 def inv_one(litx):
     bx = list(map(sign, litx))
-    
-    cnt = sum(bx)
-    if cnt > 0:
-        x = bx.index(True)
+    cnt = sum(bx)               # number of True
+    if cnt ==2 or cnt == 0:
+        x = bx.index(False)
         litx[x] = inv(litx[x])
         pass
     else :
-        bx = [inv(bx[0])] + bx[:-1]
+        x = bx.index(True)
+        litx[x] = inv(litx[x])
         pass
     return litx
 def make_lit(v, signbit):
