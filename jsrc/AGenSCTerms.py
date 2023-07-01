@@ -18,27 +18,79 @@ class AGenSCTerms:
         
         self.acc = self.ag.acc
         self.topox = self.acc.topox
-        self.ppx = dict()
-        
+        self.lit2symbolx = [None] * (self.acc.N*2)
+        self.pycode = self.init_pycode()        
         self.identify_p_terms()
         self.identify_g_terms()
+
         self.gen_terms()
+        self.close_code()
+        pass
+    def code(self, s):
+        self.pycode.append(s) if isinstance(s, str) else self.pycode.extend(s)
+        pass
+    def init_pycode(self):
+        s = '''from scr.Term import *
+
+'''
+        return [s]
+    def close_code(self, fname ='s.py'):
+        open(fname,'w').write('\n'.join(self.pycode))
+        print(self.__class__.__name__,'Gen', fname)
         pass
     
     def gen_terms(self):
         #print(self.ag.FAx)
+        lit_sign = lambda l: '' if not sign(l) else '!'
+        get_symbol = lambda i: self.lit2symbolx[i]
         for i in self.topox:
-            if var(i) in self.ag.FAx:
+            if var(i) in self.ag.HAx:
+                if not self.ag.is_xor(i): continue
+                assert not sign(i)
+
+                g = self.ag.HAx[var(i)][0]
+                c = g.outputx[0]
+                s = g.outputx[1] 
+                assert not sign(c) and not sign(s)
+                self.lit2symbolx[pure(c)] = f'hc{c}'
+                self.lit2symbolx[pure(c)^0x1] = f'!hc{c}'                
+
+                self.lit2symbolx[pure(s)] = f'hs{s}'
+                self.lit2symbolx[pure(s)^0x1] = f'!hs{s}'                
+
+                print(f'h{c} = c(%s)'% (','.join(map(get_symbol,g))))
+                print(f'h{s} = %ss(%s)'% (lit_sign(s),','.join(map(get_symbol,g))))
+
+                pass
+            elif var(i) in self.ag.FAx:
+                if not self.ag.is_xor(i): continue
+                assert not sign(i)
+                self.lit2symbolx[i] = f'f{i}'
+                self.lit2symbolx[i^0x1] = f'f{i^0x1}'
                 #pdb.set_trace()
                 if not var(i) in self.ag.xor3x: continue
                 g = self.ag.FAx[var(i)][0]
                 assert len(g)
                 c = g.outputx[0]
                 s = g.outputx[1] 
+                self.lit2symbolx[pure(c)] = f'fc{c}'
+                self.lit2symbolx[pure(c)^0x1] = f'fc{inv(c)}'                
+
+                self.lit2symbolx[pure(s)] = f'fs{s}'
+                self.lit2symbolx[pure(s)^0x1] = f'fs{inv(s)}'                
+
+                assert not sign(c) and not sign(s)
                 print(g, s,c)
-                print(f'n{var(c)} = !c(%s)'% (','.join(map(str,g))))
-                lit_sign = lambda l: '' if not sign(l) else '!'
-                print(f'n{var(s)} = %ss(%s)'% (lit_sign(s),','.join(map(str,g))))
+                #print(list(map(get_symbol, g)))
+                for v in g:
+                    print(get_symbol(v))
+                    pass
+                
+                print(f'fc{c} = c(%s)'% (','.join(map(get_symbol,g))))
+                print(f'fc{c^0x1} = c(%s)'% (','.join(map(get_symbol,map(inv,g)))))
+
+                print(f'fs{s} = s(%s)'% (','.join(map(get_symbol,g))))
+                print(f'fs{s^0x1} = s(%s)'% (','.join(map(get_symbol,inv_one(g)))))
                 pass
             elif var(i)  in self.ag.FAx:
                 pass
@@ -62,12 +114,18 @@ class AGenSCTerms:
 
     def identify_p_terms(self):
         for i,ix  in map(lambda i: (i, self.aiger.get_fanins(i)), self.topox):
+            assert not  sign(i)
             if len(ix) != 2: continue
             tx = [ self.aiger.is_pi(ix[0]) ,  self.aiger.is_pi(ix[1]) , 
                    not sign(ix[0]),  not sign(ix[1])]
             if not and_all(tx) : continue
-            x,y = self.ppx[var(i)] = self.get_pp_x_y(ix)
-            print(f'pp{var(i)} = pp_{x}_{y}')
+            x,y = self.get_pp_x_y(ix)
+            k = f'n{i} -- pp{i} = Atom("pp_{x}_{y}")'
+            self.lit2symbolx[i]  = f'pp{i}'
+            self.lit2symbolx[inv(i)]  = f'!pp{i}'
+            print(k)
+            self.code(k)
+            
             pass
         pass
     def identify_g_terms(self):
@@ -81,4 +139,5 @@ if __name__ == '__main__':
     f = filex .f
     if len(sys.argv)>1:
         f = sys.argv[1]
+        pass
     asc = AGenSCTerms(f)
