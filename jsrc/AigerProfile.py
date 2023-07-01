@@ -40,6 +40,8 @@ class AigerProfile:
     
     def get_pp_x_y(self, i):
         a,b = i[0], i[1]
+        assert self.aiger.is_pi(a)
+        assert self.aiger.is_pi(b)
         x = int(self.get_id_name(a).split('[')[1][:-1])
         y = int(self.get_id_name(b).split('[')[1][:-1])
         if self.get_id_name(a).split('[') == 'IN2':

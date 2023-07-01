@@ -150,15 +150,19 @@ class AGate_FA(AGate):
             #if var(i) == 85: pdb.set_trace()
             if ag.is_gate(i, AGate_Majority3):
                 node = ag.get_gate(i, AGate_Majority3)
+                #assert sign(node[0]) == sign(node[1])
+                #assert sign(node[1] == sign(node[2]))
+                ##ss = natsorted(pure(node))
                 ss = natsorted(pure(node))
                 print('try',var(i), ss)
                 if str(ss) in ag.inverse_xor3:
                     print(f'found, an FA @{var(i)}', '+'.join(map(lstr, ss)))
                     assert len(ag.inverse_xor3[str(ss)]) ==1 
                     x = ag.inverse_xor3[str(ss)][0]
-                    fix = [i for i in node]
-                    ag.HAx[var(i)] .append(AGate_FA(node,[i, x], []))
-                    ag.HAx[var(x.outputx[0])] .append(AGate_FA(node,[i, x], []))
+                    fix = [u for u in node]
+                    
+                    ag.FAx[var(i)] .append(AGate_FA(node,[i, x.outputx[0]], []))
+                    ag.FAx[var(x.outputx[0])] .append(AGate_FA(node,[i, x.outputx[0]], [])) 
                     pass
                 pass
             pass
@@ -190,7 +194,7 @@ class AGate_HA(AGate):
                 f = reverse_xor2[str(key)]
                 print(f'find half adder: {var(i)}, {var(f[0].outputx[0])} = HA({key})')
                 assert len(f) == 1
-                new_gate = AGate_HA(fin, [ f[0].outputx[0],i], [])
+                new_gate = AGate_HA(fin, [ i, f[0].outputx[0]], [])
                 ag.HAx[var(i)].append(new_gate)
                 ag.HAx[var(f[0].outputx[0])].append(new_gate)
                 pass

@@ -39,23 +39,27 @@ class AGuessGate:
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], AGate_XOR)
     def get_xor(self, i):
         return self.gatex[var(i)][0]
-    def get_gate(self, i, gate_type):
+    def get_gate(self, i, gate_type, force = True):
+        f = self.gatex[var(i)]
+        if not force and not f: return None
+        if not isinstance(f, gate_type) and not force: return None
         r=  self.gatex[var(i)][0]
-        assert self.is_gate(i, gate_type)
+        self.is_gate(i, gate_type)
         return r
     def get_matched_gate(self,i):
-        get = lambda lx: lx[var(i)][0] if lx[var(i)] else None
-        lxx = [self.FAx, self.HAx, self.gatex]
+        get = lambda lx: lx[var(i)][0] if var(i) in lx else None
+        lxx = [self.FAx, self.HAx]
         for lx in lxx: 
-            if get(lx) : 
-                print(type(get(lx)))
-                return get(lx)
+            g = get(lx) 
+            if g: return g
             pass
+        if self.gatex[var(i)]: return self.gatex[var(i)][0]
         return None
     def get_HA(self, i):        
-        return self.HAx[var(i)] if var(i) in self.HAx else None
+        return None  if not var(i) in self.HAx else self.HAx[var(i)]
     def get_FA(self, i):        
-        return self.FAx[var(i)] if var(i) in self.FAx else None
+        return None  if not var(i) in self.FAx else self.FAx[var(i)]
+
     
     def is_gate(self, i, gate_type):
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], gate_type)
