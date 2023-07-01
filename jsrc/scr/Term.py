@@ -15,6 +15,7 @@ class ConstOne(Atom):
     def __str__(self):
         return '1'
     pass
+
 class Expr(Term):
     def __init__(self, *termx):
         self.termx = termx
@@ -72,14 +73,25 @@ class FuncC(Func):
     F = 'c'
     pass
 
-S = FuncS
-C = FuncC
+class FuncD(Func):
+    F = 'd'
+    pass
 
-for i in 'abcdefghijklmnopqrstuvwxyz':
-    set_var = '%s = "%s"' % (i,i)
-    exec(set_var)
+class scr:
+    s = FuncS
+    c = FuncC
+    d = FuncD
+    pass
 
 if __name__ == '__main__':
+
+    for i in 'abcdefghijklmnopqrstuvwxyz':
+        set_var = '%s = "%s"' % (i,i)
+        exec(set_var)
+        pass
+    S = scr.s
+    C = scr.c
+    D = src.d
     a0 = S(a,b)
     print(a0)
     pass

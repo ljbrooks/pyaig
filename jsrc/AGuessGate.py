@@ -52,6 +52,11 @@ class AGuessGate:
                 return get(lx)
             pass
         return None
+    def get_HA(self, i):        
+        return self.HAx[var(i)] if var(i) in self.HAx else None
+    def get_FA(self, i):        
+        return self.FAx[var(i)] if var(i) in self.FAx else None
+    
     def is_gate(self, i, gate_type):
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], gate_type)
     def show_gate(self, i):

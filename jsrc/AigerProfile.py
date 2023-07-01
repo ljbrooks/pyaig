@@ -62,21 +62,19 @@ class AigerProfile:
         pass
     def profile_first_level_maj(self):
         
-        majx = list(filter(lambda i: self.ag.is_gate(i, AGate_Majority3) and self.acc.levelx[var(i)]<=5, self.acc.topox))
+        majx = list(filter(lambda i: self.ag.is_gate(i, AGate_Majority3) and self.acc.levelx[var(i)]<=4, self.acc.topox))
         maj_gatex = list(map(lambda i: self.ag.get_gate(i,  AGate_Majority3), majx))
         
         ppx = sum(map(lambda i: list(map(pure, i)),  maj_gatex), [])
-        
+        assert len(ppx) > 1
         for i in ppx:
             j = self.get_gate_fanins(i)
             #print('yay', i)
-            print(f'maj: {var(i)}: %s' % (','.join(map(lambda v: self.get_pp_x_y(v), j))))
-            pass
-        for p in ppx:
-            print(self.get_pp_x_y(p))
+            #print(f'maj: {var(i)}: %s' % (','.join(map(lambda v: self.get_pp_x_y, j))))
+            print(self.get_pp_x_y, j)
             pass
         
-        xy = list(map(self.get_pp_x_y, ppx))
+        xy = list(map(lambda i: self.get_pp_x_y(self.get_gate_fanins(i)), ppx))
         x_max = max(list(zip(*xy))[0])+1
         y_max = max(list(zip(*xy))[1])+1
         m = [[0]*y_max for i in range(x_max)]
@@ -86,7 +84,7 @@ class AigerProfile:
         print(tabulate(m))
         
 
-        ix = sum(map(lambda i: self.get_gate_fanins(i), maj_gatex) ,[])
+        ix = sum(map(lambda i: self.get_gate_fanins(i), ppx) ,[])
         nx = map(self.get_id_name, ix)
         print(tabulate(natsorted(Counter(nx).items())))
         ix = set(ix)
