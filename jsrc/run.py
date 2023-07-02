@@ -39,8 +39,12 @@ pdb.set_trace()
 ux = [xs156] #xs86, xs44, xs150, xs156]
 for u in ux:
     print
-    u= rewrite(u,a)
-    print
+    x= rewrite(u,a)
+    print('before --')
+    print(pretty(u))
+    print('after-----')
+    print(pretty(x))
+    print()
 print(str(u))
 
 '''

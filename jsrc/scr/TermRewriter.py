@@ -61,22 +61,22 @@ class TermRewriter:
         else: 
             termx = list(termx)
         print('s', termx)
-        #pdb.set_trace()
-        # merge all the s
-        # s(s(a)+b) = s(a,b)
-
+        
         sx,a = split_by(isA(FuncS))(termx)
-        
-        ss = sum(fmap(lambda i: i.termx, sx), [])
-        
+    
+        tx = termx
+        if len(sx):
+            tmp = [i.termx if isA(FuncS)(i) else [i] for i in termx]
+            tx = sum(tmp, [])
+            pass
         # if len(ss) : tx = ss + a
         # else : tx = termx
-        tx = termx
+        #tx = termx
         # if mostly(tsign)(tx):
         #     return ExprInv(self.s(fmap(self.__invert__, tx)))
         inv_cnt =  sum(fmap(tsign, tx))
         if inv_cnt >1:
-            #tx = tinvert_inverted(tx, inv_cnt //2 * 2)
+            tx = tinvert_inverted(tx, inv_cnt //2 * 2)
             pass
 
         return FuncS(*tuple(tx),**kwargs)
@@ -90,8 +90,9 @@ class TermRewriter:
 
         if mostly(tsign)(termx):
             termx = fmap(self.__invert__, termx)
-            pass
-        return ExprInv(FuncC(*tuple(termx)), **kwargs)
+            return ExprInv(FuncC(*tuple(termx)))
+
+        return FuncC(*tuple(termx))
     
     def neg(self, *ax):
         if isinstance(ax, list):

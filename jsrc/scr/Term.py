@@ -175,6 +175,24 @@ def rewrite_r(tx):
     return a
 
 
+def pretty(t, depth = 0):
+    indent = '   '
+    if isinstance(t, list):
+        return ',\n'.join(fmap(pretty, t))
+    if isinstance(t, Atom) :
+        r = str(t)
+    elif isinstance(t, Func):
+        rx  = [pretty(i, depth+1) for i in t.termx]
+        r =f'{t.F}( %s)' % (f'\n{indent}'.join(pretty(t.termx).splitlines()))
+        return r
+    elif isinstance(t, ExprUnary):
+        r = f'{t.OP}%s' % (pretty(t.car))
+    else:
+        print(t)
+        assert False
+
+    return r
+        
 if __name__ == '__main__':
 
     for i in 'abcdefghijklmnopqrstuvwxyz':
