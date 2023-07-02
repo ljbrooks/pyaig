@@ -31,6 +31,9 @@ class Term:                     # base
         return hash(self.uid)
     def re_eval(self):
         return self    
+    @property
+    def car(self):
+        return self.termx[0]
     pass
 
 
@@ -55,11 +58,12 @@ class ConstOne(Term):
 class Expr(Term):
     def __init__(self, *termx, **kwargs):
         Term.__init__(self, **kwargs)
-        self.termx = termx
+        self.termx = list(termx)
         pass
     def __str__(self):
         return (' %s ' % self.OP).join(map(str, self.termx))
     pass
+
 class ExprUnary(Term):
     def __init__(self, *termx, **kwargs):
         Term.__init__(self, **kwargs)
@@ -85,6 +89,7 @@ class ExprAnd(Expr):
     def re_eval(self):
         return reduce(lambda a,b: a&b, self.termx[1:], self.termx[0])
     pass
+
 class ExprOr(Expr):
     OP='|'
     def re_eval(self):
@@ -113,7 +118,7 @@ class Func (Expr):
 class FuncS(Func):
     F='s'
     def re_eval(self):
-        return TermMgr.builder.f(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+        return TermMgr.builder.s(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 class FuncC(Func):
