@@ -107,7 +107,9 @@ from scr.TermDot  import *
                 self.lit2symbolx[pure(c)] = f'xc{c}'
                 self.lit2symbolx[pure(c)^0x1] = f'xc{inv(c)}'                
                 code = [f'xc{c} = scr.c(%s, nid="xc{c}")'% (','.join(map(get_symbol,g))),
-                        f'xc{inv(c)} = scr.c(%s, nid="xc{inv(c)}")'% (','.join(map(get_symbol,inv(g))))]
+                        #f'xc{inv(c)} = - scr.c(%s, nid="xc{c}")'% (','.join(map(get_symbol,inv(g))))
+                        f'xc{inv(c)} = scr.c(%s, nid="xc{inv(c)}")'% (','.join(map(get_symbol,inv(g))))
+                        ]
                 pass
             self.code(code)
             pass
@@ -133,7 +135,7 @@ from scr.TermDot  import *
             assert not  sign(i)
             if len(ix) != 2: continue
             tx = [ self.aiger.is_pi(ix[0]) ,  self.aiger.is_pi(ix[1]) ,
-                  # not sign(ix[0]),  not sign(ix[1])
+                   not sign(ix[0]),  not sign(ix[1])
                   ]
             if not and_all(tx) : continue
             x,y = self.get_pp_x_y(ix)
