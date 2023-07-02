@@ -17,8 +17,8 @@ nil = Nil()
 
 is_nil = lambda i: isinstance(i, Nil)
 class TermTopo:
-    def __init__(self, termx, rootx=None):
-        self.termx = termx
+    def __init__(self,  rootx=None):
+        #self.termx = termx
         self.rootx = rootx if not rootx is None else termx
         self.fanout= defaultdict(list)
         self.dfs()
@@ -31,8 +31,11 @@ class TermTopo:
             i.f = math.inf 
             i.pi = nil
             pass
+        self.coi = []
+        pass
     def dfs(self):
         self.init()
+        
         self.time = 1
         for i in reversed(self.rootx):
             if i.color == WHITE:
@@ -43,6 +46,7 @@ class TermTopo:
         pass
         pass
     def dfs_r(self, t):
+        self.coi.append(t)
         t.d , self.time = self.time, self.time+1
         for j in t.termx:
             if j.color == WHITE:
@@ -55,4 +59,17 @@ class TermTopo:
         t.color = BLACK
         t.f , self.time = self.time, self.time+1
         pass
+    def topoOrder(self):
+        tm = self.coi
+        tx = list(filter(lambda i: i.d != math.inf, tm))
+        return sorted(tx,  key = lambda i: i.f)
     pass
+
+def count(t):
+    assert isinstance(t, Term)
+    return 1 + sum(map(count, t.termx))
+
+def topo(t):
+    r = TermTopo(t).topoOrder()
+    return r
+

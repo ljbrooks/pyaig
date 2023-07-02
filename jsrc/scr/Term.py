@@ -33,9 +33,6 @@ class Term:                     # base
     
     pass
 
-def count(t):
-    assert isinstance(t, Term)
-    return 1 + sum(map(count, t.termx))
 
 class Atom(Term):
     def __init__(self, nid):
