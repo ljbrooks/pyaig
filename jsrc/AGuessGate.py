@@ -292,14 +292,19 @@ class AGuessGate:
             G = AGate_NXOR
             pass
         if not G is None:
-            self.gatex[var(lit)].append(G([inv(r_fanin[0]), r_fanin[1]], [lit],
-                                          [l,r], # 
-                                        ))
-                                        
+            finx = r_fanin if not sign(r_fanin[0]) else l_fanin
+            xor = G(finx,
+                    [lit],
+                    [l,r], # 
+                    )
+            # nxor gate
+            xor.is_nxor = sign(r_fanin[0]) != sign(r_fanin[1])
+            self.gatex[var(lit)].append(xor)
+            
             print('found ', var(lit), '%s = %s %s %s' % ( var(lit), 
-                                                          lstr(inv(r_fanin[0])), 
+                                                          lstr(xor[0]),
                                                           G.name,
-                                                          lstr(r_fanin[1])
+                                                          lstr(xor[1])
                                                           ))
             self.print_gate(lit)
             

@@ -28,6 +28,10 @@ class AGate_AND(AGate):
 class AGate_XOR(AGate):
     shape = 'diamond'
     name = 'XOR'
+    def __init__(self, *args):
+        AGate.__init__(self, *args)
+        self.is_nxor = False
+        pass
     pass
 
 class AGate_NXOR(AGate):
@@ -99,6 +103,11 @@ class AGate_Majority3(AGate):          # majority function
 class AGate_XOR3(AGate):
     shape = 'invtriangle'
     name = 'xor3'
+    def __init__(self, *args):
+        AGate.__init__(self, *args)
+        self.is_nxor = False
+        pass
+    
     @staticmethod
     def identify (ag):
         is_xor = lambda i: ag.is_gate(i, AGate_XOR)        
@@ -129,6 +138,7 @@ class AGate_XOR3(AGate):
                 ix = ag.get_gate(fanin, AGate_XOR)
                 #if sign(fanin): inv_one(r) # invert one of the outputs 
                 r=  AGate_XOR3(ix + [other], [i], [fanin])
+                r.is_nxor = gate.is_nxor ^ ix.is_nxor
                 ag.xor3x[var(i)].append(r)
                 ag.inverse_xor3[str(natsorted(pure(r)))].append(r)
                 print(list(ag.inverse_xor3.items())[:10])
