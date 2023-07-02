@@ -36,7 +36,8 @@ a = TermRewriter()
 pdb.set_trace()
 #u= rewrite(xs80,a)
 
-ux = [xs156] #xs86, xs44, xs150, xs156]
+#ux = [xs156] #xs86, xs44, xs150, xs156]
+ux = pox
 for u in ux:
     print
     x= rewrite(u,a)
