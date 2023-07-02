@@ -1,5 +1,23 @@
 
+
+sym = lambda t: t.symbol
+
+class TermMgr(list):
+    pass
+    
 class Term:                     # base
+    UID = 0
+    tmgr = TermMgr()
+    def __init__(self, **kwargs):
+        self.nid=None
+        self.termx=[]
+        self.__dict__.update(kwargs)
+        self.uid  = Term.UID
+        Term.UID+=1
+        Term.tmgr.append(self)
+        pass
+    def __repr__(self):
+        return f'{self.__class__.__name__}: {str(self)}'
     def __or__(self, b):
         return ExprOr(self,b)
     def __and__(self,b):
@@ -10,31 +28,47 @@ class Term:                     # base
         return ExprSum(termx)
     def __neg__(self):
         return ExprNeg(self)
-    def __inv__(self):
+    def __invert__(self):
         return ExprInv(self)
+    def __hash__(self):
+        return hash(self.uid)
     pass
 
 
 
 class Atom(Term):
-    def __init__(self, symbol):
-        self.symbol = symbol
+    def __init__(self, nid):
+        Term.__init__(self, nid = nid)
         pass
     def __str__(self):
-        return self.symbol
+        return self.nid
     pass
 
-class ConstOne(Atom):
+class ConstOne(Term):
+    def __init__(self):
+        Term.__init__(self)
+        self.nid = '1'
+        pass
     def __str__(self):
+
         return '1'
     pass
 
 class Expr(Term):
-    def __init__(self, *termx):
+    def __init__(self, *termx, **kwargs):
+        Term.__init__(self, **kwargs)
         self.termx = termx
         pass
     def __str__(self):
         return (' %s ' % self.OP).join(map(str, self.termx))
+    pass
+class ExprUnary(Term):
+    def __init__(self, *termx, **kwargs):
+        Term.__init__(self, **kwargs)
+        self.termx = termx
+        pass
+    def __str__(self):
+        return f'{self.OP}{self.termx[0]}'
     pass
 class ExprSigma(Expr):
     OP='+'
@@ -48,11 +82,11 @@ class ExprAnd(Expr):
     OP='&'
     pass
 
-class ExprNeg(Expr):
+class ExprNeg(ExprUnary):
     OP='-'
     pass
 
-class ExprInv(Expr):
+class ExprInv(ExprUnary):
     OP='~'
     pass
 
@@ -61,8 +95,11 @@ class ExprOr(Expr):
     pass
 
 class Func (Expr):
+    def __init__(self, *args, **kwargs):
+        Expr.__init__(self,*args, **kwargs)
+        pass
     def __str__(self):
-        return f'{self.F}(%s)' % (','.join(self.termx))
+        return f'{self.F}(%s)' % (','.join(map(str,self.termx)))
     pass
 
 class FuncS(Func):

@@ -310,7 +310,8 @@ class AGuessGate:
                     [l,r], # 
                     )
             # nxor gate
-            xor.is_nxor = sign(r_fanin[0]) != sign(r_fanin[1])
+            xor.is_nxor = sign(r_fanin[0]) != sign(r_fanin[1]) # not the same sign
+            
             self.gatex[var(lit)].append(xor)
             
             print('found ', var(lit), '%s = %s %s %s' % ( var(lit), 

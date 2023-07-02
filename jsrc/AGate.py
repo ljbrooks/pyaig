@@ -105,7 +105,7 @@ class AGate_XOR3(AGate):
     name = 'xor3'
     def __init__(self, *args):
         AGate.__init__(self, *args)
-        self.is_nxor = False
+        self.is_nxor = 0
         pass
     
     @staticmethod
@@ -133,12 +133,12 @@ class AGate_XOR3(AGate):
             other.remove(fanin)
             assert len(other) == 1
             other = other[0] ^ sign(fanin)
-            
+            other = other ^ sign(other) ^ sign(fanin)
             if is_xor(fanin):
                 ix = ag.get_gate(fanin, AGate_XOR)
                 #if sign(fanin): inv_one(r) # invert one of the outputs 
                 r=  AGate_XOR3(ix + [other], [i], [fanin])
-                r.is_nxor = gate.is_nxor ^ ix.is_nxor
+                r.is_nxor = gate.is_nxor + ix.is_nxor # this defines the inputx 
                 ag.xor3x[var(i)].append(r)
                 ag.inverse_xor3[str(natsorted(pure(r)))].append(r)
                 print(list(ag.inverse_xor3.items())[:10])

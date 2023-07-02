@@ -8,6 +8,7 @@ from scr.Term import *
 from functools import *
 
 and_all = lambda i: reduce(lambda a,b : a and b, i, True)
+or_all = lambda i: reduce(lambda a,b : a or b, i, False)
 class AGenSCTerms:
     # generate sc term from aiger after AGuessGate
     def __init__(self, aiger, rootx=None):
@@ -27,10 +28,14 @@ class AGenSCTerms:
         self.close_code()
         pass
     def code(self, s):
-        self.pycode.append(s) if isinstance(s, str) else self.pycode.extend(s)
+        sx = s if isinstance(s, list) else [s]
+        self.pycode.extend(sx)
+
         pass
     def init_pycode(self):
         s = '''from scr.Term import *
+from scr.TermTopo  import *
+from scr.TermDot  import *
 
 '''
         return [s]
@@ -58,8 +63,8 @@ class AGenSCTerms:
                 self.lit2symbolx[pure(s)] = f'hs{s}'
                 self.lit2symbolx[pure(s)^0x1] = f'~hs{s}'                
 
-                code = [f'h{c} = scr.c(%s)'% (','.join(map(get_symbol,g))),
-                        f'h{s} = %sscr.s(%s)'% (lit_sign(s),','.join(map(get_symbol,g)))]
+                code = [f'hc{c} = scr.c(%s, nid="hc{c}")'% (','.join(map(get_symbol,g))),
+                        f'hs{s} = %sscr.s(%s, nid="hs{s}")'% (lit_sign(s),','.join(map(get_symbol,g)))]
                 self.code(code)
                 pass
             elif var(i) in self.ag.FAx:
@@ -90,11 +95,12 @@ class AGenSCTerms:
                     print(get_symbol(v))
                     pass
                 
-                inv_if= lambda lx: inv_one(lx) if sg.is_nxor else lx
-                code = [f'fc{c} = scr.c(%s)'% (','.join(map(get_symbol,cg))),
-                        f'fc{c^0x1} = scr.c(%s)'% (','.join(map(get_symbol,map(inv,cg)))),
-                        f'fs{s} = scr.s(%s)'% (','.join(map(get_symbol,inv_if(sg)))),
-                        f'fs{s^0x1} = scr.s(%s)'% (','.join(map(get_symbol,inv_if(inv_one(sg)))))
+                #inv_if= lambda lx: inv_one(lx) if sg.is_nxor else lx
+                code = [f'fc{c} = scr.c(%s, nid="fc{c}")'% (','.join(map(get_symbol,cg))),
+                        f'fc{c^0x1} = scr.c(%s, nid="fc{c^0x1}")'% (','.join(map(get_symbol,map(inv,cg)))),
+
+                        f'fs{s} = scr.s(%s, nid="fs{s}")'% (','.join(map(get_symbol,sg))),
+                        f'fs{s^0x1} = scr.s(%s, nid="fs{s^0x1}")'% (','.join(map(get_symbol,inv(sg))))
                         ]
 
                 self.code(code)
@@ -148,3 +154,5 @@ if __name__ == '__main__':
         f = sys.argv[1]
         pass
     asc = AGenSCTerms(f)
+    from run import *
+
