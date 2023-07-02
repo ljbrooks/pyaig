@@ -6,7 +6,7 @@ from scr.TermBuilder import *
 from scr.TermRewriter import *
 import math
 from tabulate import *
-
+from scr.util import *
 TermMgr.builder = TermBuilder
 from s import *
 
@@ -33,9 +33,17 @@ print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
 
 a = TermRewriter()
 
-TermMgr.builder = a
+pdb.set_trace()
+#u= rewrite(xs80,a)
 
+ux = [xs80] #xs86, xs44, xs150, xs156]
+for u in ux:
+    u= rewrite(u,a)
+print(str(u))
+
+'''
 for i in pox:
     pdb.set_trace()
-    u = i.re_eval()
+    u = rewrite(i,a)
     print(u)
+'''

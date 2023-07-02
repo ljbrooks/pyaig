@@ -61,7 +61,7 @@ from scr.TermDot  import *
                 self.lit2symbolx[i] = f'i{i}'
                 self.lit2symbolx[inv(i)] = f'i{inv(i)}'
                 self.code(f'i{i} = Atom("i{var(i)}")')
-                self.code(f'i{inv(i)} = - i{i}')
+                self.code(f'i{inv(i)} = ~ i{i}')
                 pass
             g = self.ag.get_adder_gate(i)
             if g is None: g = self.aiger.get_fanins(i)
@@ -83,7 +83,7 @@ from scr.TermDot  import *
             if isinstance(g, AGate_Majority3):
                 c = i
                 self.lit2symbolx[pure(c)] = f'hc{c}'
-                self.lit2symbolx[pure(c)^0x1] = f'-hc{c}'                
+                self.lit2symbolx[pure(c)^0x1] = f'~hc{c}'                
                 
                 code = [f'hc{c} = scr.c(%s, nid="hc{c}")'% (','.join(map(get_symbol,g))),
                         f'hc{inv(c)} = scr.c(%s, nid="hc{inv(c)}")'% (','.join(map(get_symbol,inv(g))))]
@@ -92,7 +92,7 @@ from scr.TermDot  import *
             elif isinstance(g, AGate_XOR):
                 s = i
                 self.lit2symbolx[pure(s)] = f'xs{s}'
-                self.lit2symbolx[pure(s)^0x1] = f'-xs{s}'                
+                self.lit2symbolx[pure(s)^0x1] = f'~xs{s}'                
                 code = [ f'xs{s} = %sscr.s(%s, nid="xs{s}")'% (lit_sign(s),','.join(map(get_symbol,g))),
                          f'xs{inv(s)} = %sscr.s(%s, nid="xs{inv(s)}")'% (lit_sign(s),','.join(map(get_symbol,inv(g))))
                         ]
@@ -107,7 +107,7 @@ from scr.TermDot  import *
                 self.lit2symbolx[pure(c)] = f'xc{c}'
                 self.lit2symbolx[pure(c)^0x1] = f'xc{inv(c)}'                
                 code = [f'xc{c} = scr.c(%s, nid="xc{c}")'% (','.join(map(get_symbol,g))),
-                        #f'xc{inv(c)} = - scr.c(%s, nid="xc{c}")'% (','.join(map(get_symbol,inv(g))))
+                        #f'xc{inv(c)} = ~ scr.c(%s, nid="xc{c}")'% (','.join(map(get_symbol,inv(g))))
                         f'xc{inv(c)} = scr.c(%s, nid="xc{inv(c)}")'% (','.join(map(get_symbol,inv(g))))
                         ]
                 pass
@@ -141,7 +141,7 @@ from scr.TermDot  import *
             x,y = self.get_pp_x_y(ix)
             k = f'pp{i} = Atom("pp_{x}_{y}")   # n{i} --'
             self.lit2symbolx[i]  = f'pp{i}'
-            self.lit2symbolx[inv(i)]  = f'-pp{i}'
+            self.lit2symbolx[inv(i)]  = f'~pp{i}'
             print(k)
             self.code(k)
             

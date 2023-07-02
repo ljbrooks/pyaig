@@ -20,12 +20,12 @@ class TermBuilder:
     def __invert__(self):
         return ExprInv(self)
     @staticmethod
-    def d(termx):
-        return FuncD(self)
+    def d(*termx):
+        return FuncD(*termx)
     @staticmethod
-    def s(termx):
-        return FuncS(self)
+    def s(*termx):
+        return FuncS(*termx)
     @staticmethod
-    def c(termx):
-        return FuncC(self)
+    def c(*termx):
+        return FuncC(*termx)
     pass
