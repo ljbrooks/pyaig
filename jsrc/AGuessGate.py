@@ -180,6 +180,16 @@ class AGuessGate:
             for j in fx:
                 G.add_edge(var(j), var(i), style=edge_style(j), color = edge_color(j), penwidth =2)
                 pass
+            for i, (_, po_lit, po_name) in enumerate(self.aiger.iter_po_names()):
+                n = po_name.decode('utf-8')
+                G .add_node(n,
+                            penwidth = 6)
+                G.add_edge(var(po_lit), n, 
+                           style= edge_style(po_lit),
+                           color = edge_color(po_lit)
+                           )
+                pass
+            
             pass
         return G
     def toDot(self, fname):
@@ -205,7 +215,9 @@ class AGuessGate:
         for i in pox: S.add_node(pydot.Node(i))
         p.add_subgraph(S)
 
-        print('Gen', fname)
+        # _, po_lit, po_name for i in list(self.aiger.iter_po_names()
+
+        print('AGuessGate Gen', fname)
         open(fname, 'w').write(str(p))
         pass
     def print_gate0(self,lit):

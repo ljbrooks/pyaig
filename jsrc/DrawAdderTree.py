@@ -48,7 +48,16 @@ class DrawAdderTree:
                            color = edge_color(j), penwidth =2)
                     
                 pass
-    
+            for i, (_, po_lit, po_name) in enumerate(self.aiger.iter_po_names()):
+                n = po_name.decode('utf-8')
+                G .add_node(n,
+                            penwidth = 6)
+                G.add_edge(var(po_lit), n, 
+                           style= edge_style(po_lit),
+                           color = edge_color(po_lit)
+                           )
+                pass
+
             pass
         self.toDot('x.dot')
         print('x.dot is from DrawAdderTree.py')

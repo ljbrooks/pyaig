@@ -41,7 +41,7 @@ class AGenSCTerms:
     
     def gen_terms(self):
         #print(self.ag.FAx)
-        lit_sign = lambda l: '' if not sign(l) else '!'
+        lit_sign = lambda l: '' if not sign(l) else '~'
         get_symbol = lambda i: self.lit2symbolx[i]
         for i in self.topox:
             if var(i) in self.ag.HAx:
@@ -53,14 +53,14 @@ class AGenSCTerms:
                 s = g.outputx[1] 
                 assert not sign(c) and not sign(s)
                 self.lit2symbolx[pure(c)] = f'hc{c}'
-                self.lit2symbolx[pure(c)^0x1] = f'!hc{c}'                
+                self.lit2symbolx[pure(c)^0x1] = f'~hc{c}'                
 
                 self.lit2symbolx[pure(s)] = f'hs{s}'
-                self.lit2symbolx[pure(s)^0x1] = f'!hs{s}'                
+                self.lit2symbolx[pure(s)^0x1] = f'~hs{s}'                
 
-                print(f'h{c} = c(%s)'% (','.join(map(get_symbol,g))))
-                print(f'h{s} = %ss(%s)'% (lit_sign(s),','.join(map(get_symbol,g))))
-
+                code = [f'h{c} = scr.c(%s)'% (','.join(map(get_symbol,g))),
+                        f'h{s} = %sscr.s(%s)'% (lit_sign(s),','.join(map(get_symbol,g)))]
+                self.code(code)
                 pass
             elif var(i) in self.ag.FAx:
                 if not self.ag.is_xor(i): continue
@@ -73,6 +73,10 @@ class AGenSCTerms:
                 assert len(g)
                 c = g.outputx[0]
                 s = g.outputx[1] 
+                assert not sign(c) and not sign(s)
+                cg = self.ag.get_gate(c, AGate_Majority3)
+                sg = self.ag.get_gate(s,AGate_XOR3)
+
                 self.lit2symbolx[pure(c)] = f'fc{c}'
                 self.lit2symbolx[pure(c)^0x1] = f'fc{inv(c)}'                
 
@@ -86,11 +90,14 @@ class AGenSCTerms:
                     print(get_symbol(v))
                     pass
                 
-                print(f'fc{c} = c(%s)'% (','.join(map(get_symbol,g))))
-                print(f'fc{c^0x1} = c(%s)'% (','.join(map(get_symbol,map(inv,g)))))
+                inv_if= lambda lx: inv_one(lx) if sg.is_nxor else lx
+                code = [f'fc{c} = scr.c(%s)'% (','.join(map(get_symbol,cg))),
+                        f'fc{c^0x1} = scr.c(%s)'% (','.join(map(get_symbol,map(inv,cg)))),
+                        f'fs{s} = scr.s(%s)'% (','.join(map(get_symbol,inv_if(sg)))),
+                        f'fs{s^0x1} = scr.s(%s)'% (','.join(map(get_symbol,inv_if(inv_one(sg)))))
+                        ]
 
-                print(f'fs{s} = s(%s)'% (','.join(map(get_symbol,g))))
-                print(f'fs{s^0x1} = s(%s)'% (','.join(map(get_symbol,inv_one(g)))))
+                self.code(code)
                 pass
             elif var(i)  in self.ag.FAx:
                 pass
@@ -120,9 +127,9 @@ class AGenSCTerms:
                    not sign(ix[0]),  not sign(ix[1])]
             if not and_all(tx) : continue
             x,y = self.get_pp_x_y(ix)
-            k = f'n{i} -- pp{i} = Atom("pp_{x}_{y}")'
+            k = f'pp{i} = Atom("pp_{x}_{y}")   # n{i} --'
             self.lit2symbolx[i]  = f'pp{i}'
-            self.lit2symbolx[inv(i)]  = f'!pp{i}'
+            self.lit2symbolx[inv(i)]  = f'~pp{i}'
             print(k)
             self.code(k)
             

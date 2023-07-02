@@ -1,7 +1,20 @@
 
 class Term:                     # base
-    
+    def __or__(self, b):
+        return ExprOr(self,b)
+    def __and__(self,b):
+        return ExprAnd(self,b)
+    def __add__(self,b):
+        return ExprAdd(self,b)
+    def sigma(self, *termx):
+        return ExprSum(termx)
+    def __neg__(self):
+        return ExprNeg(self)
+    def __inv__(self):
+        return ExprInv(self)
     pass
+
+
 
 class Atom(Term):
     def __init__(self, symbol):
@@ -22,20 +35,7 @@ class Expr(Term):
         pass
     def __str__(self):
         return (' %s ' % self.OP).join(map(str, self.termx))
-    def __or__(self, a,b):
-        return ExprOr(a,b)
-    def __and__(self, a,b):
-        return ExprAnd(a,b)
-    def __add__(self,a,b):
-        return ExprAdd(a,b)
-    def sigma(self, *termx):
-        return ExprSum(termx)
-    def __neg__(self, a):
-        return ExprNeg(a)
-    def __inv__(self, a):
-        return ExprInv(a)
     pass
-
 class ExprSigma(Expr):
     OP='+'
     pass
