@@ -11,9 +11,10 @@ pwd = os.getcwd()
 now = str(datetime.datetime.now())
 log = Path(os.environ['HOME'])/'hist.log'
 log2 = Path(os.environ['HOME'])/'.hist.log'
-fx = open(log,'r').read().strip().splitlines()
 
-n = len(fx)
+logx = [log, log2, 'hist.log']
+
+
 
 class Hist:
     Done = False
@@ -22,11 +23,14 @@ class Hist:
     pass
 
 if not Hist.Done :
-    s = f'''{n} {now} pwd : {pwd} cmd : {cmd}
+    for log in logx:
+        os.system(f'touch {log}')
+        fx = open(log,'r').read().strip().splitlines()
+        n = len(fx)
+        s = f'''{n} {now} pwd : {pwd} cmd : {cmd}
 '''
-    
-    open(log,'a').write(s)
-    open(log2,'a').write(s)
+        open(log,'a').write(s)
+        pass
     Hist.Done = True
     pass
     
