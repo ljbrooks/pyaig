@@ -1,20 +1,18 @@
-
+from scr.TermMgr import *
 
 sym = lambda t: t.symbol
 
-class TermMgr(list):
-    pass
-    
+from scr.TermMgr import *    
 class Term:                     # base
-    UID = 0
-    tmgr = TermMgr()
+
+
     def __init__(self, **kwargs):
         self.nid=None
         self.termx=[]
         self.__dict__.update(kwargs)
-        self.uid  = Term.UID
-        Term.UID+=1
-        Term.tmgr.append(self)
+        self.uid  = TermMgr.UID
+        TermMgr.UID+=1
+        TermMgr.tmgr.append(self)
         pass
     def __repr__(self):
         return f'{self.__class__.__name__}: {str(self)}'
@@ -32,9 +30,12 @@ class Term:                     # base
         return ExprInv(self)
     def __hash__(self):
         return hash(self.uid)
+    
     pass
 
-
+def count(t):
+    assert isinstance(t, Term)
+    return 1 + sum(map(count, t.termx))
 
 class Atom(Term):
     def __init__(self, nid):

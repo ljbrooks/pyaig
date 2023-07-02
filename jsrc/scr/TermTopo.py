@@ -3,8 +3,8 @@ import math
 WHITE='white'
 GRAY='gray'
 BLACK='black'
-from scr.Term import *
-
+#from scr.Term import *
+from scr.TermMgr import *
 class Nil:
     def __init__(self):
         self.nid = 'nil'
@@ -25,7 +25,7 @@ class TermTopo:
         
         pass
     def init(self):
-        for i in Term.tmgr:#self.termx: 
+        for i in TermMgr.tmgr:#self.termx: 
             i.color = WHITE
             i.d = math.inf
             i.f = math.inf 

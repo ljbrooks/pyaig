@@ -70,7 +70,7 @@ from scr.TermDot  import *
         for i in self.topox:    # only for those marked
             if not self.marked[var(i)]: continue
             g = self.ag.get_adder_gate(i)
-            if i==46: pdb.set_trace()
+            #if i==46: pdb.set_trace()
             code = []
             if isinstance(g, AGate_Majority3):
                 c = i
