@@ -54,7 +54,7 @@ class TermRewriter:
         return FuncD(termx)
 
     def s(self, *termx, **kwargs):
-
+        print('rewrite s', termx)
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass
@@ -69,20 +69,20 @@ class TermRewriter:
         
         ss = sum(fmap(lambda i: i.termx, sx), [])
         
-        if len(ss) : tx = ss + a
-        else : tx = termx
-                
+        # if len(ss) : tx = ss + a
+        # else : tx = termx
+        tx = termx
         # if mostly(tsign)(tx):
         #     return ExprInv(self.s(fmap(self.__invert__, tx)))
         inv_cnt =  sum(fmap(tsign, tx))
         if inv_cnt >1:
-            tx = tinvert_inverted(tx, inv_cnt //2 * 2)
+            #tx = tinvert_inverted(tx, inv_cnt //2 * 2)
             pass
 
         return FuncS(*tuple(tx),**kwargs)
 
     def c(self, *termx , **kwargs):
-        pdb.set_trace()
+        #pdb.set_trace()
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass

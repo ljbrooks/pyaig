@@ -156,18 +156,22 @@ def rewrite(tx, rewriter):
     return r
 
 def rewrite_r(tx):
-
+    print()
     print('enter', tx)
     if isinstance(tx, list):
         return list(map(rewrite_r, tx))
     if not len(tx.termx): return tx
     if isinstance(tx, FuncC) :
-        pdb.set_trace()
+        #        pdb.set_trace()
+        pass
     ax = rewrite_r(tx.termx)
+    print('ax here', ax)
+    print('was', tx)
     u = tx.__class__(*tuple(ax), nid=tx.nid)
     a = u.re_eval() # fmap(rewrite_r, tx.termx)
     #    a = tx.__class__(*tuple(a), tx.nid)
     print('exit', a, '\n     <--', tx)
+    print()
     return a
 
 
