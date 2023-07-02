@@ -56,9 +56,17 @@ from scr.TermDot  import *
         for i in reversed(self.topox):    # only for those marked
             if not marked[var(i)] : continue
             if not self.lit2symbolx[i]  is None: continue
+            if self.aiger.is_pi(i):
+                assert not(sign(i))
+                self.lit2symbolx[i] = f'i{i}'
+                self.lit2symbolx[inv(i)] = f'i{inv(i)}'
+                self.code(f'i{i} = Atom("i{var(i)}")')
+                self.code(f'i{inv(i)} = ~ i{i}')
+                pass
             g = self.ag.get_adder_gate(i)
             if g is None: g = self.aiger.get_fanins(i)
             for j in g: marked[var(j)] = True
+            
             pass
         return marked
             
@@ -124,8 +132,9 @@ from scr.TermDot  import *
         for i,ix  in map(lambda i: (i, self.aiger.get_fanins(i)), self.topox):
             assert not  sign(i)
             if len(ix) != 2: continue
-            tx = [ self.aiger.is_pi(ix[0]) ,  self.aiger.is_pi(ix[1]) , 
-                   not sign(ix[0]),  not sign(ix[1])]
+            tx = [ self.aiger.is_pi(ix[0]) ,  self.aiger.is_pi(ix[1]) ,
+                  # not sign(ix[0]),  not sign(ix[1])
+                  ]
             if not and_all(tx) : continue
             x,y = self.get_pp_x_y(ix)
             k = f'pp{i} = Atom("pp_{x}_{y}")   # n{i} --'
