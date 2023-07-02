@@ -99,6 +99,7 @@ from scr.TermDot  import *
                 self.code(code)
                 pass
             elif isinstance(g, AGate_AND):
+                assert False
                 pass
             else:
                 if not self.lit2symbolx[i] is None: continue
