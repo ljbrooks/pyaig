@@ -3,15 +3,16 @@ import pdb, pydot
 import networkx as nx
 default_shape = ''
 class DrawAdderTree:
-    def __init__(self, ag):
+    def __init__(self, ag, draw=True):
         self.ag = ag
         self.aiger = ag.aiger
         self.acc = ag.acc
+        self.marked = m = self.compute_marked()
         
-        self.toDiGraph()
+        if draw: self.toDiGraph()
         pass
     def toDiGraph(self):
-        self.marked = m = self.compute_marked()
+        m = self.marked
         G = self.G = nx.DiGraph()
         for i in filter(lambda l: m[var(l)] , self.acc.topox):
             g = self.ag.get_matched_gate(i)
@@ -55,7 +56,7 @@ class DrawAdderTree:
                 G.add_edge(var(po_lit), n, 
                            style= edge_style(po_lit),
                            color = edge_color(po_lit)
-                           )
+                            )
                 pass
 
             pass

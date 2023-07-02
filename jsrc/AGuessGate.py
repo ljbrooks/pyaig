@@ -33,10 +33,12 @@ class AGuessGate:
         self.FAx = defaultdict(list)
         self.guess_gates()
         self.first_level_xor3=VarMap()
-        self.draw_adder_tree()
+        self.draw = self.draw_adder_tree()
         pass
     def is_xor(self, i):
         return len(self.gatex[var(i)])>0 and isinstance(self.gatex[var(i)][0], AGate_XOR)
+    def get_xor3(self,i):
+        return self.xor3x[var(i)][0]
     def get_xor(self, i):
         return self.gatex[var(i)][0]
     def get_gate(self, i, gate_type, force = True):
@@ -55,6 +57,15 @@ class AGuessGate:
             pass
         if self.gatex[var(i)]: return self.gatex[var(i)][0]
         return None
+    def get_adder_gate(self, i):
+        r = None
+        #if var(i) in self.xor3x: r = self.xor3x[var(i)]
+        if self.gatex[var(i)]:
+            r = self.gatex[var(i)][0]
+            pass
+        if isinstance(r, AGate_AND): r = None
+        return r
+
     def get_HA(self, i):        
         return None  if not var(i) in self.HAx else self.HAx[var(i)]
     def get_FA(self, i):        
@@ -327,7 +338,7 @@ class AGuessGate:
         pass
     def draw_adder_tree(self):
         d = DrawAdderTree(self)
-        pass
+        return d
     pass
 if __name__ == '__main__':
 

@@ -140,10 +140,12 @@ class AGate_XOR3(AGate):
                 r=  AGate_XOR3(ix + [other], [i], [fanin])
                 r.is_nxor = gate.is_nxor + ix.is_nxor # this defines the inputx 
                 ag.xor3x[var(i)].append(r)
+                #self.ag.gatex[var(i)] = [r] + self.ag.gatex[var(i)]
                 ag.inverse_xor3[str(natsorted(pure(r)))].append(r)
                 print(list(ag.inverse_xor3.items())[:10])
                 print(f'insert {var(i)} ', str(natsorted(list(map(lstr, r)))))
                 print(f'found xor3  {var(i)} := %s' % ' ^ '.join(map(lstr,r)))
+                assert len(r) == 3
                 pass
             pass
         pass

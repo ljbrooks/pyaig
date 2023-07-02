@@ -25,8 +25,15 @@ class AGenSCTerms:
         self.identify_g_terms()
 
         self.gen_terms()
+        self.gen_rootx()
         self.close_code()
         pass
+    def gen_rootx(self):
+        px = [self.lit2symbolx[i] for _, i , _  in self.aiger.get_pos()]
+        r = '''pox = [%s]''' % (','.join(px))
+        self.code(r)
+        pass
+            
     def code(self, s):
         sx = s if isinstance(s, list) else [s]
         self.pycode.extend(sx)
@@ -40,73 +47,61 @@ from scr.TermDot  import *
 '''
         return [s]
     def close_code(self, fname ='s.py'):
-        open(fname,'w').write('\n'.join(self.pycode))
+        open(fname,'w').write('\n'.join(self.pycode)+'\n')
         print(self.__class__.__name__,'Gen', fname)
         pass
-    
+    def compute_marked(self):
+        marked = [False]*self.acc.N
+        for i in self.aiger.get_po_fanins(): marked[var(i)] = True
+        for i in reversed(self.topox):    # only for those marked
+            if not marked[var(i)] : continue
+            if not self.lit2symbolx[i]  is None: continue
+            g = self.ag.get_adder_gate(i)
+            if g is None: g = self.aiger.get_fanins(i)
+            for j in g: marked[var(j)] = True
+            pass
+        return marked
+            
     def gen_terms(self):
         #print(self.ag.FAx)
         lit_sign = lambda l: '' if not sign(l) else '~'
         get_symbol = lambda i: self.lit2symbolx[i]
-        for i in self.topox:
-            if var(i) in self.ag.HAx:
-                if not self.ag.is_xor(i): continue
-                assert not sign(i)
-
-                g = self.ag.HAx[var(i)][0]
-                c = g.outputx[0]
-                s = g.outputx[1] 
-                assert not sign(c) and not sign(s)
+        self.marked = self.compute_marked()
+        for i in self.topox:    # only for those marked
+            if not self.marked[var(i)]: continue
+            g = self.ag.get_adder_gate(i)
+            if i==46: pdb.set_trace()
+            code = []
+            if isinstance(g, AGate_Majority3):
+                c = i
                 self.lit2symbolx[pure(c)] = f'hc{c}'
                 self.lit2symbolx[pure(c)^0x1] = f'~hc{c}'                
-
-                self.lit2symbolx[pure(s)] = f'hs{s}'
-                self.lit2symbolx[pure(s)^0x1] = f'~hs{s}'                
-
-                code = [f'hc{c} = scr.c(%s, nid="hc{c}")'% (','.join(map(get_symbol,g))),
-                        f'hs{s} = %sscr.s(%s, nid="hs{s}")'% (lit_sign(s),','.join(map(get_symbol,g)))]
-                self.code(code)
-                pass
-            elif var(i) in self.ag.FAx:
-                if not self.ag.is_xor(i): continue
-                assert not sign(i)
-                self.lit2symbolx[i] = f'f{i}'
-                self.lit2symbolx[i^0x1] = f'f{i^0x1}'
-                #pdb.set_trace()
-                if not var(i) in self.ag.xor3x: continue
-                g = self.ag.FAx[var(i)][0]
-                assert len(g)
-                c = g.outputx[0]
-                s = g.outputx[1] 
-                assert not sign(c) and not sign(s)
-                cg = self.ag.get_gate(c, AGate_Majority3)
-                sg = self.ag.get_gate(s,AGate_XOR3)
-
-                self.lit2symbolx[pure(c)] = f'fc{c}'
-                self.lit2symbolx[pure(c)^0x1] = f'fc{inv(c)}'                
-
-                self.lit2symbolx[pure(s)] = f'fs{s}'
-                self.lit2symbolx[pure(s)^0x1] = f'fs{inv(s)}'                
-
-                assert not sign(c) and not sign(s)
-                print(g, s,c)
-                #print(list(map(get_symbol, g)))
-                for v in g:
-                    print(get_symbol(v))
-                    pass
                 
-                #inv_if= lambda lx: inv_one(lx) if sg.is_nxor else lx
-                code = [f'fc{c} = scr.c(%s, nid="fc{c}")'% (','.join(map(get_symbol,cg))),
-                        f'fc{c^0x1} = scr.c(%s, nid="fc{c^0x1}")'% (','.join(map(get_symbol,map(inv,cg)))),
-
-                        f'fs{s} = scr.s(%s, nid="fs{s}")'% (','.join(map(get_symbol,sg))),
-                        f'fs{s^0x1} = scr.s(%s, nid="fs{s^0x1}")'% (','.join(map(get_symbol,inv(sg))))
+                code = [f'hc{c} = scr.c(%s, nid="hc{c}")'% (','.join(map(get_symbol,g))),
+                        f'hc{inv(c)} = scr.c(%s, nid="hc{inv(c)}")'% (','.join(map(get_symbol,inv(g))))]
+                
+                pass
+            elif isinstance(g, AGate_XOR):
+                s = i
+                self.lit2symbolx[pure(s)] = f'xs{s}'
+                self.lit2symbolx[pure(s)^0x1] = f'~xs{s}'                
+                code = [ f'xs{s} = %sscr.s(%s, nid="xs{s}")'% (lit_sign(s),','.join(map(get_symbol,g))),
+                        f'xs{inv(s)} = %sscr.s(%s, nid="xs{inv(s)}")'% (lit_sign(s),','.join(map(get_symbol,inv(g))))
                         ]
-
                 self.code(code)
                 pass
-            elif var(i)  in self.ag.FAx:
+            elif isinstance(g, AGate_AND):
                 pass
+            else:
+                if not self.lit2symbolx[i] is None: continue
+                g = self.aiger.get_fanins(i)
+                c = pure(i)
+                self.lit2symbolx[pure(c)] = f'xc{c}'
+                self.lit2symbolx[pure(c)^0x1] = f'xc{inv(c)}'                
+                code = [f'xc{c} = scr.c(%s, nid="xc{c}")'% (','.join(map(get_symbol,g))),
+                        f'xc{inv(c)} = scr.c(%s, nid="xc{inv(c)}")'% (','.join(map(get_symbol,inv(g))))]
+                pass
+            self.code(code)
             pass
         pass
     def get_id_name(self, i):
@@ -155,4 +150,4 @@ if __name__ == '__main__':
         pass
     asc = AGenSCTerms(f)
     from run import *
-
+    print('INFO:', 'import run.py PASSED')
