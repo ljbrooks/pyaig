@@ -1,0 +1,14 @@
+0 2023-07-03 01:38:06.228491 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py 8_8_S_SP_WT_RC_GenMul.v.aig_out_4.aig
+        1 2023-07-03 01:38:36.642388 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py 8_8_S_SP_WT_RC_GenMul.v.aig_out_4.aig
+2 2023-07-03 01:39:40.802694 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py 8_8_S_SP_WT_RC_GenMul.v.aig_out_4.aig
+3 2023-07-03 01:39:48.052543 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py 8_8_S_SP_WT_RC_GenMul.v.aig_out_4.aig
+4 2023-07-03 01:39:50.477876 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py 8_8_S_SP_WT_RC_GenMul.v.aig_out_4.aig
+5 2023-07-03 01:58:49.620733 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py 8_8_S_SP_WT_RC_GenMul.v.aig_out_10.aig
+6 2023-07-03 01:59:17.315704 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+7 2023-07-03 07:26:44.092328 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+8 2023-07-03 07:27:53.298606 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py WT_USP_KS_8x8_noX_multgen.sv.aig 3
+9 2023-07-03 07:28:00.199499 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+10 2023-07-03 07:29:30.775997 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+11 2023-07-03 07:31:42.005246 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+12 2023-07-03 07:33:53.038881 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+13 2023-07-03 07:40:23.605574 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
