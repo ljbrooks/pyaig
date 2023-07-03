@@ -1,0 +1,1 @@
+../../multgen/multgen -type StandAlone -tree WT -pp USP -adder KS -in1size 8 -in2size 8 -outsize 16 -allowXes fasle
