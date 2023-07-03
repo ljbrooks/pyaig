@@ -62,21 +62,29 @@ class TermRewriter:
             termx = list(termx)
         print('s', termx)
         
-        sx,a = split_by(isA(FuncS))(termx)
+        
     
-        tx = termx
-        if len(sx):
-            tmp = [i.termx if isA(FuncS)(i) else [i] for i in termx]
-            tx = sum(tmp, [])
-            pass
-        # if len(ss) : tx = ss + a
-        # else : tx = termx
-        #tx = termx
-        # if mostly(tsign)(tx):
-        #     return ExprInv(self.s(fmap(self.__invert__, tx)))
-        inv_cnt =  sum(fmap(tsign, tx))
-        if inv_cnt >1:
-            tx = tinvert_inverted(tx, inv_cnt //2 * 2)
+        # here is a while loop
+        
+        while True:
+            sx,a = split_by(isA(FuncS))(termx)
+            tx = termx
+            if len(sx):
+                tmp = [i.termx if isA(FuncS)(i) else [i] for i in termx]
+                tx = sum(tmp, [])
+                pass
+            # if len(ss) : tx = ss + a
+            # else : tx = termx
+            #tx = termx
+            # if mostly(tsign)(tx):
+            #     return ExprInv(self.s(fmap(self.__invert__, tx)))
+            inv_cnt =  sum(fmap(tsign, tx))
+            if inv_cnt >1:
+                tx = tinvert_inverted(tx, inv_cnt //2 * 2)
+                termx = tx
+                pass
+            else:
+                break
             pass
 
         return FuncS(*tuple(tx),**kwargs)

@@ -33,7 +33,7 @@ print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
 
 a = TermRewriter()
 
-pdb.set_trace()
+#pdb.set_trace()
 #u= rewrite(xs80,a)
 
 #ux = [xs156] #xs86, xs44, xs150, xs156]
