@@ -44,3 +44,8 @@ def ffilter(f, lx):
     return list(filter(f, lx))
 
 
+def args2list(*args):
+    if len(args) == 1 and isinstance(args[0] , list):
+        return args[0]
+    return list(args)
+        

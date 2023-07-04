@@ -53,6 +53,12 @@ class Term:                     # base
 
     pass
 
+class TermList(list, Term):
+    def __init__(self, args, **kwargs):
+        list.__init__(self, args)
+        Term.__init__(self, **kwargs)
+        pass
+    pass
 def uid(a): return a.uid
 
 class TermList(list, Term):           # 1D
@@ -82,11 +88,6 @@ class Atom(Term):
         return str(self)
     pass
 
-def atom(nid):
-    # 
-    if nid in TermMgr.unique:
-        return TermMgr.get(nid)
-    return TermMgr.put(nid, Atom(nid))
 
 class ConstOne(Atom):
     def __init__(self):
@@ -171,36 +172,30 @@ class Func (Expr):
 
     pass
 
-class Functer:
-    def __init__(self, func_type):
-        self.func_type = func_type
-        pass
-    def __call__(self, *args, **kwargs):
-        return self.func_type(*args, **kwargs)    
-    pass
-
 class FuncS(Func):
-    F = 's'
+    OP= F = 's'
     def re_eval(self):
         return TermMgr.builder.s(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 class FuncC(Func):
-    F = 'c'
+    OP = F = 'c'
     def re_eval(self):
         return TermMgr.builder.c(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 class FuncD(Func):
-    F = 'd'
+    OP = F = 'd'
     def re_eval(self):
         return TermMgr.builder.d(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
+def atom(s, **kwargs): return Atom(s, **kwargs)
+
 class scr:
-    s = Functer(FuncS)
-    c = Functer(FuncC)
-    d = Functer(FuncD)
+    s = FuncS
+    c = FuncC
+    d = FuncD
     pass
 
 def rewrite(tx, rewriter):

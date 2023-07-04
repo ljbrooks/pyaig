@@ -1,7 +1,8 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent/'..'))
-
+from scr.TermMgr import *
+from scr.Term import *
 from scr.VarBase import *
 from scr.Frame import *
 
@@ -22,7 +23,8 @@ class Var(VarBase):
     def update(self, val):
         self.val = val
         pass
-
+    def __hstr__(self):
+        return 
     def __repr__(self):
         #return f'{self.name}:{self.val}'
         return self.name
@@ -70,6 +72,18 @@ class VarList(Var,list):
         return self[1:]
     pass
 
+class Functer:
+    def __init__(self, fptr):
+        self.fptr = fptr
+        pass
+    def __call__(self, *args, **kwargs):
+        nid = None
+        if 'nid' in kwargs: nid = kwargs['nid']
+        return defvar(self.func_type(*args, **kwargs),nid)
+    pass
+
+
+
 def toList(*args):
     if len(args) == 1 and isinstance(args[0] ,list):
         return args[0]
@@ -84,3 +98,14 @@ def use_space(K, gspace):
     gspace.update(K.exports())
     pass
 
+def atom(nid):
+    # 
+    if nid in TermMgr.unique:
+        return TermMgr.get(nid) # return the value, or return the var?
+    return defvar(TermMgr.put(nid, Atom(nid)), nid)
+
+class scr:
+    s = Functer(FuncS)
+    c = Functer(FuncC)
+    d = Functer(FuncD)
+    pass

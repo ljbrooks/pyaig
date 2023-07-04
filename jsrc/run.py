@@ -4,6 +4,7 @@ from scr.TermDot import *
 from scr.TermMgr import *
 from scr.TermBuilder import *
 from scr.TermRewriter import *
+from scr.TermReduce import *
 import math
 from tabulate import *
 from scr.util import *
@@ -48,9 +49,23 @@ for u in ux:
     print()
 print(str(u))
 
+rx = [rewrite(i,a) for i in pox]
 '''
 for i in pox:
     pdb.set_trace()
     u = rewrite(i,a)
     print(u)
 '''
+
+
+
+for i in rx:
+    tr = TermReduce(i)
+    print(tr.x)
+    for x in tr.x:
+        print('uid:', x.uid)
+        print(pretty(x))
+        
+        print(f'%s'% ( [j.uid for j in x.termx]), ' -- ' , x.termx.uid)
+        pass
+    pass
