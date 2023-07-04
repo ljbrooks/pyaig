@@ -54,3 +54,13 @@ lists of arbitrary sc-terms.
 
 I am hoping this sc-tree package can be evolved to handle future any
 arithmetic logic for rewriting and verification.
+
+
+
+## 二 7月 04 23:04:09 CST 2023
+
+`scr/TermReduce.py` is able reduce the sc-term with the same
+signature.
+
+A signature is the uid and termx is replaced with TermList construct
+which also has an uid. This is pretty cool
