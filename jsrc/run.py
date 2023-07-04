@@ -65,7 +65,8 @@ for i in rx:
     for x in tr.x:
         print('uid:', x.uid)
         print(pretty(x))
-        
         print(f'%s'% ( [j.uid for j in x.termx]), ' -- ' , x.termx.uid)
         pass
+    r = tr.reduce(tr.x[-1])
+    print('final', pretty(r))
     pass

@@ -64,3 +64,12 @@ signature.
 
 A signature is the uid and termx is replaced with TermList construct
 which also has an uid. This is pretty cool
+
+Now, I can apply the rewriting
+
+``` python
+c(  c(s(x), c(y), 
+    c(x)))
+    --> 
+```
+
