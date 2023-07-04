@@ -15,7 +15,7 @@ log2 = Path(os.environ['HOME'])/'.hist.log'
 logx = [log, log2, 'hist.log']
 
 
-
+host = os.environ['HOST']
 class Hist:
     Done = False
     def __init__():
@@ -27,7 +27,7 @@ if not Hist.Done :
         os.system(f'touch {log}')
         fx = open(log,'r').read().strip().splitlines()
         n = len(fx)
-        s = f'''{n} {now} pwd : {pwd} cmd : {cmd}
+        s = f'''{n} {host} {now} pwd : {pwd} cmd : {cmd}
 '''
         open(log,'a').write(s)
         pass
