@@ -92,3 +92,7 @@
 91 2023-07-04 19:23:00.775779 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_SB2_KS_8x8_noX_multgen.sv.aig_out_2.aig
 92 2023-07-04 19:25:25.655675 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_SB2_KS_8x8_noX_multgen.sv.aig_out_3.aig
 93 2023-07-04 19:31:22.932374 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+None 0 2023-07-04 19:48:54.093470 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+macbeth
+ 0 2023-07-04 19:49:21.559905 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+macbeth 1 2023-07-04 19:49:43.976214 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
