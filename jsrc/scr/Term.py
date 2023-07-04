@@ -2,30 +2,37 @@ from scr.TermMgr import *
 from scr.util import *
 import pdb
 sym = lambda t: t.symbol
-
+from natsort import natsorted
 from scr.TermMgr import *    
 class Term:                     # base
-
+    #nid = lambda(i):i.nid
     def __init__(self, **kwargs):
         self.nid=None
-        self.termx=[]
+        self.termx=TermList.zero
         self.__dict__.update(kwargs)
         self.uid  = TermMgr.UID
+        self.ptr = None         # point to the uniquified one
         TermMgr.UID+=1
-        TermMgr.tmgr.append(self)
+        TermMgr.tmgr.append(self) # this is where it can uniquified
+        #not 
         pass
     def __repr__(self):
         return str(self)
     #return f'{self.__class__.__name__}: {str(self)}'
     def __or__(self, b):
+        assert False
         return TermMgr.builder.__or__(self,b)
     def __and__(self,b):
+        assert False
         return TermMgr.builder.__and__(self,b)
     def __add__(self,b):
+        assert False
         return TermMgr.builder.__add__(self,b)
     def sigma(self, *termx):
+        assert False
         return TermMgr.builder.__sigma__(*termx)
     def __neg__(self):
+        # this is needed
         return TermMgr.builder.__neg__(self)
     def __invert__(self):
         return TermMgr.builder.__invert__(self)
@@ -36,7 +43,29 @@ class Term:                     # base
     @property
     def car(self):
         return self.termx[0]
+    
+    def __le__(self, b):
+        return self.uid <= b.uid
+
     pass
+
+def uid(a): return a.uid
+
+class TermList(list, Term):           # 1D
+    sort = natsorted
+    zero = None
+    def __init__(self, *termx, **kwargs):
+        Term.__init__(self,**kwargs)
+        if len(termx) == 1 and isinstance(termx[0] , list):
+            termx = termx[0]
+            pass 
+        list.__init__(self, termx)
+        pass
+    pass
+
+TermList.zero = TermList()
+#print(TermList.zero)
+#assert False
 
 
 class Atom(Term):
@@ -45,17 +74,24 @@ class Atom(Term):
         pass
     def __str__(self):
         return self.nid
-
+    def __l1str__(self):
+        return str(self)
     pass
 
-class ConstOne(Term):
+def atom(nid):
+    # 
+    if nid in TermMgr.unique:
+        return TermMgr.get(nid)
+    return TermMgr.put(nid, Atom(nid))
+
+class ConstOne(Atom):
     def __init__(self):
-        Term.__init__(self)
-        self.nid = '1'
+        Atom.__init__(self, '1')
         pass
-    def __str__(self):
-        return '1'
     pass
+
+def const1(): 
+    return atom('1')
 
 class Expr(Term):
     def __init__(self, *termx, **kwargs):
@@ -67,6 +103,8 @@ class Expr(Term):
         pass
     def __str__(self):
         return (' %s ' % self.OP).join(map(str, self.termx)) #+ f'[{self.nid}]'
+    def __l1str__(self):
+        return (' %s ' % self.OP).join(map(nid, self.termx)) #+ f'[{self.nid}]'
     pass
 
 class ExprUnary(Term):
@@ -76,6 +114,8 @@ class ExprUnary(Term):
         pass
     def __str__(self):
         return f'{self.OP}{self.termx[0]}'
+    def __l1str__(self):
+        return f'{self.OP}{uid(self)}'
     pass
 class ExprSigma(Expr):
     OP='+'
@@ -122,6 +162,8 @@ class Func (Expr):
         pass
     def __str__(self):
         return f'{self.F}(%s)' % (','.join(map(str,self.termx))) #+ f'[{self.nid}]'
+    def __l1str__(self):
+        return f'{self.F}(%s)' % (','.join(map(nid,self.termx))) #+ f'[{self.nid}]'
     pass
 
 class FuncS(Func):
@@ -192,6 +234,9 @@ def pretty(t, depth = 0):
         assert False
 
     return r
+
+def l1str(a):
+    return a.__l1str__()
         
 if __name__ == '__main__':
 
