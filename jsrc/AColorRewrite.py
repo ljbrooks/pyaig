@@ -7,6 +7,7 @@ import pdb
 from AGuessGate import *
 import pyaig
 from autil.lit_util import *
+from aiger_util import *
 class AColorRewrite:
     def __init__(self, aiger):
         if isinstance(aiger, str ) : aiger = pyaig.aig_io.read_aiger(aiger)

@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent/'..'))
+
 from scr.TermMgr import *
 from scr.util import *
 import pdb
@@ -164,10 +168,19 @@ class Func (Expr):
         return f'{self.F}(%s)' % (','.join(map(str,self.termx))) #+ f'[{self.nid}]'
     def __l1str__(self):
         return f'{self.F}(%s)' % (','.join(map(nid,self.termx))) #+ f'[{self.nid}]'
+
+    pass
+
+class Functer:
+    def __init__(self, func_type):
+        self.func_type = func_type
+        pass
+    def __call__(self, *args, **kwargs):
+        return self.func_type(*args, **kwargs)    
     pass
 
 class FuncS(Func):
-    F='s'
+    F = 's'
     def re_eval(self):
         return TermMgr.builder.s(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
@@ -185,9 +198,9 @@ class FuncD(Func):
     pass
 
 class scr:
-    s = FuncS
-    c = FuncC
-    d = FuncD
+    s = Functer(FuncS)
+    c = Functer(FuncC)
+    d = Functer(FuncD)
     pass
 
 def rewrite(tx, rewriter):

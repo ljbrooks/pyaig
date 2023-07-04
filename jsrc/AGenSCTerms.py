@@ -6,7 +6,7 @@ from AigerCoiCluster import *
 from autil.lit_util import *
 from scr.Term import *
 from functools import *
-
+from aiger_util import *
 and_all = lambda i: reduce(lambda a,b : a and b, i, True)
 or_all = lambda i: reduce(lambda a,b : a or b, i, False)
 class AGenSCTerms:
@@ -60,8 +60,8 @@ from scr.TermDot  import *
                 assert not(sign(i))
                 self.lit2symbolx[i] = f'i{i}'
                 self.lit2symbolx[inv(i)] = f'i{inv(i)}'
-                self.code(f'i{i} = Atom("i{var(i)}")')
-                self.code(f'i{inv(i)} = ~ i{i}')
+                self.code(f'i{i} = Atom("i{var(i)}")   ## ' + pi_name(self.aiger)(i))
+                self.code(f'i{inv(i)} = ~ i{i}    ## ' + pi_name(self.aiger)(i))
                 pass
             g = self.ag.get_adder_gate(i)
             if g is None: g = self.aiger.get_fanins(i)
