@@ -10,6 +10,11 @@ class TermReduce:
         self.x = list(self.dedup())
 #        self.reduce(self.x[-1])
         pass
+    
+    def wrap(self, lx):
+        if isinstance(lx, list):
+            return list(self.wrap(lx))
+        return TermPtr(lx)
     def dedup(self):
         key = lambda i: f'{i.OP}(%s)' % (list(map(lambda t: t.uid, i.termx)))
         key_list = lambda ix: str(list(map(lambda i: i.uid, ix)))
@@ -44,7 +49,7 @@ class TermReduce:
     def key_list(self, i):
         r = f'{i.OP}(%s)' % (list(map(lambda t: t.uid, i.termx)))
         return r
-    def new(self, i):
+    def new(self, i, update=False):
         d = self.d
         key = lambda i: f'{i.OP}(%s)' % (list(map(lambda t: t.uid, i.termx)))
         key_list = lambda ix: str(list(map(lambda i: i.uid, ix)))
@@ -54,7 +59,7 @@ class TermReduce:
         kx = key_list(i.termx)
         print('kx : ', kx)
         if kx not in self.d: 
-            i.termx = TermList(i.termx)
+            i.termx = TermList(i.termx) # i's term is updated
             assert  i.termx.uid > 0
             d[kx] = i.termx
             pass
@@ -63,7 +68,7 @@ class TermReduce:
             pass
         k = key(i)
         if k not in d :   d[k] = i
-        else : i = d[k]
+        else : i = d[k]         # it is already there
         return i
     def reduce(self, a):
         is_c = lambda i: isinstance(i, FuncC)

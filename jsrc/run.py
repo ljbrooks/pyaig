@@ -60,6 +60,8 @@ for i in pox:
 
 
 for i in rx:
+    t = TermTopo(rx[0])
+    old = len(t.topoOrder())
     tr = TermReduce(i)
     print(tr.x)
     for x in tr.x:
@@ -67,6 +69,16 @@ for i in rx:
         print(pretty(x))
         print(f'%s'% ( [j.uid for j in x.termx]), ' -- ' , x.termx.uid)
         pass
+    t = TermTopo(tr.x[-1])
+    l2 = len(t.topoOrder())
+    print('length change', old, len(t.topoOrder()))
     r = tr.reduce(tr.x[-1])
+    t = TermTopo(r)
+
     print('final', pretty(r))
+    print('length change', old, l2, len(t.topoOrder()))    
+    pass
+
+
+
     pass

@@ -51,8 +51,25 @@ class Term:                     # base
     def __le__(self, b):
         return self.uid <= b.uid
 
+    def __len__(self):
+        return len(self.termx)
+    def __getitem__(self, i):
+        return self.termx[i]
+
     pass
 
+class TermPtr(Term):            # this thing also has an uid
+    def __init__(self, term):
+        self.term = term
+        pass
+    def __len__(self):
+        return len(self.term.termx)
+    def __getitem__(self, i):
+        return self.term.termx[i]
+    def __hash__(self):
+        return hash(self.term)
+    
+    pass
 class TermList(list, Term):
     def __init__(self, args, **kwargs):
         list.__init__(self, args)
