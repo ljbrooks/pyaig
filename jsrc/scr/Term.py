@@ -50,6 +50,8 @@ class Term:                     # base
     
     def __le__(self, b):
         return self.uid <= b.uid
+    def __lt__(self, b):
+        return self.uid < b.uid
 
     def __len__(self):
         return len(self.termx)
@@ -87,6 +89,7 @@ class TermList(list, Term):           # 1D
             termx = termx[0]
             pass 
         list.__init__(self, termx)
+        assert not isinstance(termx, TermList)
         pass
     pass
 
@@ -241,19 +244,42 @@ def rewrite_r(tx):
     print()
     return a
 
+def shortkey(t:Term):
+    assert isinstance(t, Term) or isinstance(t, list)
+    if isinstance(t,Atom): return str(t)
+    else:
+        if isinstance(t, TermList):
+            return str(sorted(list(map(lambda i:i.uid, t)))) # 
 
-def pretty(t, depth = 0):
-    indent = '   '
-    if isinstance(t, list):
-        return ',\n'.join(fmap(pretty, t))
+        elif isinstance(t, list):
+            return str(sorted(list(map(lambda i:i.uid, t)))) # 
+            pass
+        else:
+            return f'{t.OP}(%s)' % (shortkey(t.termx))
+        pass
+    pass
+
+skip_atom = lambda noAtom: lambda i: not noAtom or not isinstance(i, Atom)
+
+def pretty_(noAtom):
+    def fn(t):
+        return pretty(t, noAtom= noAtom)
+    return fn
+
+def pretty(t, depth = 0, noAtom=False):
+    indent = f'--{depth}--'
+    if isinstance(t, TermList):
+        return ('{%s}\n'%t.uid) + ',\n'.join(fmap(pretty_(noAtom), filter(skip_atom(noAtom), t)) )
+    elif isinstance(t, list):
+        return ',\n'.join(fmap(pretty_(noAtom), filter(skip_atom(noAtom),t)))
     if isinstance(t, Atom) :
-        r = str(t)
+        r = ('{%s}'%t.uid) + str(t) 
     elif isinstance(t, Func):
-        rx  = [pretty(i, depth+1) for i in t.termx]
-        r =f'{t.F}( %s)' % (f'\n{indent}'.join(pretty(t.termx).splitlines()))
+        rx  = [pretty(i, depth+1, noAtom) for i in filter(skip_atom(noAtom), t.termx)]
+        r =f'{t.F}( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
         return r
     elif isinstance(t, ExprUnary):
-        r = f'{t.OP}%s' % (pretty(t.car))
+        r = f'{t.OP}%s' % (pretty_(noAtom)(t.car))
     else:
         print(t)
         assert False

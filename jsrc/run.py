@@ -5,6 +5,7 @@ from scr.TermMgr import *
 from scr.TermBuilder import *
 from scr.TermRewriter import *
 from scr.TermReduce import *
+from scr.TermDFS import *
 import math
 from tabulate import *
 from scr.util import *
@@ -78,11 +79,18 @@ for i in rx:
     print('final', pretty(r))
     print('length change', old, l2, len(t.topoOrder()))    
     lx = [old, l2, len(t.topoOrder())]
-    for i in range(3):
+    for i in range(13):
         r2 = tr.reduceAll(r)
         lx.append(len(TermTopo(r2).topoOrder()))
         r = r2
-        print('final2', pretty(r))
+        print('final2----\n', pretty(r))
         #print('length change2', old, l2, len(t.topoOrder()))    
+        
+        print('noAtom---\n', pretty(r, noAtom=True))
         print(lx)
+        
+        if lx[-1] >= lx[-2]: break
+        pass
+    d = TermDFS(r)
+
     pass

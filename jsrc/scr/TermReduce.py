@@ -1,6 +1,7 @@
 from scr.TermTopo import *
 from collections import *
 import pdb
+from isort import isort
 from scr.Term import *
 class TermReduce:
     def __init__(self, term):
@@ -10,25 +11,30 @@ class TermReduce:
         self.x = list(self.dedup())
 #        self.reduce(self.x[-1])
         pass
-    
+    def check(self,a):
+        pass
     def wrap(self, lx):
         if isinstance(lx, list):
             return list(self.wrap(lx))
         return TermPtr(lx)
+    
+    def update(self, t: TermList):
+        for i in range(len(t)):
+            t[i] = self.d[shortkey(t[i])]
+            pass
+        isort(t)
+        return t
+
     def dedup(self):
-        key = lambda i: f'{i.OP}(%s)' % (list(map(lambda t: t.uid, i.termx)))
-        key_list = lambda ix: str(list(map(lambda i: i.uid, ix)))
 
         # Atom is already unique, so let it go
-        self.d = d = dict([(i.uid, i) for i in filter(lambda a: isinstance(a, Atom), self.topo.topoOrder())])
+        self.d = d = dict([(shortkey(i), i) for i in filter(lambda a: isinstance(a, Atom), self.topo.topoOrder())])
         
         for i in self.topo.topoOrder():
             if isinstance(i, Atom): continue
             #pdb.set_trace()
-            
-            i.termx = [self.d[j.uid] if isinstance(j, Atom) else self.d[key(j)] for j in i.termx]
-            i.termx = list(sorted(i.termx, key=lambda x: x.uid))
-            kx = key_list(i.termx)
+            self.update(i.termx)
+            kx = shortkey(i.termx)
             print('kx : ', kx)
             if kx not in d: 
                 i.termx = TermList(i.termx)
@@ -38,7 +44,7 @@ class TermReduce:
             else:
                 i.termx = d[kx]
                 pass
-            k = key(i)
+            k = shortkey(i)
             if k not in d :   d[k] = i
             else: 
                 i = d[k] #assert False
@@ -51,22 +57,19 @@ class TermReduce:
         return r
     def new(self, i, update=False):
         d = self.d
-        key = lambda i: f'{i.OP}(%s)' % (list(map(lambda t: t.uid, i.termx)))
-        key_list = lambda ix: str(list(map(lambda i: i.uid, ix)))
-        #pdb.set_trace()
-        i.termx = [self.d[j.uid] if isinstance(j, Atom) else self.d[key(j)] for j in i.termx]
-        i.termx = list(sorted(i.termx, key=lambda x: x.uid))
-        kx = key_list(i.termx)
+
+        i.termx = self.update(i.termx)
+        kx = shortkey(i.termx)
         print('kx : ', kx)
         if kx not in self.d: 
-            i.termx = TermList(i.termx) # i's term is updated
+            i.termx = TermList(i.termx) if not isinstance(i.termx, TermList) else i.termx # i's term is updated
             assert  i.termx.uid > 0
             d[kx] = i.termx
             pass
         else:
             i.termx = d[kx]
             pass
-        k = key(i)
+        k = shortkey(i)
         if k not in d :   d[k] = i
         else : i = d[k]         # it is already there
         return i
