@@ -162,3 +162,7 @@ m3 3 2023-07-05 16:33:34.790555 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGe
 m3 4 2023-07-05 16:33:38.125095 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py mock/d.aig
 m3 5 2023-07-05 16:34:05.404437 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
 m3 6 2023-07-05 16:34:10.380678 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+Jiangs-MacBook-Pro.local 0 2023-07-05 14:31:09.569167 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+Jiangs-MacBook-Pro.local 1 2023-07-05 14:31:45.394517 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+Jiangs-MacBook-Pro.local 2 2023-07-05 14:31:57.633921 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+

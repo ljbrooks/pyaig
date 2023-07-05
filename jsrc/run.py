@@ -77,8 +77,12 @@ for i in rx:
 
     print('final', pretty(r))
     print('length change', old, l2, len(t.topoOrder()))    
-    pass
-
-
-
+    lx = [old, l2, len(t.topoOrder())]
+    for i in range(3):
+        r2 = tr.reduceAll(r)
+        lx.append(len(TermTopo(r2).topoOrder()))
+        r = r2
+        print('final2', pretty(r))
+        #print('length change2', old, l2, len(t.topoOrder()))    
+        print(lx)
     pass

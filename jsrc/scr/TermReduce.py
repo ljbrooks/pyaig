@@ -71,6 +71,7 @@ class TermReduce:
         else : i = d[k]         # it is already there
         return i
     def reduce(self, a):
+        u = a.uid
         is_c = lambda i: isinstance(i, FuncC)
         is_s = lambda i: isinstance(i, FuncS)
         cx = defaultdict(list)
@@ -104,8 +105,14 @@ class TermReduce:
             break
             pass
         if good: return self.reduce(a)
+        assert a.uid == u 
         return a
-
+    def reduceAll(self, a):
+        topo = TermTopo(a)
+        for i in topo.topoOrder():
+            self.reduce(i)
+            pass
+        return a
     pass
         
 
