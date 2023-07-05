@@ -155,3 +155,10 @@ macbeth 57 2023-07-05 09:58:31.128555 pwd : /home/long/uu/pyaig/jsrc cmd : AGenS
 macbeth 58 2023-07-05 09:58:39.287559 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
 macbeth 59 2023-07-05 09:59:42.132509 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
 macbeth 60 2023-07-05 10:00:00.284624 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+m3 0 2023-07-05 15:26:57.342288 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py
+m3 1 2023-07-05 15:50:56.562442 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AigerCoiCluster.py
+m3 2 2023-07-05 15:51:02.674231 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AigerCoiCluster.py mock/d.aig
+m3 3 2023-07-05 16:33:34.790555 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py
+m3 4 2023-07-05 16:33:38.125095 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py mock/d.aig
+m3 5 2023-07-05 16:34:05.404437 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+m3 6 2023-07-05 16:34:10.380678 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
