@@ -155,3 +155,6 @@ macbeth 57 2023-07-05 09:58:31.128555 pwd : /home/long/uu/pyaig/jsrc cmd : AGenS
 macbeth 58 2023-07-05 09:58:39.287559 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
 macbeth 59 2023-07-05 09:59:42.132509 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
 macbeth 60 2023-07-05 10:00:00.284624 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+Jiangs-MacBook-Pro.local 0 2023-07-05 14:31:09.569167 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+Jiangs-MacBook-Pro.local 1 2023-07-05 14:31:45.394517 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+Jiangs-MacBook-Pro.local 2 2023-07-05 14:31:57.633921 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
