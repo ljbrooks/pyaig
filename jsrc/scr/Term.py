@@ -199,7 +199,7 @@ class FuncS(Func):
     pass
 
 class FuncC(Func):
-    OP = F = 'c'
+    OP = F = 'm'
     def re_eval(self):
         return TermMgr.builder.c(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
