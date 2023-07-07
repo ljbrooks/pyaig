@@ -74,6 +74,9 @@ class TermReduce:
         else : i = d[k]         # it is already there
         return i
     def reduce(self, a):
+        #assert isinstance(a, FuncC)
+        # this is the rewrite 
+        # 
         u = a.uid
         is_c = lambda i: isinstance(i, FuncC)
         is_s = lambda i: isinstance(i, FuncS)
@@ -114,6 +117,7 @@ class TermReduce:
         topo = TermTopo(a)
         for i in topo.topoOrder():
             self.reduce(i)
+
             pass
         return a
     pass

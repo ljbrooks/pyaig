@@ -199,3 +199,17 @@ m3 36 2023-07-05 21:48:24.415215 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AG
 macbeth 61 2023-07-05 23:29:33.559059 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_5.aig
 macbeth 62 2023-07-05 23:29:40.885209 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_6.aig
 macbeth 63 2023-07-05 23:29:49.042072 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+m3 37 2023-07-07 19:28:14.872599 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_2
+m3 38 2023-07-07 19:28:17.851342 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_2.aig
+m3 39 2023-07-07 19:28:31.249004 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+m3 40 2023-07-07 19:31:59.258568 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+m3 41 2023-07-07 19:33:54.681026 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_4.aig
+m3 42 2023-07-07 19:33:58.876575 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_5.aig
+m3 43 2023-07-07 19:34:24.183247 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_6.aig
+m3 44 2023-07-07 19:35:38.025780 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+m3 45 2023-07-07 19:46:10.615910 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_0.aig
+m3 46 2023-07-07 19:46:15.383959 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_1.aig
+m3 47 2023-07-07 19:47:11.621483 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_1.aig
+m3 48 2023-07-07 19:47:16.030526 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_5.aig
+m3 49 2023-07-07 19:47:25.387710 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_6.aig
+m3 50 2023-07-07 19:47:36.680111 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig

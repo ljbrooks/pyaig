@@ -74,6 +74,7 @@ for i in rx:
     l2 = len(t.topoOrder())
     print('length change', old, len(t.topoOrder()))
     r = tr.reduce(tr.x[-1])
+    #r = tr.x[-1]#t.topoOrder()[-1]
     t = TermTopo(r)
 
     print('final', pretty(r))

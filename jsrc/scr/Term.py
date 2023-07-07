@@ -198,6 +198,12 @@ class FuncS(Func):
         return TermMgr.builder.s(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
+class FuncD(Func):
+    OP= F = 'd'
+    def re_eval(self):
+        return TermMgr.builder.d(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+    pass
+
 class FuncC(Func):
     OP = F = 'm'
     def re_eval(self):
