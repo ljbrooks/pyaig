@@ -114,7 +114,7 @@ class TermReduce:
                 jtag('reduce result: ', pretty(a))
                 pass
             break
-            pass
+
         if good: return self.reduce(a)
         assert a.uid == u 
         return a

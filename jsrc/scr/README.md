@@ -73,3 +73,10 @@ c(  c(s(x), c(y),
     --> 
 ```
 
+``` python
+m(s((mx) + y) , m(s(x)+z) )
+
+=  m (y + m (x + mz)) - m ( y+mx)
+
+```
+<!-- this is a fold, and needs be recognized -->
