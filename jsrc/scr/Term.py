@@ -1,14 +1,16 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent/'..'))
-
+import math
 from scr.TermMgr import *
 from scr.util import *
 import pdb
 sym = lambda t: t.symbol
 from natsort import natsorted
 from scr.TermMgr import *    
+from isort import *
 class Term:                     # base
+    inf = None
     #nid = lambda(i):i.nid
     def __init__(self, **kwargs):
         self.nid=None
@@ -48,10 +50,14 @@ class Term:                     # base
     def car(self):
         return self.termx[0]
     
+    def sort_rank(self):
+        return [ self.rank, self.OP, self.uid]
+    
     def __le__(self, b):
-        return self.uid <= b.uid
+        return self.sort_rank() <= b.sort_rank()
     def __lt__(self, b):
-        return self.uid < b.uid
+        return self.sort_rank() < b.sort_rank()
+    #return self.uid < b.uid
 
     def __len__(self):
         return len(self.termx)
@@ -60,27 +66,14 @@ class Term:                     # base
 
     pass
 
-class TermPtr(Term):            # this thing also has an uid
-    def __init__(self, term):
-        self.term = term
-        pass
-    def __len__(self):
-        return len(self.term.termx)
-    def __getitem__(self, i):
-        return self.term.termx[i]
-    def __hash__(self):
-        return hash(self.term)
-    
+class TermInf(Term):
+    rank = math.inf
     pass
-class TermList(list, Term):
-    def __init__(self, args, **kwargs):
-        list.__init__(self, args)
-        Term.__init__(self, **kwargs)
-        pass
-    pass
-def uid(a): return a.uid
 
-class TermList(list, Term):           # 1D
+
+
+class TermList(Term):           # 1D
+    rank = None
     sort = natsorted
     zero = None
     def __init__(self, *termx, **kwargs):
@@ -88,17 +81,40 @@ class TermList(list, Term):           # 1D
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass 
-        list.__init__(self, termx)
+        else:
+            termx = list(termx)
+        assert isinstance(termx, list)
+        assert not isinstance (termx, TermList)
+        self.tx = termx
+        #list.__init__(self, termx)
+        isort(self)
         assert not isinstance(termx, TermList)
         pass
+    def __getitem__(self, i):
+        return self.tx[i]
+    def __len__(self,): return len(self.tx)
+    def __setitem__(self, i,v):
+        self.tx[i] = v
+        pass
+
+    def __add__(self, x):
+        r = []
+        self.clear()
+
+        assert isinstance(x, TermList)
+        r = merge(self, x)
+        return r
     pass
 
 TermList.zero = TermList()
 #print(TermList.zero)
 #assert False
 
+Term.inf = TermInf()
 
 class Atom(Term):
+    rank = 1
+    OP='a'
     def __init__(self, nid):
         Term.__init__(self, nid = nid)
         pass
@@ -110,6 +126,7 @@ class Atom(Term):
 
 
 class ConstOne(Atom):
+    rank = 0
     def __init__(self):
         Atom.__init__(self, '1')
         pass
@@ -119,12 +136,16 @@ def const1():
     return atom('1')
 
 class Expr(Term):
+    rank = 2
     def __init__(self, *termx, **kwargs):
         Term.__init__(self, **kwargs)
+        if isinstance(termx, TermList):
+            self.termx = termx
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass
-        self.termx = list(tuple(termx))
+
+        self.termx = list(tuple(termx)) if not isinstance(termx, TermList) else termx
         pass
     def __str__(self):
         return (' %s ' % self.OP).join(map(str, self.termx)) #+ f'[{self.nid}]'
@@ -133,6 +154,7 @@ class Expr(Term):
     pass
 
 class ExprUnary(Term):
+    rank = 3
     def __init__(self, *termx, **kwargs):
         Term.__init__(self, **kwargs)
         self.termx = list(tuple(termx))
@@ -182,8 +204,9 @@ class ExprInv(ExprUnary):
     pass
 
 class Func (Expr):
+    rank = 4
     def __init__(self, *args, **kwargs):
-        Expr.__init__(self,*args, **kwargs)
+        Expr.__init__(self, *args, **kwargs)
         pass
     def __str__(self):
         return f'{self.F}(%s)' % (','.join(map(str,self.termx))) #+ f'[{self.nid}]'
@@ -195,25 +218,32 @@ class Func (Expr):
 class FuncS(Func):
     OP= F = 's'
     def re_eval(self):
-        return TermMgr.builder.s(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+        return TermMgr.builder.s(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 class FuncD(Func):
     OP= F = 'd'
     def re_eval(self):
-        return TermMgr.builder.d(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+        return TermMgr.builder.d(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 class FuncC(Func):
     OP = F = 'm'
     def re_eval(self):
-        return TermMgr.builder.c(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+        return TermMgr.builder.c(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
+
+class FuncSigma(Func):
+    OP = F = '+/>'              # foldl + 
+    def re_eval(self):
+        return TermMgr.builder.sigma(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+    pass
+
 
 class FuncD(Func):
     OP = F = 'd'
     def re_eval(self):
-        return TermMgr.builder.d(*tuple(self.termx)) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+        return TermMgr.builder.d(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 def atom(s, **kwargs): return Atom(s, **kwargs)
@@ -282,10 +312,10 @@ def pretty(t, depth = 0, noAtom=False):
         r = ('{%s}'%t.uid) + str(t) 
     elif isinstance(t, Func):
         rx  = [pretty(i, depth+1, noAtom) for i in filter(skip_atom(noAtom), t.termx)]
-        r =f'{t.F}( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
+        r =f'{t.F}.{t.uid} ( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
         return r
     elif isinstance(t, ExprUnary):
-        r = f'{t.OP}%s' % (pretty_(noAtom)(t.car))
+        r = f'{t.OP}.{t.uid} %s' % (pretty_(noAtom)(t.car))
     else:
         print(t)
         assert False

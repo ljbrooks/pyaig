@@ -16,3 +16,25 @@ def sort_in_place(lx, i):
         sort_in_place(lx, i-1)
         pass
     pass
+
+def merge(x,y):
+    r = []
+    self.clear()
+    assert isinstance(x, TermList)
+    
+    y.append(x.inf)
+    x.append(y.inf)
+    i,j = 0, 0
+    for _  in range(len(x) + len(y) -2):
+        if x[i] <= y[j] : 
+            r.append(x[i])
+            i+=1
+        else:
+            r.append(y[j])
+            j+=1
+            pass
+        pass
+    x.pop()
+    y.pop()
+    return TermList(r)
+
