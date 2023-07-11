@@ -14,7 +14,7 @@ class Term:                     # base
     #nid = lambda(i):i.nid
     def __init__(self, **kwargs):
         self.nid=None
-        self.termx=TermList.zero
+        #self.termx=TermList.zero
         self.__dict__.update(kwargs)
         self.uid  = TermMgr.UID
         self.ptr = None         # point to the uniquified one
@@ -89,11 +89,23 @@ class TermList(Term):           # 1D
         #list.__init__(self, termx)
         isort(self)
         assert not isinstance(termx, TermList)
+        self.changed = True
         pass
+    def append(self, v):
+        self.changed = True
+        self.tx.append(v)
+        pass
+    def remove(self, v):
+        self.changed = True
+        l = len(self.tx)
+        self.tx.remove(v)
+        assert l == len(self)+1
+        return 
     def __getitem__(self, i):
         return self.tx[i]
     def __len__(self,): return len(self.tx)
     def __setitem__(self, i,v):
+        self.changed = True
         self.tx[i] = v
         pass
 
@@ -104,6 +116,8 @@ class TermList(Term):           # 1D
         assert isinstance(x, TermList)
         r = merge(self, x)
         return r
+    def __str__(self):
+        return str(self.tx)
     pass
 
 TermList.zero = TermList()
@@ -117,6 +131,7 @@ class Atom(Term):
     OP='a'
     def __init__(self, nid):
         Term.__init__(self, nid = nid)
+        self.termx = []
         pass
     def __str__(self):
         return self.nid
@@ -137,9 +152,12 @@ def const1():
 
 class Expr(Term):
     rank = 2
-    def __init__(self, *termx, **kwargs):
+    def __init__(self, *termx, tl = None, **kwargs):
         Term.__init__(self, **kwargs)
-        if isinstance(termx, TermList):
+        self.termx = TermList.zero
+        if not tl is None:
+            termx = tl
+        elif isinstance(termx, TermList):
             self.termx = termx
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
@@ -205,8 +223,9 @@ class ExprInv(ExprUnary):
 
 class Func (Expr):
     rank = 4
-    def __init__(self, *args, **kwargs):
-        Expr.__init__(self, *args, **kwargs)
+    def __init__(self, *args,tl = None, **kwargs):
+        Expr.__init__(self, *args, tl=tl,**kwargs)
+        assert tl is None or  isinstance(tl, TermList)
         pass
     def __str__(self):
         return f'{self.F}(%s)' % (','.join(map(str,self.termx))) #+ f'[{self.nid}]'
