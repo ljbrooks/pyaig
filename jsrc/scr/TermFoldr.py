@@ -4,9 +4,9 @@
 recursive patterns, it is called left-reducer.
 
 ## define f 
-f [] = 0
-f [a] = m a
-f (a,b) = m(a + b)
+mm [] = 0
+mm [a] =  a
+mm (a,b) = m(a + b)
 
 lfold(f) [a,b,c] = m(a+m(b+m(c))) 
 
@@ -62,11 +62,13 @@ class FuncSigma(FuncFoldr):
     rank = 3.5
     F = OP = '+/'      # sigma of atoms
     # idetnify parallel prefix structure and reduce it
+    
     pass
 
 class FuncFoldrMPlus(FuncFoldr):
     # idetnify parallel prefix structure and reduce it
     F = OP = 'm+<-/'                 # rfold m
+    
     pass
 
 class FuncFoldrMSPlus(FuncFoldr):

@@ -4,11 +4,13 @@ import pdb
 from isort import isort
 from scr.Term import *
 from jtag3 import jtag
+
+def jtag(*args): pass
 class TermReduce:
     def __init__(self, term):
         self.term = term 
         self.topo = TermTopo([term])
-        print('\n'.join(map(str, self.topo.topoOrder())))
+        #print('\n'.join(map(str, self.topo.topoOrder())))
         self.x = list(self.dedup())
 #        self.reduce(self.x[-1])
         pass
@@ -36,7 +38,7 @@ class TermReduce:
             #pdb.set_trace()
             self.update(i.termx)
             kx = shortkey(i.termx)
-            print('kx : ', kx)
+            #print('kx : ', kx)
             if kx not in d: 
                 i.termx = TermList(i.termx)
                 assert  i.termx.uid > 0
@@ -61,7 +63,7 @@ class TermReduce:
 
         i.termx = self.update(i.termx)
         kx = shortkey(i.termx)
-        print('kx : ', kx)
+        #print('kx : ', kx)
         if kx not in self.d: 
             i.termx = TermList(i.termx) if not isinstance(i.termx, TermList) else i.termx # i's term is updated
             assert  i.termx.uid > 0
@@ -89,7 +91,7 @@ class TermReduce:
                 csx[j.termx.uid] .append((i,j)) # the c-term and the s-term
                 pass
             pass
-        print('common set:', set(cx.keys()) & set(csx.keys()))
+        #print('common set:', set(cx.keys()) & set(csx.keys()))
         good = False
         for k  in cx.keys() & csx.keys(): # 
             good = True
@@ -106,7 +108,7 @@ class TermReduce:
 
                 n = FuncC(c2x)
                 n = self.new(n)
-                print(pretty(n))
+                #print(pretty(n))
                 a.termx.remove(c2)
                 a.termx.remove(c1)
                 a.termx.append(n) # this is correct

@@ -30,21 +30,21 @@ def topoOrder(with_t=True):
     pass
 
 
-print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
+#print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
 
 
 a = TermRewriter()
 
 ux = pox
 for u in ux:
-    print
+#    print
     x= rewrite(u,a)
-    print('before --')
-    print(pretty(u))
-    print('after-----')
-    print(pretty(x))
-    print()
-print(str(u))
+    #   print('before --')
+    #print(pretty(u))
+    #print('after-----')
+    #print(pretty(x))
+    #print()
+#print(str(u))
 
 rx = [rewrite(i,a) for i in pox]
 '''

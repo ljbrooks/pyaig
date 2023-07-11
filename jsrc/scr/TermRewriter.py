@@ -54,13 +54,13 @@ class TermRewriter:
         return FuncD(termx)
 
     def s(self, *termx, **kwargs):
-        print('rewrite s', termx)
+        #print('rewrite s', termx)
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass
         else: 
             termx = list(termx)
-        print('s', termx)
+            #print('s', termx)
         
         
     
@@ -94,13 +94,18 @@ class TermRewriter:
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass
-        print('c', termx)
+        #print('c', termx)
 
         if mostly(tsign)(termx):
             termx = fmap(self.__invert__, termx)
             return ExprInv(FuncC(*tuple(termx)))
 
         return FuncC(*tuple(termx))
+
+    def m2(self, *termx , **kwargs):
+
+        return FuncM2(*tuple(termx))
+
     
     def neg(self, *ax):
         if isinstance(ax, list):
@@ -117,7 +122,7 @@ def tneg(term):
 
 
 def tinvert_inverted(tx, cnt=-1):
-    print(tx,cnt)
+    #print(tx,cnt)
 
     if cnt == -1:
         for i in range(len(tx)):

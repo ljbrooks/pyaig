@@ -252,6 +252,12 @@ class FuncC(Func):
         return TermMgr.builder.c(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
+class FuncM2(Func):
+    OP = F = 'm2'
+    def re_eval(self):
+        return TermMgr.builder.m2(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+    pass
+
 # class FuncSigma(Func):
 #     OP = F = '+/>'              # foldl + 
 #     def re_eval(self):
@@ -271,6 +277,7 @@ class scr:
     s = FuncS
     c = FuncC
     d = FuncD
+    m2 = FuncM2
     pass
 
 def rewrite(tx, rewriter):
@@ -282,7 +289,7 @@ def rewrite(tx, rewriter):
 
 def rewrite_r(tx):
     print()
-    print('enter', tx)
+    #print('enter', tx)
     if isinstance(tx, list):
         return list(map(rewrite_r, tx))
     if not len(tx.termx): return tx
@@ -290,13 +297,13 @@ def rewrite_r(tx):
         #        pdb.set_trace()
         pass
     ax = rewrite_r(tx.termx)
-    print('ax here', ax)
-    print('was', tx)
+    #print('ax here', ax)
+    #print('was', tx)
     u = tx.__class__(*tuple(ax), nid=tx.nid)
     a = u.re_eval() # fmap(rewrite_r, tx.termx)
     #    a = tx.__class__(*tuple(a), tx.nid)
-    print('exit', a, '\n     <--', tx)
-    print()
+    #print('exit', a, '\n     <--', tx)
+    #print()
     return a
 
 def shortkey(t:Term):
@@ -321,24 +328,32 @@ def pretty_(noAtom):
         return pretty(t, noAtom= noAtom)
     return fn
 
+
+Depth = 0
 def pretty(t, depth = 0, noAtom=False):
-    indent = f'--{depth}--'
+    global Depth
+    Depth+=1
+    indent = f'  {Depth}  '
     if isinstance(t, TermList):
+        Depth-=1
         return ('{%s}\n'%t.uid) + ',\n'.join(fmap(pretty_(noAtom), filter(skip_atom(noAtom), t)) )
     elif isinstance(t, list):
+        Depth-=1
         return ',\n'.join(fmap(pretty_(noAtom), filter(skip_atom(noAtom),t)))
     if isinstance(t, Atom) :
         r = ('{%s}'%t.uid) + str(t) 
     elif isinstance(t, Func):
         rx  = [pretty(i, depth+1, noAtom) for i in filter(skip_atom(noAtom), t.termx)]
         r =f'{t.F}.{t.uid} ( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
+        Depth-=1
         return r
     elif isinstance(t, ExprUnary):
         r = f'{t.OP}.{t.uid} %s' % (pretty_(noAtom)(t.car))
     else:
         print(t)
         assert False
-
+        pass
+    Depth-=1
     return r
 
 def l1str(a):

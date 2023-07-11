@@ -30,7 +30,7 @@ def topoOrder(with_t=True):
     pass
 
 
-print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
+#print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
 
 
 a = TermRewriter()
@@ -41,14 +41,14 @@ a = TermRewriter()
 #ux = [xs156] #xs86, xs44, xs150, xs156]
 ux = pox
 for u in ux:
-    print
+    #print
     x= rewrite(u,a)
-    print('before --')
-    print(pretty(u))
-    print('after-----')
-    print(pretty(x))
-    print()
-print(str(u))
+    #print('before --')
+    #print(pretty(u))
+    #print('after-----')
+    #print(pretty(x))
+    #print()
+#print(str(u))
 
 rx = [rewrite(i,a) for i in pox]
 '''
@@ -64,11 +64,11 @@ for i in rx:
     t = TermTopo(rx[0])
     old = len(t.topoOrder())
     tr = TermReduce(i)
-    print(tr.x)
+#    print(tr.x)
     for x in tr.x:
-        print('uid:', x.uid)
-        print(pretty(x))
-        print(f'%s'% ( [j.uid for j in x.termx]), ' -- ' , x.termx.uid)
+        #print('uid:', x.uid)
+        #print(pretty(x))
+        #print(f'%s'% ( [j.uid for j in x.termx]), ' -- ' , x.termx.uid)
         pass
     t = TermTopo(tr.x[-1])
     l2 = len(t.topoOrder())
