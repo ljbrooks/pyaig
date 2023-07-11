@@ -252,11 +252,11 @@ class FuncC(Func):
         return TermMgr.builder.c(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
-class FuncSigma(Func):
-    OP = F = '+/>'              # foldl + 
-    def re_eval(self):
-        return TermMgr.builder.sigma(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
-    pass
+# class FuncSigma(Func):
+#     OP = F = '+/>'              # foldl + 
+#     def re_eval(self):
+#         return TermMgr.builder.sigma(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+#     pass
 
 
 class FuncD(Func):

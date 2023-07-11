@@ -25,7 +25,8 @@ class TermReduce2:
             if not isinstance(i.termx, TermList):
                 i.termx = self.ht.add_termlist(i.termx)
                 pass
-            yield self.ht.update(i)
+            #self.ht.renew(i)
+            yield self.ht.update(i) # here, I merge the atom list
             pass
         pass
 

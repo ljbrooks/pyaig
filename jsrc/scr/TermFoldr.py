@@ -49,24 +49,27 @@ import sys
 sys.path.append('.')
 from scr.Term import *
 
-class FuncFoldr(Term):
+class FuncFoldr(Func):
     # idetnify parallel prefix structure and reduce it
     def __init__(self, lx):
-        list.__init__(self, lx)
+        assert isinstance(lx, TermList)
+        Func.__init__(self, None, tl=lx)
+            #list.__init__(self,  lx)
         pass
     pass
 
 class FuncSigma(FuncFoldr):
-    OP = '+/'      # sigma of atoms
+    rank = 3.5
+    F = OP = '+/'      # sigma of atoms
     # idetnify parallel prefix structure and reduce it
     pass
 
 class FuncFoldrMPlus(FuncFoldr):
     # idetnify parallel prefix structure and reduce it
-    OP = 'm+<-/'                 # rfold m
+    F = OP = 'm+<-/'                 # rfold m
     pass
 
 class FuncFoldrMSPlus(FuncFoldr):
-    OP = 'ms+<-/'                 # rfold m
+    F = OP = 'ms+<-/'                 # rfold m
     pass
 

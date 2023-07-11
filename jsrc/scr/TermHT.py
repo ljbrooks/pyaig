@@ -2,6 +2,7 @@ from isort import *
 import pdb
 from scr.util import *
 from scr.Term import *
+from scr.TermFoldr import *
 
 class TermHT:
     @staticmethod
@@ -39,12 +40,15 @@ class TermHT:
         isort(tl)
         k = self.key(tl)
         if k in self.tb:
-            return self.tb[k]
+            r =  self.tb[k]
         else:
             r = TermList(*tuple(tl))
             assert not hasattr(r, 'termx')
-            return self.__insert__(r)
-        pass
+            r =  self.__insert__(r)
+            pass
+        assert isinstance(r, TermList)
+        return r
+
     def new_op(self, op_type, lx):
         #pdb.set_trace()
         if not isinstance(lx, TermList):
@@ -56,7 +60,7 @@ class TermHT:
         assert isinstance(r.termx , TermList)
         return self.update(r)
     
-    def update(self,a):
+    def register(self,a):
         assert isinstance(a.termx, TermList)
         if len(a.termx):
             for i in range(len(a.termx)):
@@ -70,4 +74,36 @@ class TermHT:
             pass
         return self.__insert__(a)
     
+    def update(self, a):
+        assert isinstance(a, Atom) or isinstance(a.termx, TermList)
+        if isinstance(a, Atom): return self.register(a)
+        assert len(a.termx) >0
+        if not isinstance(a.termx[0], Atom) and not isinstance(a.termx[0], FuncSigma):
+            if not isinstance(a.termx, TermList):
+                a.termx = self.add_termlist(a.termx)
+                return self.register(a)
+            pass
+        atom_count = sum(map(lambda i: isinstance(i, Atom), a.termx))
+        #if atom_count == 0: return self.register(a)
+        #assert atom_count >0
+
+        ax, bx  = a.termx[:atom_count], a.termx[atom_count:]
+        if atom_count>0:
+
+            f = FuncSigma(self.add_termlist(ax))
+            f = self.register(f)
+            bx = [f] + bx
+            pass
+
+        sigma_count = sum(map(lambda i: isinstance(i, FuncSigma), bx))
+        if sigma_count > 1:
+            ax, bx = bx[:sigma_count] , bx[sigma_count:]
+            r = sum([i.termx.tx for i in ax], [])
+            f = FuncSigma(self.add_termlist(r))
+            bx = [f] + bx
+            pass
+        a.termx = self.add_termlist(bx)
+        
+        return self.register(a)
+
     pass
