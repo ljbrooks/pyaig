@@ -107,9 +107,9 @@ from scr.TermDot  import *
                 c = pure(i)
                 self.lit2symbolx[pure(c)] = f'xc{c}'
                 self.lit2symbolx[pure(c)^0x1] = f'xc{inv(c)}'                
-                code = [f'xc{c} = scr.c(%s, nid="m2{c}")'% (','.join(map(get_symbol,g))),
-                        #f'xc{inv(c)} = ~ scr.m2(%s, nid="m2{inv(c)}")'% (','.join(map(get_symbol,g)))
-                        f'xc{inv(c)} =  scr.c(%s, nid="m2{inv(c)}")'% (','.join(map(get_symbol,inv(g))))
+                code = [f'xc{c} = scr.m2(%s, nid="m2{c}")'% (','.join(map(get_symbol,g))),
+                        f'xc{inv(c)} = ~ scr.m2(%s, nid="m2{inv(c)}")'% (','.join(map(get_symbol,g)))
+                        #f'xc{inv(c)} =  scr.c(%s, nid="m2{inv(c)}")'% (','.join(map(get_symbol,inv(g))))
                         ]
                 pass
             self.code(code)

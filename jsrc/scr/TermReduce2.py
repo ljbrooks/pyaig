@@ -90,6 +90,7 @@ class TermReduce2:
         return a
     def reduceAll(self, a):
         #pdb.set_trace()
+        assert isinstance(a, list)
         topo = TermTopo(a)
         for i in topo.topoOrder():
             #if i.uid == 133 : pdb.set_trace()

@@ -33,11 +33,11 @@ class TermHT:
             self.tb[self.key(a)] = a
             pass
         return a
-    def add_termlist(self, tl):
+    def add_termlist(self, tl, ordered = True):
         assert isinstance(tl, list)
         assert not isinstance(tl, TermList)
         i = hasattr(tl, 'termx') 
-        isort(tl)
+        if ordered : isort(tl)
         k = self.key(tl)
         if k in self.tb:
             r =  self.tb[k]
@@ -67,14 +67,14 @@ class TermHT:
                 a.termx[i] = self.tb[self.key(a[i])]
                 pass
             assert isinstance(a.termx, TermList)
-            isort(a.termx)      # insertion sort it
+            #isort(a.termx)      # insertion sort it
             assert isinstance(a.termx, TermList)
             assert not hasattr(a.termx, 'termx')
             a.termx = self.__insert__(a.termx)
             pass
         return self.__insert__(a)
     
-    def update(self, a):
+    def update(self, a, ordered = True):
         assert isinstance(a, Atom) or isinstance(a.termx, TermList)
         if isinstance(a, Atom): return self.register(a)
         assert len(a.termx) >0
@@ -96,13 +96,14 @@ class TermHT:
             pass
 
         sigma_count = sum(map(lambda i: isinstance(i, FuncSigma), bx))
-        if sigma_count > 1:
+        if sigma_count > 1 and isA(FuncPrim)(a):
             ax, bx = bx[:sigma_count] , bx[sigma_count:]
             r = sum([i.termx.tx for i in ax], [])
             f = FuncSigma(self.add_termlist(r))
+            f = self.register(f)
             bx = [f] + bx
             pass
-        a.termx = self.add_termlist(bx)
+        a.termx = self.add_termlist(bx, ordered = False)
         
         return self.register(a)
 

@@ -9,6 +9,9 @@ sym = lambda t: t.symbol
 from natsort import natsorted
 from scr.TermMgr import *    
 from isort import *
+
+#POS ='positive'
+#NEG = 'negative'
 class Term:                     # base
     inf = None
     #nid = lambda(i):i.nid
@@ -18,6 +21,8 @@ class Term:                     # base
         self.__dict__.update(kwargs)
         self.uid  = TermMgr.UID
         self.ptr = None         # point to the uniquified one
+        self.alter =[]
+        self.has_m2_inv_children = False    # m2 has inverted children
         TermMgr.UID+=1
         TermMgr.tmgr.append(self) # this is where it can uniquified
         #not 
@@ -50,6 +55,10 @@ class Term:                     # base
     def car(self):
         return self.termx[0]
     
+    @property
+    def alter0(self):
+        return None if len(self.alter) == 0 else self.alter[0]
+
     def sort_rank(self):
         return [ self.rank, self.OP, self.uid]
     
@@ -73,6 +82,7 @@ class TermInf(Term):
 
 
 class TermList(Term):           # 1D
+    OP = 'tl'
     rank = None
     sort = natsorted
     zero = None
@@ -87,7 +97,7 @@ class TermList(Term):           # 1D
         assert not isinstance (termx, TermList)
         self.tx = termx
         #list.__init__(self, termx)
-        isort(self)
+        #isort(self)
         assert not isinstance(termx, TermList)
         self.changed = True
         pass
@@ -234,25 +244,35 @@ class Func (Expr):
 
     pass
 
-class FuncS(Func):
+class FuncPrim(Func):
+    rank = 5
+    pass
+class FuncS(FuncPrim):
     OP= F = 's'
     def re_eval(self):
         return TermMgr.builder.s(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
-class FuncD(Func):
+class FuncD(FuncPrim):
     OP= F = 'd'
     def re_eval(self):
         return TermMgr.builder.d(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
-class FuncC(Func):
+class FuncC(FuncPrim):
     OP = F = 'm'
     def re_eval(self):
         return TermMgr.builder.c(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
-class FuncM2(Func):
+
+'''
+def FuncM2(*termx, tl=None, **kwargs):
+    r = FuncC(*termx, tl=tl, **kwargs)
+    r.OP='m2'
+    return r
+'''
+class FuncM2(FuncPrim):
     OP = F = 'm2'
     def re_eval(self):
         return TermMgr.builder.m2(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
@@ -288,7 +308,7 @@ def rewrite(tx, rewriter):
     return r
 
 def rewrite_r(tx):
-    print()
+    #print()
     #print('enter', tx)
     if isinstance(tx, list):
         return list(map(rewrite_r, tx))
@@ -356,6 +376,8 @@ def pretty(t, depth = 0, noAtom=False):
     Depth-=1
     return r
 
+def short(t, depth = 0):
+    return pretty(t, depth, noAtom=True)
 def l1str(a):
     return a.__l1str__()
         

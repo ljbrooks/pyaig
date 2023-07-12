@@ -320,3 +320,7 @@ macbeth 166 2023-07-11 22:45:57.998854 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 167 2023-07-11 22:46:24.760000 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/8_8_U_SP_AR_RC_GenMul.v.aig_out_8.aig
 macbeth 168 2023-07-11 22:47:47.177196 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/8_8_U_SP_AR_RC_GenMul.v.aig_out_9.aig
 macbeth 169 2023-07-11 22:48:11.810612 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/8_8_U_SP_AR_RC_GenMul.v.aig_out_9.aig
+macbeth 170 2023-07-12 18:50:41.051263 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/8_8_U_SP_AR_RC_GenMul.v.aig_out_7.aig
+macbeth 171 2023-07-12 20:49:58.582432 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
+macbeth 172 2023-07-12 20:50:59.103851 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+macbeth 173 2023-07-12 20:52:53.926742 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig

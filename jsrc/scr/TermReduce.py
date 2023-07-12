@@ -81,7 +81,7 @@ class TermReduce:
         # this is the rewrite 
         # 
         u = a.uid
-        is_c = lambda i: isinstance(i, FuncC)
+        is_c = lambda i: isinstance(i, FuncC) 
         is_s = lambda i: isinstance(i, FuncS)
         cx = defaultdict(list)
         csx = defaultdict(list)
