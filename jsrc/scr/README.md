@@ -3,6 +3,7 @@
 # design of the rewriting package
 
 
+
 The expression is in the form of s/c tree, together with logic
 operators. The expression is generated from 
 
@@ -25,6 +26,45 @@ for this.
 1. First, the sc-tree is generated in `s.py`
 
 2. A run.py is run to produce the rewriten adder tree.
+
+## Current flow
+
+1. AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig 
+
+2. Call TermRewriter to clean up the phase
+
+3. Call TermReducer/TermReducer to reduce m(x) + m(s(x)+y) to m(x+y)
+
+4. Call TermFoldr.recognize to identify Foldr constructs 
+
+## TermRewriter.py
+
+This is more of a phase rewriter, rewrite the invertors to its most
+simplied form. However, it is inocrrect if there is neg-phase children
+to a m2 gate. m2 gate is the two input AND gate. If the input is
+negative phase, then it is an OR gate. The OR gate is used in the last
+step ADD in the multiplier for prefix-adders or carry lookahead adders
+etc. 
+
+Currently, there is no good way to identify the last part of the adder
+and convert it to normal ripple carry adder.
+
+### TODO 
+
+Here, we need to convert m2 to the normal m3 operators, if it has no
+neg-phase children. Otherwise, m2 is equivalent to m3. This needs be
+done before the reducers.
+
+## TermReduce.py
+Reduce `m(x) + m(s(x) + y)` to  `m(x+y)`, use its own hash-table
+## TermReduce2.py
+
+Same as above to reduce `m(x) + m(s(x) + y)` to `m(x+y)`, but uses
+TermHT as the unique table.
+
+## TermFoldr.py
+
+Identify reducer patterns
 
 ## TODO
 
