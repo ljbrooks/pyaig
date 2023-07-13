@@ -120,3 +120,21 @@ m(s((mx) + y) , m(s(x)+z) )
 
 ```
 <!-- this is a fold, and needs be recognized -->
+
+
+## 四 7月 13 16:40:38 CST 2023
+
+Identify the prefix networks
+
+```
+f x:xs:y = m ( f xs:y, 
+               s ( +m</ x:xs))
+               
+f x:y:z = m ( m ( sy + mz ),
+              s ( sx + my) )
+              
+Now, it needs be recognized
+```
+               
+               
+

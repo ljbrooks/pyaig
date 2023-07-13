@@ -72,10 +72,10 @@ for i in rx:
         assert r[0] == tr.root
         if lx[-1] >= lx[-2] : break
         pass
-    fn  = FuncFoldr.recognize(FuncFoldrMPlus , tr.ht)
+    fn  = FuncFoldr.recognize(FuncFoldrPlusM , tr.ht)
     for i in TermTopo(r).topoOrder():
         
-        if not isinstance(i, FuncFoldrMPlus.base_fn): continue
+        if not isinstance(i, FuncFoldrPlusM.base_fn): continue
         x = fn(i)
         if  not x is None:
             jtag('identify foldr from ', pretty(i))

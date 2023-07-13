@@ -59,8 +59,8 @@ class FuncFoldr(Func):
         pass
     @staticmethod 
     def recognize(ffn, ht):         # ffn : fold_fn
-        assert issubclass (ffn, Func)
         # x + fn(y)
+        assert issubclass (ffn, Func)
         def f(a):
             #pdb.set_trace()
             assert isinstance(a, FuncPrim)
@@ -88,7 +88,7 @@ class FuncSigma(FuncFoldr):
     
     pass
 
-class FuncFoldrMPlus(FuncFoldr):
+class FuncFoldrPlusM(FuncFoldr):
     # idetnify parallel prefix structure and reduce it
     F = OP = 'm+<-/'                 # rfold m
     

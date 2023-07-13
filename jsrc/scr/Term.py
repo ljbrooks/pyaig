@@ -79,7 +79,8 @@ class TermInf(Term):
     rank = math.inf
     pass
 
-
+class TermGroup:
+    pass
 
 class TermList(Term):           # 1D
     OP = 'tl'
@@ -209,6 +210,13 @@ class ExprAnd(Expr):
     def re_eval(self):
         return reduce(lambda a,b: a&b, self.termx[1:], self.termx[0])
     pass
+
+class ExprConsp(Expr):
+    OP=':'
+    def re_eval(self):
+        return self
+    pass
+
 
 class ExprOr(Expr):
     OP='|'
