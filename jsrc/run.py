@@ -39,18 +39,13 @@ a = TermRewriter()
 #u= rewrite(xs80,a)
 
 #ux = [xs156] #xs86, xs44, xs150, xs156]
+print(pretty(pox[0]))
 ux = pox
-for u in ux:
-    #print
-    x= rewrite(u,a)
-    #print('before --')
-    #print(pretty(u))
-    #print('after-----')
-    #print(pretty(x))
-    #print()
-#print(str(u))
-
 rx = [rewrite(i,a) for i in pox]
+print('after rewrite')
+
+print(pretty(rx[0]))
+#exit(0)
 '''
 for i in pox:
     pdb.set_trace()

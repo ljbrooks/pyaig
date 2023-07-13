@@ -26,6 +26,7 @@ class TermBuilder:
     def s(*termx):
         return FuncS(*termx)
     @staticmethod
-    def c(*termx):
+    def c(*termx, is_m2 = None):
+        assert is_m2 != None
         return FuncC(*termx)
     pass

@@ -265,9 +265,10 @@ class FuncC(FuncPrim):
     def __init__(self, *args,tl = None, **kwargs):
         Func.__init__(self, *args, tl=tl, **kwargs)
         self.is_m2 = False
+        
         pass
     def re_eval(self):
-        return TermMgr.builder.c(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+        return TermMgr.builder.c(self.termx, is_m2 = self.is_m2) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 
@@ -275,6 +276,7 @@ class FuncC(FuncPrim):
 def FuncM2(*termx, tl=None, **kwargs):
     r = FuncC(*termx, tl=tl, **kwargs)
     r.is_m2 = True
+    r.F = r.OP = 'm2'
     return r
 
 class FuncM23(FuncPrim):
@@ -319,13 +321,18 @@ def rewrite_r(tx):
         return list(map(rewrite_r, tx))
     if not len(tx.termx): return tx
     if isinstance(tx, FuncC) :
-        #        pdb.set_trace()
+        #if tx.is_m2:             pdb.set_trace()
         pass
     ax = rewrite_r(tx.termx)
     #print('ax here', ax)
     #print('was', tx)
-    u = tx.__class__(*tuple(ax), nid=tx.nid)
+    u = tx.__class__(*tuple(ax), nid=tx.nid) # here missed the m2
+    if isinstance(tx, FuncC) :
+        u.is_m2 = tx.is_m2
     a = u.re_eval() # fmap(rewrite_r, tx.termx)
+    if isinstance(tx, FuncC) :
+        a.is_m2 = tx.is_m2
+        pass
     #    a = tx.__class__(*tuple(a), tx.nid)
     #print('exit', a, '\n     <--', tx)
     #print()
@@ -369,7 +376,7 @@ def pretty(t, depth = 0, noAtom=False):
         r = ('{%s}'%t.uid) + str(t) 
     elif isinstance(t, Func):
         rx  = [pretty(i, depth+1, noAtom) for i in filter(skip_atom(noAtom), t.termx)]
-        r =f'{t.F}.{t.uid} ( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
+        r =f'{t.OP}.{t.uid} ( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
         Depth-=1
         return r
     elif isinstance(t, ExprUnary):

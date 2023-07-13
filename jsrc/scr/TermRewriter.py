@@ -21,7 +21,7 @@ class TermRewriter:
 
         if isinstance(a,ExprNeg):
             return a.termx[0]
-        elif isinstance(a, FuncC):
+        elif isinstance(a, FuncC) and not a.is_m2:
             #~c(~x, ~y)
             if all(tsign)(a.car.termx) or mostly(tsign)(a.car.termx):
                 return FuncC(fmap(self.__neg__, a.car.termx))
@@ -35,7 +35,7 @@ class TermRewriter:
     def __invert__(self,a):
         if isinstance(a,ExprInv):
             return a.termx[0]
-        elif isinstance(a, FuncC):
+        elif isinstance(a, FuncC) and not a.is_m2:
             #~c(~x, ~y)
             if all(tsign)(a.car.termx) or mostly(tsign)(a.car.termx):
                 return FuncC(fmap(self.__invert__, a.car.termx))
@@ -62,8 +62,6 @@ class TermRewriter:
             termx = list(termx)
             #print('s', termx)
         
-        
-    
         # here is a while loop
         
         while True:
@@ -89,21 +87,25 @@ class TermRewriter:
 
         return FuncS(*tuple(tx),**kwargs)
 
-    def c(self, *termx , **kwargs):
-        #pdb.set_trace()
+    def c(self, *termx ,is_m2 = None, **kwargs):
+        assert is_m2 != None
+        #if is_m2:pdb.set_trace()
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass
         #print('c', termx)
 
-        if mostly(tsign)(termx):
+        if not is_m2 and mostly(tsign)(termx) :
+            #assert False
             termx = fmap(self.__invert__, termx)
             return ExprInv(FuncC(*tuple(termx)))
 
-        return FuncC(*tuple(termx))
+        r =  FuncC(*tuple(termx))
+        r.is_m2 = is_m2
+        return r
 
     def m2(self, *termx , **kwargs):
-
+        assert False
         return FuncM2(*tuple(termx))
 
     
@@ -121,10 +123,18 @@ def tneg(term):
     return isinstance(term, ExprNeg)
 
 
+def invert_node(a):
+    if isA(FuncC) and a.is_m2:
+        return ExprInv(a)
+    else:
+        pass
+    pass
+
 def tinvert_inverted(tx, cnt=-1):
     #print(tx,cnt)
-
+    #pdb.set_trace()
     if cnt == -1:
+        # what does it mean? invert all
         for i in range(len(tx)):
             if tsign(tx[i]): tx[i] = tx[i].car 
             pass
