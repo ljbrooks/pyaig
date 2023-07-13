@@ -99,6 +99,7 @@ class TermReduce:
             assert len(cx[k]) == 1
             assert len(csx[k]) == 1
             for c1, (c2, cs)  in zip( cx[k], csx[k]):
+                
                 jtag('reduce original): ', pretty(a))
                 jtag('reduce m(x): ', pretty(c1))
                 jtag('reduce m(s(x)+ m(y)): ', pretty(c2))
@@ -109,9 +110,11 @@ class TermReduce:
                 n = FuncC(c2x)
                 n = self.new(n)
                 #print(pretty(n))
-                a.termx.remove(c2)
-                a.termx.remove(c1)
-                a.termx.append(n) # this is correct
+                ax = [v for v in a.termx]
+                ax.remove(c2)
+                ax.remove(c1)
+                ax.append(n) # this is correct
+                a.termx = ax
                 a = self.new(a)
                 jtag('reduce result: ', pretty(a))
                 pass
