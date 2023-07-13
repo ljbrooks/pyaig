@@ -116,12 +116,13 @@ class FuncReduceMMS(FuncFoldr):
         m (m,s)
         s (sigma, m)
         '''
-        r =  isA(FuncC)(a) and len(a.termx) == 2 # and isA(FuncS(a.termx[-1]))
+        r =  isA(FuncC)(a) and len(a.termx) == 2 
         if not r: return False
-        #m, s = a.termx[:-1], a.termx[-1]
+
         m,s = a.termx
+
         if not isA(FuncC)(m) or not isA(FuncS)(s): return False
-        if len(m.termx) != 2 or len(s.termx)!=2: return False
+        if len(m.termx) < 2 or len(s.termx)!=2: return False
         zx, y1 = m.termx[:-1], m.termx[-1]
         x, y2 = s.termx
         if y1.termx != y2.termx: return False
@@ -129,7 +130,7 @@ class FuncReduceMMS(FuncFoldr):
         return True
     @staticmethod
     def recognize(a):
-        m, s = a.termx[:-1], a.termx[-1]
+        
         m, s = a.termx
         #if len(m) ==1: m = m[0]
         zx, y1 = m.termx[:-1], m.termx[-1]
@@ -143,7 +144,7 @@ class FuncReduceMMS(FuncFoldr):
 
         else:
             #X, YS, Z  = x, [y1], z
-            mms = [x,y1.termx[0],zx]
+            mms = [x,y1.termx[0],TermList(zx)]
             pass
         a.mms = mms
         pass
