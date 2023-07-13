@@ -1,4 +1,8 @@
+from scr.Term import *
+
 def isort(lx):
+    if isinstance(lx, TermListUnordered):
+        return lx
     isort_r(lx, 1)
     return lx
 
@@ -18,6 +22,8 @@ def sort_in_place(lx, i):
     pass
 
 def merge(x,y):
+    assert not isinstance(x, TermListUnordered)
+    assert not isinstance(y, TermListUnordered)
     r = []
     self.clear()
     assert isinstance(x, TermList)

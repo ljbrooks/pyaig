@@ -127,14 +127,22 @@ m(s((mx) + y) , m(s(x)+z) )
 Identify the prefix networks
 
 ```
-f x:xs:y = m ( f xs:y, 
-               s ( +m</ x:xs))
+f x:ys:z = m (f ys:z) ( s ( +m</ x:ys ) )
                
 f x:y:z = m ( m ( sy + mz ),
-              s ( sx + my) )
+              s ( x + my) )
+              
+a +m b = a + mb
+
++m</  is the right reduce of +m 
               
 Now, it needs be recognized
 ```
                
-               
 
+### Algorithm
+    
+1. Identify `s +m</` first and then, go look for its sibling to identify
+   the other `m (f ys:z)` part
+
+2. Alternative, is to recursively construct the above f x:ys:z 

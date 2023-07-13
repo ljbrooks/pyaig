@@ -8,7 +8,7 @@ import pdb
 sym = lambda t: t.symbol
 from natsort import natsorted
 from scr.TermMgr import *    
-from isort import *
+#from isort import *
 
 #POS ='positive'
 #NEG = 'negative'
@@ -129,6 +129,9 @@ class TermList(Term):           # 1D
         return r
     def __str__(self):
         return str(self.tx)
+    pass
+
+class TermListUnordered(TermList):
     pass
 
 TermList.zero = TermList()
