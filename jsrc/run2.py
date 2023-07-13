@@ -75,7 +75,7 @@ for i in rx:
     fn  = FuncFoldr.recognize(FuncFoldrPlusM , tr.ht)
     for i in TermTopo(r).topoOrder():
         
-        if not isinstance(i, FuncFoldrPlusM.base_fn): continue
+        if not FuncFoldrPlusM.accept(i) : continue
         x = fn(i)
         if  not x is None:
             jtag('identify foldr from ', pretty(i))

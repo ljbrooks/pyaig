@@ -65,7 +65,7 @@ class FuncFoldr(Func):
             #pdb.set_trace()
             assert isinstance(a, FuncPrim)
             if len(a.termx) != 2: return 
-            if isA(FuncSigma)(a.termx[0]) and isA(ffn.base_fn)(a.termx[1]):
+            if isA(FuncSigma)(a.termx[0]) and ffn.accept(a.termx[1]):
                 x = a.termx[1].alter0
                 if isinstance(x, ffn):
                     tx = [a.termx[0]] + [i for i in x.termx]
@@ -93,7 +93,7 @@ class FuncFoldrPlusM(FuncFoldr):
     # idetnify parallel prefix structure and reduce it
     F = OP = 'm+<-/'                 # rfold m
     
-    base_fn = FuncC
+    accept  = lambda i: isA(FuncC)(i)
 
     @staticmethod
     def recognize(self):
@@ -105,3 +105,8 @@ class FuncFoldrMSPlus(FuncFoldr):
     F = OP = 'ms+<-/'                 # rfold m
     pass
 
+
+class FuncReduceMMS(FuncFoldr):
+    
+    
+    pass

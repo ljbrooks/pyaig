@@ -57,7 +57,12 @@ class Term:                     # base
     
     @property
     def alter0(self):
+        assert  len(self.alter)<=1
         return None if len(self.alter) == 0 else self.alter[0]
+    def clear_alter(self):
+        assert  len(self.alter)==1
+        self.alter = []
+        pass
 
     def sort_rank(self):
         return [ self.rank, self.OP, self.uid]
