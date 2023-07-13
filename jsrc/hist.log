@@ -324,3 +324,4 @@ macbeth 170 2023-07-12 18:50:41.051263 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 171 2023-07-12 20:49:58.582432 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_3.aig
 macbeth 172 2023-07-12 20:50:59.103851 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
 macbeth 173 2023-07-12 20:52:53.926742 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+macbeth 174 2023-07-13 10:19:40.786344 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_6.aig

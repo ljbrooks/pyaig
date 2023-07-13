@@ -53,6 +53,7 @@ class TermReduce2:
             assert len(cx[k]) == 1
             assert len(csx[k]) == 1
             for c1, (c2, cs)  in zip( cx[k], csx[k]):
+                ax = [u for u in a.termx]
                 assert isinstance(c1.termx, TermList)
                 assert isinstance(c2.termx, TermList)
                 jtag('reduce original): ', pretty(a))
@@ -65,21 +66,25 @@ class TermReduce2:
                 c2x.extend(cs.termx)        # 
                 isort(c2x)
                 #pdb.set_trace()
+                print (a.uid)
+                if a.uid == 844: pdb.set_trace()
                 c2x = self.ht.add_termlist(c2x)
                 
                 #u = n = FuncC(None, tl=c2x)
-                n =self.ht.new_op(FuncC, c2x)
+                
+                n =self.ht.new_op(FuncC, c2x) # can not be m2
                 #n = self.ht.update(u)
                 print(pretty(n))
                 t = len(a.termx)
-                a.termx.remove(c2)
-                assert len(a.termx) == t-1
-                a.termx.remove(c1)
-                assert not c1 in a.termx
-                assert not c2 in a.termx
-                a.termx.append(n) # this is correct
+                ax.remove(c2)
+                assert len(ax) == t-1
+                ax.remove(c1)
+                assert not c1 in ax
+                assert not c2 in ax
+                ax.append(n) # this is correct
                 isort(a.termx)
-                assert t ==  len(a.termx) +1
+                assert t ==  len(ax) +1
+                a.termx = self.ht.add_termlist(ax)
                 a = self.ht.update(a)
                 jtag('reduce result: ', pretty(a))
                 pass

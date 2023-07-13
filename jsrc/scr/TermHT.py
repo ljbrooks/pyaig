@@ -27,17 +27,19 @@ class TermHT:
     def __insert__(self, a):
         assert isinstance(a, Term)
         assert isinstance(a, TermList) or not isinstance(a, list)
+        if not isinstance(a,TermList) and len(a.termx):
+            assert self.tb[self.key(a.termx)] == a.termx
         if self.key(a) in self.tb:
             return self.tb[self.key(a)]
         else:
             self.tb[self.key(a)] = a
             pass
         return a
-    def add_termlist(self, tl, ordered = True):
+    def add_termlist(self, tl):
         assert isinstance(tl, list)
         assert not isinstance(tl, TermList)
         i = hasattr(tl, 'termx') 
-        if ordered : isort(tl)
+        isort(tl)
         k = self.key(tl)
         if k in self.tb:
             r =  self.tb[k]
@@ -58,6 +60,7 @@ class TermHT:
 
         r = op_type(None,tl=lx)
         assert isinstance(r.termx , TermList)
+        assert self.tb[self.key(r.termx)] == r.termx
         return self.update(r)
     
     def register(self,a):
@@ -67,14 +70,16 @@ class TermHT:
                 a.termx[i] = self.tb[self.key(a[i])]
                 pass
             assert isinstance(a.termx, TermList)
-            #isort(a.termx)      # insertion sort it
+            isort(a.termx)      # insertion sort it
             assert isinstance(a.termx, TermList)
             assert not hasattr(a.termx, 'termx')
             a.termx = self.__insert__(a.termx)
             pass
         return self.__insert__(a)
     
-    def update(self, a, ordered = True):
+    def update(self, a):
+        print(a.uid)
+        if a.uid == 1264: pdb.set_trace()
         assert isinstance(a, Atom) or isinstance(a.termx, TermList)
         if isinstance(a, Atom): return self.register(a)
         assert len(a.termx) >0
@@ -103,7 +108,7 @@ class TermHT:
             f = self.register(f)
             bx = [f] + bx
             pass
-        a.termx = self.add_termlist(bx, ordered = False)
+        a.termx = self.add_termlist(bx)
         
         return self.register(a)
 

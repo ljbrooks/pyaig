@@ -101,11 +101,11 @@ class TermList(Term):           # 1D
         assert not isinstance(termx, TermList)
         self.changed = True
         pass
-    def append(self, v):
+    def appendd(self, v):
         self.changed = True
         self.tx.append(v)
         pass
-    def remove(self, v):
+    def removee(self, v):
         self.changed = True
         l = len(self.tx)
         self.tx.remove(v)
@@ -260,19 +260,24 @@ class FuncD(FuncPrim):
     pass
 
 class FuncC(FuncPrim):
+
     OP = F = 'm'
+    def __init__(self, *args,tl = None, **kwargs):
+        Func.__init__(self, *args, tl=tl, **kwargs)
+        self.is_m2 = False
+        pass
     def re_eval(self):
         return TermMgr.builder.c(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 
-'''
+
 def FuncM2(*termx, tl=None, **kwargs):
     r = FuncC(*termx, tl=tl, **kwargs)
-    r.OP='m2'
+    r.is_m2 = True
     return r
-'''
-class FuncM2(FuncPrim):
+
+class FuncM23(FuncPrim):
     OP = F = 'm2'
     def re_eval(self):
         return TermMgr.builder.m2(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
