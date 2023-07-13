@@ -78,7 +78,7 @@ class TermHT:
         return self.__insert__(a)
     
     def update(self, a):
-        print(a.uid)
+        #print(a.uid)
         if a.uid == 1264: pdb.set_trace()
         assert isinstance(a, Atom) or isinstance(a.termx, TermList)
         if isinstance(a, Atom): return self.register(a)

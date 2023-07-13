@@ -82,6 +82,10 @@ for i in rx:
             jtag('foldr as  ', pretty(x))
             jtag('foldr as (shorted)  ', short(x))
             pass
+        if FuncReduceMMS.accept(i):
+            jtag("Found MMS", pretty(i))
+            jtag("Found MMS", short(i.mms))
+            pass
         pass
     d = TermDFS(r[0])
     

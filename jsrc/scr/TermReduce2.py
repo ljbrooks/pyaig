@@ -45,7 +45,9 @@ class TermReduce2:
                 csx[j.termx.uid] .append((i,j)) # the c-term and the s-term
                 pass
             pass
-        print('common set:', set(cx.keys()) & set(csx.keys()))
+        if set(cx.keys()) & set(csx.keys()) :
+            print('common set:', set(cx.keys()) & set(csx.keys()))
+            pass
         good = False
         for k  in cx.keys() & csx.keys(): # 
             good = True
@@ -66,7 +68,7 @@ class TermReduce2:
                 c2x.extend(cs.termx)        # 
                 isort(c2x)
                 #pdb.set_trace()
-                print (a.uid)
+                #print (a.uid)
                 #if a.uid == 844: pdb.set_trace()
                 c2x = self.ht.add_termlist(c2x)
                 
