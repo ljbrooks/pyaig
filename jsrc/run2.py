@@ -88,5 +88,5 @@ for i in rx:
             pass
         pass
     d = TermDFS(r[0])
-    
+    jtag('short2', short2(r[0]))
     pass

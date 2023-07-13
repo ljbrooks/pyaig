@@ -65,7 +65,7 @@ class Term:                     # base
         pass
 
     def sort_rank(self):
-        return [ self.rank, self.OP, self.uid]
+        return [ self.rank, self.OP, self.termx.uid if isinstance(self.termx, TermList) else 0 , self.uid]
     
     def __le__(self, b):
         return self.sort_rank() <= b.sort_rank()
@@ -378,10 +378,24 @@ def pretty_(noAtom):
 
 
 Depth = 0
+print_mode = 0
 def pretty(t, depth = 0, noAtom=False):
     global Depth
     Depth+=1
     indent = f'  {Depth}  '
+    global print_mode
+    if print_mode == 1:
+        r = None
+        if hasattr(t, 'mms'):
+            print_mode = 0
+            r = pretty(t.mms, noAtom=noAtom)
+        elif t.alter0:
+            print_mode = 0
+            r = pretty(t.alter0, noAtom=noAtom)
+            pass
+        print_mode = 1
+        if r : return r
+        pass
     if isinstance(t, TermList):
         Depth-=1
         return ('{%s}\n'%t.uid) + ',\n'.join(fmap(pretty_(noAtom), filter(skip_atom(noAtom), t)) )
@@ -406,6 +420,13 @@ def pretty(t, depth = 0, noAtom=False):
 
 def short(t, depth = 0):
     return pretty(t, depth, noAtom=True)
+def short2(t, depth = 0):
+    global print_mode 
+    print_mode = 1
+    r =  pretty(t, depth, noAtom=True)
+    print_mode = 0;
+    return r
+
 def l1str(a):
     return a.__l1str__()
         
