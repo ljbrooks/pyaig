@@ -67,7 +67,7 @@ class TermReduce2:
                 isort(c2x)
                 #pdb.set_trace()
                 print (a.uid)
-                if a.uid == 844: pdb.set_trace()
+                #if a.uid == 844: pdb.set_trace()
                 c2x = self.ht.add_termlist(c2x)
                 
                 #u = n = FuncC(None, tl=c2x)

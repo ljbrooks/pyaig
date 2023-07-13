@@ -72,9 +72,9 @@ class FuncFoldr(Func):
                 else:
                     tx = [a.termx[0]] + [a.termx[1]]
                     pass
-                tx = ht.add_termlist(tx, ordered = False)
+                tx = ht.add_termlist(tx) #, ordered = False)
                 r = ffn(tx)
-                r = ht.update(r, ordered = False)
+                r = ht.update(r)# , ordered = False)
                 a.alter.append(r)
                 return r
             pass
