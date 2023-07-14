@@ -75,8 +75,11 @@ class TermReduce2:
                 #u = n = FuncC(None, tl=c2x)
                 
                 n =self.ht.new_op(FuncC, c2x) # can not be m2
+
                 #n = self.ht.update(u)
                 print(pretty(n))
+                # gosh a great achievement, performance greatly improved right here. 
+                n = self.reduce(n) # this can possibly be further reduced
                 t = len(a.termx)
                 ax.remove(c2)
                 assert len(ax) == t-1
@@ -89,6 +92,7 @@ class TermReduce2:
                 a.termx = self.ht.add_termlist(ax)
                 a = self.ht.update(a)
                 jtag('reduce result: ', pretty(a))
+                
                 pass
             break
 

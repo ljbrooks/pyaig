@@ -55,23 +55,30 @@ for i in pox:
 '''
 
 
-
+def Open(fname, mode):
+    m = {"w":"write", "r":"read", "a":"append"}
+    print(f"INFO: file {m[mode]} : {fname} {mode}")
+    return open(fname, mode)
 for i in rx:
     lx = [ len(TermTopo(i).topoOrder())]
     tr = TermReduce2(i)
     r = tr.root
     lx .append( len(TermTopo(r).topoOrder()))
     
-    for i in range(13):
+    #for i in range(20):
+    while True:
         r2 = tr.reduceAll([tr.root])
         lx.append(len(TermTopo(r2).topoOrder()))
         r = r2
         print('final2----\n', pretty(r))
+        Open('final2.txt', 'w').write(pretty(r))
+        Open('final2_noAtom.txt', 'w').write(pretty(r, noAtom=True))
         print('noAtom---\n', pretty(r, noAtom=True))
         print(lx)
         assert r[0] == tr.root
-        if lx[-1] >= lx[-2] : break
+        if lx[-1] == lx[-2] : break
         pass
+    #break
     fn  = FuncFoldr.recognize(FuncFoldrPlusM , tr.ht)
     for i in TermTopo(r).topoOrder():
         
@@ -89,4 +96,5 @@ for i in rx:
         pass
     d = TermDFS(r[0])
     jtag('short2', short2(r[0]))
+    Open('short2.txt', 'w').write(short2(r[0]))
     pass

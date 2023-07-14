@@ -75,7 +75,7 @@ class FuncFoldr(Func):
                 #tx = ht.add_termlist(tx) #, ordered = False)
                 tx = TermListUnordered(tx) # 
                 r = ffn(tx)
-                r = ht.update(r)# , ordered = False)
+                #r = ht.update(r)# , ordered = False)
                 a.alter.append(r)
                 return r
             pass
@@ -106,9 +106,10 @@ class FuncFoldrMSPlus(FuncFoldr):
     pass
 
 
-class FuncReduceMMS(FuncFoldr):
+class FuncFoldrMMS(FuncFoldr):
     # f x:y:z = m ( m(y, sz), s( x, my) ) 
     # f x:ys:z = m ( f ys:z) , s (+m</- x:ys)
+    F = OP = 'mms<-/'
     @staticmethod
     def accept(a):
         '''
@@ -140,12 +141,13 @@ class FuncReduceMMS(FuncFoldr):
             #X, YS, Z = x, [y1]+YS, Z
             #assert y1.termx == m.mms[0]
             #assert z == m.mms[1]
-            mms = [x] + m.mms
+            mms = FuncFoldrMMS(TermListUnordered([x] + [i for i in m.mms]))
 
         else:
             #X, YS, Z  = x, [y1], z
-            mms = [x,y1.termx[0],TermList(zx)]
+            mms = FuncFoldrMMS(TermListUnordered([x,y1.termx[0],TermList(zx)]))
             pass
         a.mms = mms
         pass
     pass
+FuncReduceMMS = FuncFoldrMMS
