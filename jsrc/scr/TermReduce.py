@@ -109,6 +109,7 @@ class TermReduce:
 
                 n = FuncC(c2x)
                 n = self.new(n)
+                n = self.reduce(n)
                 #print(pretty(n))
                 ax = [v for v in a.termx]
                 ax.remove(c2)
