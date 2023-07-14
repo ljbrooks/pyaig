@@ -146,3 +146,40 @@ Now, it needs be recognized
    the other `m (f ys:z)` part
 
 2. Alternative, is to recursively construct the above f x:ys:z 
+
+
+## Bad news,
+
+Turns out foldr is not enough, in Dadda tree, there is no pattern.
+
+prove 
+
+``` python
+m(x + m(y+m(z))) == 
+m(x+my) + m(s(x+my), m(sy+mz))
+
+//repeatly apply:
+m(x) + m(sx+y) = m(x+y)
+
+proof:
+m(x+my) + m(s(x+my), m(sy+mz)) 
+= m(x+my + m(sy+mz)) // use m(x)+m(sx+y)=m(x+y) where x is (x+my) here
+= m(x+m(y+mz))
+QED
+
+prove: 
+m(x) + m(sx+y) = m(x+y)
+
+using the the d rule:
+m(x) = d(x - sx)
+d(x) + d(y) = d(x+y)
+
+and this rule:
+s(sx+y) = s(x+y)
+
+m(x) + m(sx+y) = d(x-sx + sx+y - s(sx+y))
+= d (x+y - s(x+y)) 
+= m(x+y) 
+QED
+```
+
