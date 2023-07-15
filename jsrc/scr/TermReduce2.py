@@ -6,6 +6,8 @@ from scr.Term import *
 from jtag3 import jtag
 from scr.TermHT import *
 
+def jtag (*args):
+    pass
 class TermReduce2:
     def __init__(self, term):
         self.ht = TermHT()
@@ -77,7 +79,7 @@ class TermReduce2:
                 n =self.ht.new_op(FuncC, c2x) # can not be m2
 
                 #n = self.ht.update(u)
-                print(pretty(n))
+                #print(pretty(n))
                 # gosh a great achievement, performance greatly improved right here. 
                 n = self.reduce(n) # this can possibly be further reduced
                 t = len(a.termx)
