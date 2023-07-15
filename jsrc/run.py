@@ -74,7 +74,7 @@ for i in rx:
 
     print('final', pretty(r))
     print('length change', old, l2, len(t.topoOrder()))    
-    lx = [old, l2, len(t.topoOrder())]
+    lx = [0, old, l2, len(t.topoOrder())]
     for i in range(20):
         r2 = tr.reduceAll(r)
         lx.append(len(TermTopo(r2).topoOrder()))
@@ -85,7 +85,7 @@ for i in rx:
         print('noAtom---\n', pretty(r, noAtom=True))
         print(lx)
         
-        if lx[-1] == lx[-2]: break
+        if lx[-1] == lx[-2] and lx[-2] == lx[-3]: break
         pass
     print(lx)
     d = TermDFS(r)

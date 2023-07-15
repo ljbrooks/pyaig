@@ -395,3 +395,27 @@ macbeth 241 2023-07-14 23:52:05.602494 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 242 2023-07-14 23:52:09.931569 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/DT_USP_RP_8x8_noX_multgen.sv.aig_out_11.aig
 macbeth 243 2023-07-14 23:52:15.437006 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/DT_USP_RP_8x8_noX_multgen.sv.aig_out_12.aig
 macbeth 244 2023-07-14 23:53:07.097392 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/DT_USP_RP_8x8_noX_multgen.sv.aig_out_15.aig
+macbeth 245 2023-07-15 09:00:06.461952 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/WT_USP_RP_8x8_noX_multgen.sv.aig_out_8.aig
+macbeth 246 2023-07-15 09:01:59.604586 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/WT_USP_RP_8x8_noX_multgen.sv.aig_out_9.aig
+macbeth 247 2023-07-15 09:02:34.578938 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/WT_USP_RP_8x8_noX_multgen.sv.aig_out_10.aig
+macbeth 248 2023-07-15 09:02:50.798236 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/WT_USP_RP_8x8_noX_multgen.sv.aig_out_15.aig
+macbeth 249 2023-07-15 09:02:58.428620 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/multgen/WT_USP_RP_8x8_noX_multgen.sv.aig_out_11.aig
+macbeth 250 2023-07-15 09:03:54.346645 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_7.aig
+macbeth 251 2023-07-15 09:04:06.464379 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_USP_KS_8x8_noX_multgen.sv.aig_out_14.aig
+macbeth 252 2023-07-15 10:23:43.959691 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_8.aig
+macbeth 253 2023-07-15 10:24:06.736465 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_8.aig
+macbeth 254 2023-07-15 10:24:11.991862 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_9.aig
+macbeth 255 2023-07-15 10:24:19.156510 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_15.aig
+macbeth 256 2023-07-15 10:25:43.539183 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/WT_SB2_KS_8x8_noX_multgen.sv.aig_out_4.aig
+macbeth 257 2023-07-15 14:43:05.475132 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 4
+macbeth 258 2023-07-15 14:43:07.741356 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 8
+macbeth 259 2023-07-15 14:43:09.154306 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 12
+macbeth 260 2023-07-15 14:43:12.477857 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 16
+macbeth 261 2023-07-15 14:43:13.981832 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 120
+macbeth 262 2023-07-15 14:43:15.883095 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 20
+macbeth 263 2023-07-15 14:43:17.167530 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 24
+macbeth 264 2023-07-15 14:43:18.750720 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 28
+macbeth 265 2023-07-15 14:43:20.636849 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 32
+macbeth 266 2023-07-15 14:43:22.773816 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 31
+macbeth 267 2023-07-15 14:43:37.999192 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/16_16_U_SP_WT_RC_GenMul.v.aig_out_4.aig
+macbeth 268 2023-07-15 14:43:41.811685 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/16_16_U_SP_WT_RC_GenMul.v.aig_out_8.aig

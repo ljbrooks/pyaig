@@ -125,7 +125,9 @@ class TermReduce:
         assert a.uid == u 
         return a
     def reduceAll(self, a):
-        topo = TermTopo(a)
+        #if not isinstance (a, list): a = [a]
+        assert isinstance(a, Func)
+        topo = TermTopo([a])
         for i in topo.topoOrder():
             self.reduce(i)
 
