@@ -6,7 +6,8 @@
 import io
 import re
 import subprocess
-
+import gzip
+import os
 from past.builtins import xrange
 
 from . aig import AIG
@@ -522,8 +523,11 @@ def read_aiger_file(fin):
 
 def read_aiger(f):
     if type(f) == str:
-        with open(f, "rb") as fin:
-            return read_aiger_file(fin)
+        if f.endswith('.gz'):
+            fin = gzip.open(f,'rb')
+        else:
+            fin = open(f, "rb") 
+        return read_aiger_file(fin)
     else:
         return read_aiger_file(f)
 
