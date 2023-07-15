@@ -419,3 +419,12 @@ macbeth 265 2023-07-15 14:43:20.636849 pwd : /home/long/uu/pyaig/jsrc cmd : cone
 macbeth 266 2023-07-15 14:43:22.773816 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/16_16_U_SP_WT_RC_GenMul.v.aig 31
 macbeth 267 2023-07-15 14:43:37.999192 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/16_16_U_SP_WT_RC_GenMul.v.aig_out_4.aig
 macbeth 268 2023-07-15 14:43:41.811685 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/16_16_U_SP_WT_RC_GenMul.v.aig_out_8.aig
+macbeth 269 2023-07-15 15:03:03.971533 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/16_16_U_SP_WT_RC_GenMul.v.aig_out_31.aig
+macbeth 270 2023-07-15 15:05:09.272961 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/16_16_U_SP_WT_RC_GenMul.v.aig_out_20.aig
+macbeth 271 2023-07-15 16:05:54.927640 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py ../../genmul/test/16_16_S_SP_AR_BK_GenMul/16_16_S_SP_AR_BK_GenMul.v.aig
+macbeth 272 2023-07-15 16:06:03.442904 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py ../../genmul/test/16_16_S_SP_AR_BK_GenMul/16_16_S_SP_AR_BK_GenMul.v.aig
+macbeth 273 2023-07-15 16:07:18.324941 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py ../../genmul/test/16_16_S_SP_AR_BK_GenMul/16_16_S_SP_AR_BK_GenMul.v.aig
+macbeth 274 2023-07-15 16:07:56.038344 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py ../../genmul/test/16_16_S_SP_AR_BK_GenMul/16_16_S_SP_AR_BK_GenMul.v.aig
+macbeth 275 2023-07-15 16:13:59.980624 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/multgen/HC_8_multgen.sv.aig
+macbeth 276 2023-07-15 16:14:11.430184 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/multgen/HC_8_multgen.sv.aig
+macbeth 277 2023-07-15 16:14:20.115839 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/multgen/HC_8_multgen.sv.aig
