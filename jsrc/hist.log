@@ -428,3 +428,7 @@ macbeth 274 2023-07-15 16:07:56.038344 pwd : /home/long/uu/pyaig/jsrc cmd : cone
 macbeth 275 2023-07-15 16:13:59.980624 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/multgen/HC_8_multgen.sv.aig
 macbeth 276 2023-07-15 16:14:11.430184 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/multgen/HC_8_multgen.sv.aig
 macbeth 277 2023-07-15 16:14:20.115839 pwd : /home/long/uu/pyaig/jsrc cmd : cone.py examples/multgen/HC_8_multgen.sv.aig
+macbeth 278 2023-07-15 23:14:35.761253 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
+macbeth 279 2023-07-15 23:15:02.692729 pwd : /home/long/uu/pyaig/jsrc cmd : AigerCoiCluster.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
+macbeth 280 2023-07-15 23:15:06.786207 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
+macbeth 281 2023-07-15 23:15:43.006490 pwd : /home/long/uu/pyaig/jsrc cmd : AigerCoiCluster.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
