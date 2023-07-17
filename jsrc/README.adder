@@ -1,0 +1,12 @@
+# rca.py
+
+## ripple carray addder
+
+```
+fx = lambda x,y: (maj(x[0], x[1], y[0]), s(x[0], x[1], y[0]) )
+f = accumulate_r(lambda a, b: fx (a,b), (0,0))(zip(x,y))[:-1]
+
+f = fmap(right_reduce(fx)(0), zip(x,y))
+```
+
+
