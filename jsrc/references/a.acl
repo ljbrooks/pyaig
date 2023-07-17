@@ -1,0 +1,14 @@
+(encapsulate
+; Signatures 
+(((X-inv *) => *)
+    ((X-eq * *) => *))
+; Assumptions
+ (defthm X-reflexive
+      (implies (X-inv x)
+               (X-eq x x))
+   (defthm X-symmetry
+      (implies (and (X-inv x) (X-inv y) (X-eq x y))
+(X-eq y x))
+   (defthm X-transitive
+      (implies (and (X-inv x) (X-inv y) (X-inv z) (X-eq x y) (X-eq y z))
+)
