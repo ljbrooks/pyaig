@@ -74,5 +74,6 @@ def fmap(f, lx):
 
 def ffilter(p, lx):
     return list(filter(p, lx))
-def zzip(x,y):
+def fzip(x,y):
     return list(zip(x,y))
+zzip = fzip

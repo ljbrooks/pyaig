@@ -141,12 +141,40 @@ def ling_adder_with_t(x,y, cin=0):
     assert bits2uint(r) == bits2uint(x) + bits2uint(y)
     return r
 
-def ling_adder(x,y,cin):
-    ts = fmap(lambda i: t(i), zip(x,y))
+def ling_adder(x,y,cin=0):
+    ts = fmap(lambda i:t(i), zip(x,y))
     gs = fmap(lambda i: g(i),zip(x,y))
     ps = fmap(lambda i: p(i),zip(x,y))
+    # f( (p,g), cin) = g + p\cdot cin
     
-    h_next = lambda h, gt: g | (h&t) # g_i and t_i-1
+    
+    f = lambda gt, h: gt[0] | (gt[1] & h)
+
+    c1 = gs[0] | (ps[0] & cin)
+    h1 = c1 | cin
+
+    
+    # h[i] = hx[i-1] +g[i]
+    
+    #  i is the bit index
+    f = lambda i, h: gs[i]  | (h & ts[i-1])
+    
+    hs = accumulate_r( f, h1)(range(1,len(gs)))
+    #hx = fmap(right_reduce(f, h1), tails(range(1,len(gs))))
+    cx = fmap(lambda i:hs[i] & ts[i-1], range(1, len(gs))) 
+    cx += [c1]
+    jtag('ling-adder (hs)', str(hs))
+    jtag('ling-adder cx', str(cx))
+
+    #return 
+    r = fmap(lambda i: i[0] ^ i[1], zip([0] + ps,cx+[cin]))
+
+    jtag('result', str((r, bits2uint(r), bits2uint(x), bits2uint(y))))
+    jtag('PASS',  str(bits2uint(r) == bits2uint(x) + bits2uint(y)))
+    assert bits2uint(r) == bits2uint(x) + bits2uint(y)
+    
+    return r
+
     
     
     pass
@@ -190,3 +218,4 @@ if __name__ == '__main__':
     jtag('inits', str(inits(x)))
     u = ling_adder_with_t(x,y)
     jtag('ling_with_t', str(u))
+    u = ling_adder(x,y)
