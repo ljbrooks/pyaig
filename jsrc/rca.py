@@ -4,44 +4,9 @@ from fplib import *
 from functools import *
 from strlib import *
 import operator
-
-def g(x,y) : return x & y
-def p(x,y) : return  x ^ y
-def t(x,y) : return  g(x,y) | p(x,y)
-
-def g(x) : return x[0] & x[1]
-def p(x) : return  x[0] ^ x[1]
-def t(x) : return  g(x) | p(x)
-
-def a(x,y) : return  ~ g(x,y)
-
-def maj(a,b,c) : return (a&b) | (a&c) | (b&c)
-
-def s(a,b,c) : return a ^ b ^ c
-
-def to_bits(n):
-    if n<=1: yield n
-    else :
-        for i in to_bits(n//2):
-            yield i
-            pass
-        yield n%2
-        pass
-    pass
-    
-def int2bits(n):
-    return list(to_bits(n))
-
-def bits2uint(bx):
-    print(bx)
-    a = reduce (lambda a,b:2*a+b, bx, 0) # this is foldl
-    #b = foldr(lambda a,b: 2a+b, bx)
-    #print(a,b)
-    #assert a == b
-    b = left_reduce(lambda a, b: 2*a+b, 0)(bx)
-
-    assert a == b
-    return a
+from operator import *
+from prefix_adding import *
+from autil import *
 
 def rca(x,y):
     # ripple adder is a combinator
@@ -145,22 +110,14 @@ def ling_adder(x,y,cin=0):
     ts = fmap(lambda i:t(i), zip(x,y))
     gs = fmap(lambda i: g(i),zip(x,y))
     ps = fmap(lambda i: p(i),zip(x,y))
-    # f( (p,g), cin) = g + p\cdot cin
-    
-    
-    f = lambda gt, h: gt[0] | (gt[1] & h)
 
     c1 = gs[0] | (ps[0] & cin)
     h1 = c1 | cin
 
-    
-    # h[i] = hx[i-1] +g[i]
-    
-    #  i is the bit index
     f = lambda i, h: gs[i]  | (h & ts[i-1])
     
-    hs = accumulate_r( f, h1)(range(1,len(gs)))
-    #hx = fmap(right_reduce(f, h1), tails(range(1,len(gs))))
+    hs = accumulate_r(f, h1)(range(1,len(gs)))
+
     cx = fmap(lambda i:hs[i] & ts[i-1], range(1, len(gs))) 
     cx += [c1]
     jtag('ling-adder (hs)', str(hs))
@@ -175,9 +132,7 @@ def ling_adder(x,y,cin=0):
     
     return r
 
-    
-    
-    pass
+
 if __name__ == '__main__':
     
     for i in range(30):
@@ -219,3 +174,4 @@ if __name__ == '__main__':
     u = ling_adder_with_t(x,y)
     jtag('ling_with_t', str(u))
     u = ling_adder(x,y)
+    pprefix_add_plain(x,y,0)
