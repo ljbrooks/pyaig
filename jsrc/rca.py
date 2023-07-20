@@ -73,7 +73,7 @@ def cla3(x,y,cin=0):
     f = lambda pg, c: pg[1] | (c & pg[0])
 
     jtag('tails', str(tails(zip(ps,gs))))
-    cx = fmap(right_reduce(f, 0), tails(zip(ps,gs)))
+    cx = fmap(right_reduce(f, cin), tails(zip(ps,gs)))
     
     jtag('cla2-carry', str(cx))
     r = fmap(lambda i: i[0] ^ i[1], zip([0] + ps,cx+[cin]))
@@ -107,24 +107,30 @@ def ling_adder_with_t(x,y, cin=0):
     return r
 
 def ling_adder(x,y,cin=0):
-    ts = fmap(lambda i:t(i), zip(x,y))
-    gs = fmap(lambda i: g(i),zip(x,y))
-    ps = fmap(lambda i: p(i),zip(x,y))
+    ts = [0] + fmap(lambda i:t(i), zip(x,y))
+    gs = [0] + fmap(lambda i: g(i),zip(x,y))
+    ps = [0] + fmap(lambda i: p(i),zip(x,y))
 
-    c1 = gs[0] | (ps[0] & cin)
+    c1 = gs[-1] | (ps[-1] & cin)
+    
     h1 = c1 | cin
 
-    f = lambda i, h: gs[i]  | (h & ts[i-1])
+    f = lambda i, h: gs[i+1]  | (h & ts[i+2])
     
-    hs = accumulate_r(f, h1)(range(1,len(gs)))
+    hs = accumulate_r(f, h1)(range(len(gs)-2))
 
-    cx = fmap(lambda i:hs[i] & ts[i-1], range(1, len(gs))) 
-    cx += [c1]
+    assert len(hs) == len(gs) -1
+    #assert False
+    cx = fmap(lambda i:hs[i] & ts[i+1], range(len(gs)-1)) 
+    
+    cx += [cin]
+    assert len(cx) == len(gs)
+    
     jtag('ling-adder (hs)', str(hs))
     jtag('ling-adder cx', str(cx))
 
     #return 
-    r = fmap(lambda i: i[0] ^ i[1], zip([0] + ps,cx+[cin]))
+    r = fmap(lambda i: i[0] ^ i[1], zip(ps,cx+[cin]))
 
     jtag('result', str((r, bits2uint(r), bits2uint(x), bits2uint(y))))
     jtag('PASS',  str(bits2uint(r) == bits2uint(x) + bits2uint(y)))
@@ -135,7 +141,7 @@ def ling_adder(x,y,cin=0):
 
 if __name__ == '__main__':
     
-    for i in range(30):
+    for i in range(257):
         x = int2bits(i)
         y = bits2uint(x)
         assert y == i
@@ -156,7 +162,8 @@ if __name__ == '__main__':
     u = rca(x,x)
     jtag('u',str(u))
     assert bits2uint(u) == bits2uint(x)*2
-    y =  int2bits(21)
+    y =  int2bits(272)
+    assert len(x) == len(y)
     print(x,y)
     ps = list(map(lambda i: p(i), zip(x,y)))
     print(list(ps))
