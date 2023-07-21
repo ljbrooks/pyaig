@@ -78,14 +78,13 @@ def pprefix(x, y, cin):
     print(ppx2)
     assert ppx == ppx2
     # assert False
-    
+
     ppx_brunt = compute_prefix_brent_kung(pgx)
     assert ppx_brunt == ppx
-    
+
     ppx_ks = compute_prefix_Kogge_Stone(pgx)
     assert ppx_brunt == ppx_ks
 
-    
     return ppx
 
 
@@ -112,7 +111,7 @@ def compute_prefix_r(pgx):
     return a + b
 
 
-# Brent Kung
+# Brent Kung / using chop
 def compute_prefix_brent_kung(pgx):
     ff = lambda P1, P0: P1.__rplus__(P0)
 
@@ -136,7 +135,7 @@ def compute_prefix_Kogge_Stone(pgx):
     i = 1
     while i < len(pgx):
         fmap(lambda u: u[0].rplus(u[1]), zip(pgx[:-i], pgx[i:]))
-        i *= 2
+        i *= 2  # cool
         pass
     return ret
 

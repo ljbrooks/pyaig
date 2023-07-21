@@ -25,9 +25,11 @@ def right_reduce(f, e):
 
     return fn
 
+
 def right_reduce1(f):
     def fn(lx):
         return right_reduce(f, lx[-1])(lx[:-1])
+
     return fn
 
 
@@ -79,6 +81,10 @@ def fmap(f, lx):
 
 def ffilter(p, lx):
     return list(filter(p, lx))
-def fzip(x,y):
-    return list(zip(x,y))
+
+
+def fzip(x, y):
+    return list(zip(x, y))
+
+
 zzip = fzip

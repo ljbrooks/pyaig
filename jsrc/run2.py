@@ -9,6 +9,7 @@ from scr.TermDFS import *
 import math
 from tabulate import *
 from scr.util import *
+
 TermMgr.builder = TermBuilder
 from s import *
 
@@ -30,64 +31,68 @@ def topoOrder(with_t=True):
     pass
 
 
-#print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
+# print(tabulate([[i.nid, str(i)] for i in topo.topoOrder()]))
 
 
 a = TermRewriter()
 
 ux = pox
 for u in ux:
-#    print
-    x= rewrite(u,a)
+    #    print
+    x = rewrite(u, a)
     #   print('before --')
-    #print(pretty(u))
-    #print('after-----')
-    #print(pretty(x))
-    #print()
-#print(str(u))
+    # print(pretty(u))
+    # print('after-----')
+    # print(pretty(x))
+    # print()
+# print(str(u))
 
-rx = [rewrite(i,a) for i in pox]
-'''
+rx = [rewrite(i, a) for i in pox]
+"""
 for i in pox:
     pdb.set_trace()
     u = rewrite(i,a)
     print(u)
-'''
+"""
 
 
 def Open(fname, mode):
-    m = {"w":"write", "r":"read", "a":"append"}
+    m = {"w": "write", "r": "read", "a": "append"}
     print(f"INFO: file {m[mode]} : {fname} {mode}")
     return open(fname, mode)
+
+
 for i in rx:
-    lx = [ len(TermTopo(i).topoOrder())]
+    lx = [len(TermTopo(i).topoOrder())]
     tr = TermReduce2(i)
     r = tr.root
-    lx .append( len(TermTopo(r).topoOrder()))
-    
-    #for i in range(20):
+    lx.append(len(TermTopo(r).topoOrder()))
+
+    # for i in range(20):
     while True:
         r2 = tr.reduceAll([tr.root])
         lx.append(len(TermTopo(r2).topoOrder()))
         r = r2
-        print('final2----\n', pretty(r))
-        Open('final2.txt', 'w').write(pretty(r))
-        Open('final2_noAtom.txt', 'w').write(pretty(r, noAtom=True))
-        print('noAtom---\n', pretty(r, noAtom=True))
+        print("final2----\n", pretty(r))
+        Open("final2.txt", "w").write(pretty(r))
+        Open("final2_noAtom.txt", "w").write(pretty(r, noAtom=True))
+        print("noAtom---\n", pretty(r, noAtom=True))
         print(lx)
         assert r[0] == tr.root
-        if lx[-1] == lx[-2] : break
+        if lx[-1] == lx[-2]:
+            break
         pass
-    #break
-    fn  = FuncFoldr.recognize(FuncFoldrPlusM , tr.ht)
+    # break
+    fn = FuncFoldr.recognize(FuncFoldrPlusM, tr.ht)
     for i in TermTopo(r).topoOrder():
-        
-        if not FuncFoldrPlusM.accept(i) : continue
+
+        if not FuncFoldrPlusM.accept(i):
+            continue
         x = fn(i)
-        if  not x is None:
-            jtag('identify foldr from ', pretty(i))
-            jtag('foldr as  ', pretty(x))
-            jtag('foldr as (shorted)  ', short(x))
+        if not x is None:
+            jtag("identify foldr from ", pretty(i))
+            jtag("foldr as  ", pretty(x))
+            jtag("foldr as (shorted)  ", short(x))
             pass
         if FuncReduceMMS.accept(i):
             jtag("Found MMS", pretty(i))
@@ -95,6 +100,6 @@ for i in rx:
             pass
         pass
     d = TermDFS(r[0])
-    jtag('short2', short2(r[0]))
-    Open('short2.txt', 'w').write(short2(r[0]))
+    jtag("short2", short2(r[0]))
+    Open("short2.txt", "w").write(short2(r[0]))
     pass
