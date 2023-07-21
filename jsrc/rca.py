@@ -6,7 +6,7 @@ from strlib import *
 import operator
 from operator import *
 from prefix_adding import *
-from autil import *
+from adder_util import *
 
 def rca(x,y):
     # ripple adder is a combinator
@@ -115,9 +115,9 @@ def ling_adder(x,y,cin=0):
     
     h1 = c1 | cin
 
-    f = lambda i, h: gs[i+1]  | (h & ts[i+2])
+    h_fn = lambda i, h: gs[i+1]  | (h & ts[i+2])
     
-    hs = accumulate_r(f, h1)(range(len(gs)-2))
+    hs = accumulate_r(h_fn, h1)(range(len(gs)-2)) # right-reduce with tails
 
     assert len(hs) == len(gs) -1
     #assert False

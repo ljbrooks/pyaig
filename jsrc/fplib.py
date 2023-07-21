@@ -25,6 +25,11 @@ def right_reduce(f, e):
 
     return fn
 
+def right_reduce1(f):
+    def fn(lx):
+        return right_reduce(f, lx[-1])(lx[:-1])
+    return fn
+
 
 def accumulate_l(f, e):  # ,  lx):
     def fn(lx):
