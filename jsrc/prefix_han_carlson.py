@@ -1,4 +1,3 @@
-
 from adder_util import *
 from functools import *
 from strlib import *
@@ -30,6 +29,7 @@ def han_carlson_mid_layer(pgx, step):
 
     pass
 
+
 # Han Carlson 1
 def compute_prefix_han_carlson1(pgx):
     # first pass is brent-kung
@@ -39,4 +39,3 @@ def compute_prefix_han_carlson1(pgx):
     # third is brent-kung again
     compute_prefix_brent_kung_v2(pgx, 0)
     pass
-

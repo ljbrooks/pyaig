@@ -9,6 +9,7 @@ from prefix_adding import *
 from adder_util import *
 from itertools import product
 
+
 def rca(x, y):
     # ripple adder is a combinator
 
@@ -33,6 +34,7 @@ def cla(x, y, cin=0):
     # c_next = g + p \cdot cin
     # right_reduce
     f = lambda pg, c: pg[1] | (c & pg[0])
+
     cx = accumulate_r(f, cin)(zip(ps, gs))
 
     jtag("x,y", [str(x), str(y)])
@@ -190,12 +192,12 @@ if __name__ == "__main__":
     u = ling_adder(x, y)
     pprefix_add_plain(x, y, 0)
 
-    for i,j in product(range(200,300), range(200,300)):
-        x,y = int2bits(i) , int2bits(j)
-        x,y = level_xy(x,y)
-        print('kk',x,y)
-        #ling_adder_with_t(x,y,0)
+    for i, j in product(range(200, 300), range(200, 300)):
+        x, y = int2bits(i), int2bits(j)
+        x, y = level_xy(x, y)
+        print("kk", x, y)
+        # ling_adder_with_t(x,y,0)
         pprefix_add_plain(x, y, 0)
-        
+
         pass
     pass

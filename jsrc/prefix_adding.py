@@ -7,6 +7,7 @@ from jtag3 import jtag
 from fplib import *
 from prefix_han_carlson import *
 
+
 class PG:
     def __init__(self, p, g):
         self.p, self.g = p, g
@@ -34,17 +35,21 @@ class PG:
 
     pass
 
-def level_xy(x,y):
-    if len(x) > len(y): x,y = y,x
-    x = [0] * (len(y)-len(x)) + x
-    return x,y
+
+def level_xy(x, y):
+    if len(x) > len(y):
+        x, y = y, x
+    x = [0] * (len(y) - len(x)) + x
+    return x, y
+
 
 def pprefix_add_plain(x, y, cin):
-    x,y = level_xy(x,y)
-        
+    x, y = level_xy(x, y)
+
     ts = fmap(lambda i: t(i), zip(x, y))
     gs = fmap(lambda i: g(i), zip(x, y))
     ps = fmap(lambda i: p(i), zip(x, y))
+
     ppx = pprefix(x, y, cin)
 
     # carry
@@ -57,7 +62,7 @@ def pprefix_add_plain(x, y, cin):
     print("pprefix_add_plain", str(r))
     jtag("result", str((r, bits2uint(r), bits2uint(x), bits2uint(y))))
     jtag("PASS", str(bits2uint(r) == bits2uint(x) + bits2uint(y)))
-    
+
     assert bits2uint(r) == bits2uint(x) + bits2uint(y)
 
     return r
@@ -72,13 +77,14 @@ def pprefix(x, y, cin):
 
     # init the cin bit
     pg0 = PG(0, cin)
+
     # init the pgx list
     pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
 
     # this is to compute the prefix
     # ppx = accumulate_r1(rplus)(pgx)
     # plain
-    ppx = compute_prefix(pgx[:-1], pgx[-1])
+    ppx = compute_prefix_pure(pgx[:-1], pgx[-1])
     # Sklansky
     pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
     ppx2 = compute_prefix_r(pgx)
@@ -86,7 +92,7 @@ def pprefix(x, y, cin):
     print(ppx2)
     assert ppx == ppx2
     # assert False
-    
+
     pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
     ppx_brunt = compute_prefix_brent_kung_bug(pgx)
     assert ppx_brunt == ppx
@@ -99,14 +105,14 @@ def pprefix(x, y, cin):
     pgx2 = brunt_r(pgx, 1)
     pgx2 = list(reversed(pgx2))
     print(pgx2)
-    jtag('pgx2', str(pgx2))
+    jtag("pgx2", str(pgx2))
     assert pgx2 == ppx_brunt
     assert ppx_brunt == ppx_ks
 
     return ppx
 
 
-def compute_prefix(pgx, pg0):
+def compute_prefix_pure(pgx, pg0):
     rplus = lambda P1, P0: P1.__rplus__(P0)
     ppx = accumulate_r(rplus, pg0)(pgx)
     return ppx
@@ -140,36 +146,37 @@ def compute_prefix_brent_kung_bug(pgx):
     result[0] = pgx[0]
 
     for i in range(1, len(pgx)):
-        print('chop', chop_for_prefix(i))
+        print("chop", chop_for_prefix(i))
         px = [result[j] for j in chop_for_prefix(i)]
 
         # left reduce is to create the correct structure
         result[i] = left_reduce1(ff)(px)
         pass
-    
 
-
-    #assert pgx == pgx2
+    # assert pgx == pgx2
     return list(reversed(result))
 
 
 def brunt_r(pgx, step):
     # step starts with 2
     assert step >= 1
-    if (step >= len(pgx)) :return  pgx
+    if step >= len(pgx):
+        return pgx
     N = len(pgx)
 
-    rx = range(2*step-1, N, step)
-    is_even = lambda i: i%2 == 0     
+    rx = range(2 * step - 1, N, step)
+    is_even = lambda i: i % 2 == 0
 
-    even = [j for i,j in enumerate(rx) if is_even(i)]
-    odd = [j for i,j in enumerate(rx) if not is_even(i)]
-    
-    for i in even:   pgx[i].rplus(pgx[i-step])
+    even = [j for i, j in enumerate(rx) if is_even(i)]
+    odd = [j for i, j in enumerate(rx) if not is_even(i)]
 
-    brunt_r(pgx, step*2)
+    for i in even:
+        pgx[i].rplus(pgx[i - step])
 
-    for i in odd:  pgx[i].rplus(pgx[i-step])
+    brunt_r(pgx, step * 2)
+
+    for i in odd:
+        pgx[i].rplus(pgx[i - step])
     return pgx
 
 
@@ -182,7 +189,6 @@ def compute_prefix_Kogge_Stone(pgx):
         i *= 2  # cool
         pass
     return ret
-
 
 
 def pprefix_lf(x, y, cin):
