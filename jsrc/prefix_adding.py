@@ -5,7 +5,7 @@ import operator
 from operator import *
 from jtag3 import jtag
 from fplib import *
-
+from prefix_han_carlson import *
 
 class PG:
     def __init__(self, p, g):
@@ -34,8 +34,13 @@ class PG:
 
     pass
 
-
+def level_xy(x,y):
+    if len(x) > len(y): x,y = y,x
+    x = [0] * (len(y)-len(x)) + x
+    return x,y
 def pprefix_add_plain(x, y, cin):
+    x,y = level_xy(x,y)
+        
     ts = fmap(lambda i: t(i), zip(x, y))
     gs = fmap(lambda i: g(i), zip(x, y))
     ps = fmap(lambda i: p(i), zip(x, y))
@@ -51,6 +56,7 @@ def pprefix_add_plain(x, y, cin):
     print("pprefix_add_plain", str(r))
     jtag("result", str((r, bits2uint(r), bits2uint(x), bits2uint(y))))
     jtag("PASS", str(bits2uint(r) == bits2uint(x) + bits2uint(y)))
+    
     assert bits2uint(r) == bits2uint(x) + bits2uint(y)
 
     return r
@@ -66,23 +72,34 @@ def pprefix(x, y, cin):
     # init the cin bit
     pg0 = PG(0, cin)
     # init the pgx list
-    pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [pg0]
+    pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
 
     # this is to compute the prefix
     # ppx = accumulate_r1(rplus)(pgx)
     # plain
     ppx = compute_prefix(pgx[:-1], pgx[-1])
     # Sklansky
+    pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
     ppx2 = compute_prefix_r(pgx)
     print(ppx)
     print(ppx2)
     assert ppx == ppx2
     # assert False
-
-    ppx_brunt = compute_prefix_brent_kung(pgx)
+    
+    pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
+    ppx_brunt = compute_prefix_brent_kung_bug(pgx)
     assert ppx_brunt == ppx
 
+    pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
     ppx_ks = compute_prefix_Kogge_Stone(pgx)
+
+    pgx = fmap(lambda i: PG(*i), zip(ps, gs)) + [PG(0, cin)]
+    pgx = list(reversed(pgx))
+    pgx2 = brunt_r(pgx, 1)
+    pgx2 = list(reversed(pgx2))
+    print(pgx2)
+    jtag('pgx2', str(pgx2))
+    assert pgx2 == ppx_brunt
     assert ppx_brunt == ppx_ks
 
     return ppx
@@ -112,44 +129,47 @@ def compute_prefix_r(pgx):
 
 
 # Brent Kung / using chop
-def compute_prefix_brent_kung(pgx):
+def compute_prefix_brent_kung_bug(pgx):
     ff = lambda P1, P0: P1.__rplus__(P0)
 
     # need to reverse the pgx
     pgx = list(reversed(pgx))
+    pgx2 = [i for i in pgx]
     result = pgx
     result[0] = pgx[0]
 
     for i in range(1, len(pgx)):
+        print('chop', chop_for_prefix(i))
         px = [result[j] for j in chop_for_prefix(i)]
 
         # left reduce is to create the correct structure
         result[i] = left_reduce1(ff)(px)
         pass
+    
+
+
+    #assert pgx == pgx2
     return list(reversed(result))
 
 
-# Brent Kung / using level
-def compute_prefix_brent_kung_v2(pgx, level, instep=4):
-    # level starts with 0
+def brunt_r(pgx, step):
+    # step starts with 2
+    #assert step >= 2
+    if (step >= len(pgx)) :return  pgx
+    N = len(pgx)
 
-    step = 2 ** level
-    rx = freversed(pgx)
+    rx = range(2*step-1, N, step)
+    is_even = lambda i: i%2 == 0     
 
-    # the step is used for han-carlson algorithm
-    for u,v in list(zip(rx[step-1::step*2], rx[2*step-1::step*2])):
-        u.rplus(v)
-        pass
+    even = [j for i,j in enumerate(rx) if is_even(i)]
+    odd = [j for i,j in enumerate(rx) if not is_even(i)]
     
-    return freversed(rx)
+    for i in even:   pgx[i].rplus(pgx[i-step])
 
-def han_carlson_mid_layer(pgx, step):
-    
-    rx = zip(pgx[::step], pgx[step::step])
-    fmap(lambda i: i[0].rplus(i[1]), fff, rx)
-    
-    pass
+    brunt_r(pgx, step*2)
 
+    for i in odd:  pgx[i].rplus(pgx[i-step])
+    return pgx
 
 
 # Kogge–Stone
@@ -162,16 +182,6 @@ def compute_prefix_Kogge_Stone(pgx):
         pass
     return ret
 
-# Han Carlson 1
-def compute_prefix_han_carlson1(pgx):
-    # first pass is brent-kung
-
-    # Second pass is kogge-stone
-
-
-    # third is brent-kung again
-    
-    pass
 
 
 def pprefix_lf(x, y, cin):

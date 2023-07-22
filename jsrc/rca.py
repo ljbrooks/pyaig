@@ -7,7 +7,7 @@ import operator
 from operator import *
 from prefix_adding import *
 from adder_util import *
-
+from itertools import product
 
 def rca(x, y):
     # ripple adder is a combinator
@@ -189,3 +189,13 @@ if __name__ == "__main__":
     jtag("ling_with_t", str(u))
     u = ling_adder(x, y)
     pprefix_add_plain(x, y, 0)
+
+    for i,j in product(range(200,300), range(200,300)):
+        x,y = int2bits(i) , int2bits(j)
+        x,y = level_xy(x,y)
+        print('kk',x,y)
+        #ling_adder_with_t(x,y,0)
+        pprefix_add_plain(x, y, 0)
+        
+        pass
+    pass

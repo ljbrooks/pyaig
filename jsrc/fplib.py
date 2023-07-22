@@ -90,4 +90,5 @@ def fzip(x, y):
 zzip = fzip
 
 
-def freversed(lx): return list(reversed(lx))
+def freversed(lx):
+    return list(reversed(lx))
