@@ -38,6 +38,7 @@ def level_xy(x,y):
     if len(x) > len(y): x,y = y,x
     x = [0] * (len(y)-len(x)) + x
     return x,y
+
 def pprefix_add_plain(x, y, cin):
     x,y = level_xy(x,y)
         
@@ -154,7 +155,7 @@ def compute_prefix_brent_kung_bug(pgx):
 
 def brunt_r(pgx, step):
     # step starts with 2
-    #assert step >= 2
+    assert step >= 1
     if (step >= len(pgx)) :return  pgx
     N = len(pgx)
 
