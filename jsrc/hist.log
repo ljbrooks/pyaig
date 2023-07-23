@@ -432,3 +432,15 @@ macbeth 278 2023-07-15 23:14:35.761253 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 279 2023-07-15 23:15:02.692729 pwd : /home/long/uu/pyaig/jsrc cmd : AigerCoiCluster.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
 macbeth 280 2023-07-15 23:15:06.786207 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
 macbeth 281 2023-07-15 23:15:43.006490 pwd : /home/long/uu/pyaig/jsrc cmd : AigerCoiCluster.py ../../multgen/test/c42_USP_KS_4x4_noX_multgen/c42_USP_KS_4x4_noX_multgen.sv.aig_out_4.aig.gz
+macbeth 282 2023-07-23 17:53:34.631154 pwd : /home/long/uu/pyaig/jsrc cmd : AigerCoiCluster.py ./../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 283 2023-07-23 17:54:52.593326 pwd : /home/long/uu/pyaig/jsrc cmd : AGuessGate.py ./../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 284 2023-07-23 18:09:22.504480 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/HC_16_multgen/HC_16_multgen.sv.aig
+macbeth 285 2023-07-23 18:10:27.215993 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 286 2023-07-23 18:10:38.724097 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 287 2023-07-23 18:50:54.106003 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 288 2023-07-23 18:51:08.239230 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 289 2023-07-23 18:52:28.340581 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 290 2023-07-23 18:53:02.614898 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 291 2023-07-23 18:53:37.580469 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 292 2023-07-23 18:55:09.452250 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 293 2023-07-23 18:56:30.006514 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
