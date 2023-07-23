@@ -37,6 +37,8 @@ class AGuessGate:
         self.gatex = [[] for i in range(self.acc.N)]
 
         self.ppx = self.identify_first_layer_pp()  # prefix
+        self.gx = identify_first_layer_g()
+        
         self.xor3x = defaultdict(list)
         self.inverse_xor3 = defaultdict(list)
         self.HAx = defaultdict(list)
@@ -142,6 +144,24 @@ class AGuessGate:
             pass
         pass
 
+    def get_p(self, i):
+        return self.ppx[var(i)]
+    def get_g(self, i):
+        return self.gx[var(i)]
+
+    
+    def identify_first_layer_g(self):
+        ret = [None] * self.acc.N
+        level1 = filter(lambda i: self.acc.levelx[var(i)] == 1, self.acc.topox)
+        
+        is_and = lambda i: not sign(self.aiger.get_and_left(i)) and not sign(self.aiger.get_and_right(i))
+        
+        gx = filter(is_and, level1)
+        for i in gx:
+            ret[var(i)] = AGate_G(self.aiger.get_fanins(i), [i], [])
+            pass
+        return ret
+        
     def identify_first_layer_pp(self):
         ret = [None] * self.acc.N
         level1 = filter(lambda i: self.acc.levelx[var(i)] == 1, self.acc.topox)

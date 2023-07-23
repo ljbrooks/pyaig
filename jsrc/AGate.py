@@ -26,6 +26,18 @@ class AGate(list):
 
     pass
 
+class AGate_G(AGate):
+    name = "g"
+    shape = "dot"
+    pass
+
+
+class AGate_P(AGate):
+    name = "p"
+    shape = "dot"
+    pass
+
+
 
 class AGate_OR(AGate):
     name = "OR"

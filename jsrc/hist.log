@@ -444,3 +444,5 @@ macbeth 290 2023-07-23 18:53:02.614898 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 291 2023-07-23 18:53:37.580469 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
 macbeth 292 2023-07-23 18:55:09.452250 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
 macbeth 293 2023-07-23 18:56:30.006514 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 294 2023-07-23 19:08:33.362761 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig
+macbeth 295 2023-07-23 19:10:01.581452 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig

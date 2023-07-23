@@ -15,7 +15,11 @@ class DrawAdderTree:
         if draw:
             self.toDiGraph()
         pass
-
+    def get_equiv(self, i):
+        g = self.ag.get_matched_gate(i)
+        if g: return g.outputx[0]
+        else: return i
+            
     def toDiGraph(self):
         m = self.marked
         G = self.G = nx.DiGraph()
@@ -30,7 +34,8 @@ class DrawAdderTree:
             label = "%s/%s" % (name, self.acc.colorMap[var(i)].cid)
 
             if g:
-                #i = g.outputx[0]
+                # there is equivalent node to this
+                i = g.outputx[0]
                 G.add_node(var(i), shape=g.shape, penwidth=2, color=color, label=label)
 
                 fx = g
@@ -58,6 +63,7 @@ class DrawAdderTree:
             for i, (_, po_lit, po_name) in enumerate(self.aiger.iter_po_names()):
                 n = po_name.decode("utf-8")
                 G.add_node(n, penwidth=6)
+                po_lit = self.get_equiv(po_lit)
                 G.add_edge(
                     var(po_lit), n, style=edge_style(po_lit), color=edge_color(po_lit)
                 )
@@ -94,9 +100,11 @@ class DrawAdderTree:
 
         S = pydot.Subgraph(rank="same")
 
-        pox = [str(i // 2) for i in self.aiger.get_po_fanins() if str(i // 2) not in k]
+        pox = [ self.get_equiv(i) for i in self.aiger.get_po_fanins()]
+        pox = [str(i // 2) for i in pox if str(i // 2) not in k]
         for i in pox:
             S.add_node(pydot.Node(i))
+            pass
         p.add_subgraph(S)
 
         print("Gen", fname)
@@ -107,7 +115,9 @@ class DrawAdderTree:
     def compute_marked(self):
         marked = [False] * self.acc.N
         for i in self.aiger.get_po_fanins():
-            marked[var(i)] = True
+            
+            marked[var(self.get_equiv(i))] = True
+            pass
         for i in reversed(self.acc.topox):
             #assert var(i) != 23
             if var(i) == 23 : pdb.set_trace()
