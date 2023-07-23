@@ -37,6 +37,10 @@ def cla(x, y, cin=0):
 
     cx = accumulate_r(f, cin)(zip(ps, gs))
 
+    cx2 = fmap(right_reduce(f, cin), tails(zip(ps, gs)))
+    # correctness of the carry look-ahead is proven
+    assert cx2 + [cin]  == cx
+
     jtag("x,y", [str(x), str(y)])
     jtag("carry[n:1]", str(cx))
 
@@ -59,7 +63,7 @@ def cla2(x, y, cin=0):
     f = lambda pg, c: pg[1] | (c & pg[0])
 
     jtag("tails", str(tails(zip(ps, gs))))
-    cx = fmap(right_reduce(f, 0), tails(zip(ps, gs)))
+    cx = fmap(right_reduce(f, cin), tails(zip(ps, gs)))
 
     jtag("cla2-carry", str(cx))
     r = fmap(lambda i: i[0] ^ i[1], zip([0] + ps, cx + [cin]))
@@ -114,6 +118,8 @@ def ling_adder_with_t(x, y, cin=0):
     assert bits2uint(r) == bits2uint(x) + bits2uint(y)
     return r
 
+
+### t(x,y) = g(x, y) | p(x, y)
 
 def ling_adder(x, y, cin=0):
     ts = [0] + fmap(lambda i: t(i), zip(x, y))
