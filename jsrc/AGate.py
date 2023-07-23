@@ -45,9 +45,16 @@ class AGate_OR(AGate):
     pass
 
 
-class AGate_AND(AGate):
-    name = "AND"
+class AGate_WAND(AGate):
+    name = "WAND"
     shape = "rectangle"
+    pass
+
+
+class AGate_WideOR(AGate):
+    # this should the wide_and
+    
+    
     pass
 
 
@@ -122,7 +129,7 @@ class AGate_Majority3(AGate):  # majority function
 
     @staticmethod
     def identify(aiger, and3):
-        assert isinstance(and3, AGate_AND)
+        assert isinstance(and3, AGate_WAND)
         f = and3.outputx[0]  # f is the output
         ixx = list(map(lambda i: aiger.get_fanins(i), and3))  # get the trans fanins
         i2x = list(set(sum(ixx, [])))

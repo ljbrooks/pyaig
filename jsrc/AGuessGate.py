@@ -37,7 +37,7 @@ class AGuessGate:
         self.gatex = [[] for i in range(self.acc.N)]
 
         self.ppx = self.identify_first_layer_pp()  # prefix
-        self.gx = identify_first_layer_g()
+        self.gx = self.identify_first_layer_g()
         
         self.xor3x = defaultdict(list)
         self.inverse_xor3 = defaultdict(list)
@@ -87,7 +87,7 @@ class AGuessGate:
         if self.gatex[var(i)]:
             r = self.gatex[var(i)][0]
             pass
-        if isinstance(r, AGate_AND):
+        if isinstance(r, AGate_WAND):
             r = None
         return r
 
@@ -331,7 +331,7 @@ class AGuessGate:
                 "found wide and%s @%s = AND %s"
                 % (len(kx), var(lit), list(map(lambda i: (i[0], lstr(i[1])), kx)))
             )
-            a = AGate_AND(kkx, [lit], mx)
+            a = AGate_WAND(kkx, [lit], mx)
             self.gatex[var(lit)].append(a)
 
             if len(kkx) == 3:
@@ -350,7 +350,7 @@ class AGuessGate:
 
     def _extend_and_r(self, lit):
         if len(self.gatex[var(lit)]) > 0 and not isinstance(
-            self.gatex[var(lit)][0], AGate_AND
+            self.gatex[var(lit)][0], AGate_WAND
         ):
             yield 1, lit
             return
@@ -358,6 +358,9 @@ class AGuessGate:
             # yield (1, lit)      # boundary at level 1
             # return
             pass
+        if self.get_g(lit): 
+            yield (1, lit)
+            return 
         if sign(lit):
             yield (1, lit)
             return

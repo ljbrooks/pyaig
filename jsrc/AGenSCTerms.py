@@ -119,7 +119,7 @@ from scr.TermDot  import *
                 ]
                 self.code(code)
                 pass
-            elif isinstance(g, AGate_AND):
+            elif isinstance(g, AGate_WAND):
                 assert False
                 pass
             else:

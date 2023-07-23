@@ -24,7 +24,7 @@ class DrawAdderTree:
         m = self.marked
         G = self.G = nx.DiGraph()
         for i in filter(lambda l: m[var(l)], self.acc.topox):
-            if var(i) == 23 : pdb.set_trace()
+            #if var(i) == 23 : pdb.set_trace()
             g = self.ag.get_matched_gate(i)
             shape = default_shape
             color = self.acc.colorMap[i // 2].hash()
@@ -120,7 +120,7 @@ class DrawAdderTree:
             pass
         for i in reversed(self.acc.topox):
             #assert var(i) != 23
-            if var(i) == 23 : pdb.set_trace()
+            #if var(i) == 23 : pdb.set_trace()
             if not marked[var(i)]:
                 continue
             finx = (
