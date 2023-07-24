@@ -48,6 +48,7 @@ class TermRewriter:
 
 
     def d(self, *termx):
+        assert False
         if len(termx) == 1 and isinstance(termx[0] , list):
             termx = termx[0]
             pass
@@ -88,6 +89,8 @@ class TermRewriter:
         return FuncS(*tuple(tx),**kwargs)
 
     def c(self, *termx ,is_m2 = None, **kwargs):
+        #        print(is_m2)
+        #assert is_m2 == True
         assert is_m2 != None
         #if is_m2:pdb.set_trace()
         if len(termx) == 1 and isinstance(termx[0] , list):
@@ -101,7 +104,7 @@ class TermRewriter:
             return ExprInv(FuncC(*tuple(termx)))
 
         r =  FuncC(*tuple(termx))
-        r.is_m2 = is_m2
+        r.set_is_m2 (is_m2)
         return r
 
     def m2(self, *termx , **kwargs):

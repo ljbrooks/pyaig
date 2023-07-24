@@ -27,9 +27,9 @@ class AColorRewrite:
         pass
 
     def get_wand(self, i):
-        if not self.ag.is_gate(i, AGate_AND):
+        if not self.ag.is_gate(i, AGate_WideAND):
             return None
-        return self.ag.get_gate(i, AGate_AND)
+        return self.ag.get_gate(i, AGate_WideAND)
 
     def get_xor(self, i):
         if not self.ag.is_gate(i, AGate_XOR):
@@ -57,7 +57,7 @@ class AColorRewrite:
 
     def map_a_wide_and(self, i):
         #        pdb.set_trace()
-        wand = self.ag.get_gate(i, AGate_AND)
+        wand = self.ag.get_gate(i, AGate_WideAND)
 
         fn = lambda i: (self.acc.colorMap[var(i)].cid, self.acc.levelx[var(i)])
         ix = sorted(wand, key=fn)  # , reverse=True)
@@ -129,7 +129,7 @@ class AColorRewrite:
                     self.dup_gate(r)
                     self.dup_gate(i)
                     pass
-                elif self.ag.is_gate(i, AGate_AND):
+                elif self.ag.is_gate(i, AGate_WideAND):
                     # got a wide gate
                     r = self.map_a_wide_and(i)
                     self.v2new[var(i)] = r

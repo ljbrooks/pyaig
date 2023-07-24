@@ -283,8 +283,13 @@ class FuncC(FuncPrim):
         self.is_m2 = False
         
         pass
+    def set_is_m2(self, a):
+        self.is_m2 = a
+        if a:   self.OP = self.F = 'm2'
+        pass
     def re_eval(self):
         return TermMgr.builder.c(self.termx, is_m2 = self.is_m2) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+    
     pass
 
 
@@ -406,7 +411,7 @@ def pretty(t, depth = 0, noAtom=False):
         r = ('{%s}'%t.uid) + str(t) 
     elif isinstance(t, Func):
         rx  = [pretty(i, depth+1, noAtom) for i in filter(skip_atom(noAtom), t.termx)]
-        r =f'{t.OP}.{t.uid} ( %s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
+        r =f'{t.OP}.{t.uid} (\n{indent}%s)' % (f'\n{indent}'.join(pretty_(noAtom)(t.termx).splitlines()))
         Depth-=1
         return r
     elif isinstance(t, ExprUnary):

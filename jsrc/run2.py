@@ -9,7 +9,7 @@ from scr.TermDFS import *
 import math
 from tabulate import *
 from scr.util import *
-
+from jtag3 import jtag as jjtag
 TermMgr.builder = TermBuilder
 from s import *
 
@@ -35,7 +35,7 @@ def topoOrder(with_t=True):
 
 
 a = TermRewriter()
-
+jjtag("original", pretty(pox[0]))
 ux = pox
 for u in ux:
     #    print
@@ -48,6 +48,7 @@ for u in ux:
 # print(str(u))
 
 rx = [rewrite(i, a) for i in pox]
+jjtag("after first rewrite", pretty(rx[-1]))
 """
 for i in pox:
     pdb.set_trace()
@@ -100,6 +101,7 @@ for i in rx:
             pass
         pass
     d = TermDFS(r[0])
-    jtag("short2", short2(r[0]))
+
+    jjtag("short2", str(short2(r[0])))
     Open("short2.txt", "w").write(short2(r[0]))
     pass

@@ -2,6 +2,7 @@ import sys
 
 sys.path.append("../")
 import pyaig
+from pathlib import Path
 from collections import *
 import pdb
 import networkx as nx
@@ -10,7 +11,7 @@ from AGate import *
 from autil.lit_util import *
 from DrawAdderTree import *
 import pyaig
-
+from jtag3 import jtag as jjtag
 
 class VarMap(dict):
     def __init__(self):
@@ -37,12 +38,14 @@ class AGuessGate:
         self.gatex = [[] for i in range(self.acc.N)]
 
         self.ppx = self.identify_first_layer_pp()  # prefix
+        self.orx = {}
         self.gx = self.identify_first_layer_g()
         
         self.xor3x = defaultdict(list)
         self.inverse_xor3 = defaultdict(list)
         self.HAx = defaultdict(list)
         self.FAx = defaultdict(list)
+        # guess xor?
         self.guess_gates()
         self.first_level_xor3 = VarMap()
         self.draw = self.draw_adder_tree()
@@ -55,7 +58,7 @@ class AGuessGate:
 
     def get_xor3(self, i):
         return self.xor3x[var(i)][0]
-
+    
     def get_xor(self, i):
         return self.gatex[var(i)][0]
 
@@ -87,7 +90,7 @@ class AGuessGate:
         if self.gatex[var(i)]:
             r = self.gatex[var(i)][0]
             pass
-        if isinstance(r, AGate_WAND):
+        if isinstance(r, AGate_WideAND):
             r = None
         return r
 
@@ -106,15 +109,12 @@ class AGuessGate:
         for j in self.gatex[var(i)]:
             print(f"var@{var(i)}: ", j.__class__.__name__, j)
             pass
-
+        pass
     def guess_gates(self):
         XOR_FIRST = False
         for i in self.acc.topox:
-            if var(i) == 92:
-                print("special")
-                # self.print_gate(i)
-                pass
             assert not sign(i)
+            AGate_XOR.identify(self.aiger, i)
             if not XOR_FIRST:
                 self.extend_and(i)
             if self.acc.levelx[var(i)] >= 2:
@@ -231,9 +231,10 @@ class AGuessGate:
             if len(self.gatex[var(i)]) > 0:
                 g = self.gatex[var(i)][0]  # .covered_litx[1]
 
-                G.add_node(var(i), shape=g.shape, penwidth=2, color=color, label=label)
+                G.add_node(var(i), shape=g.shape, penwidth=g.penwidth, color=color, label=label)
                 fx = g
             else:
+                # regular AND node
                 G.add_node(
                     var(i),
                     penwidth=4 if not self.ppx[var(i)] is None else 2,
@@ -247,15 +248,15 @@ class AGuessGate:
                     var(j), var(i), style=edge_style(j), color=edge_color(j), penwidth=2
                 )
                 pass
-            for i, (_, po_lit, po_name) in enumerate(self.aiger.iter_po_names()):
-                n = po_name.decode("utf-8")
-                G.add_node(n, penwidth=6)
-                G.add_edge(
-                    var(po_lit), n, style=edge_style(po_lit), color=edge_color(po_lit)
-                )
-                pass
-
             pass
+        for i, (_, po_lit, po_name) in enumerate(self.aiger.iter_po_names()):
+            n = po_name.decode("utf-8")
+            G.add_node(n, penwidth=6)
+            G.add_edge(
+            var(po_lit), n, style=edge_style(po_lit), color=edge_color(po_lit)
+            )
+            pass
+        
         return G
 
     def toDot(self, fname):
@@ -331,10 +332,11 @@ class AGuessGate:
                 "found wide and%s @%s = AND %s"
                 % (len(kx), var(lit), list(map(lambda i: (i[0], lstr(i[1])), kx)))
             )
-            a = AGate_WAND(kkx, [lit], mx)
+            a = AGate_WideAND(kkx, [lit], mx)
             self.gatex[var(lit)].append(a)
 
-            if len(kkx) == 3:
+            r = None
+            if len(kkx) == 3:   # 3 and
                 # if var(lit) == 86: pdb.set_trace()
 
                 r = AGate_Majority3.identify(self.aiger, a)
@@ -349,31 +351,32 @@ class AGuessGate:
         pass
 
     def _extend_and_r(self, lit):
+        LEAF = 1
+        NON_LEAF = 0
         if len(self.gatex[var(lit)]) > 0 and not isinstance(
-            self.gatex[var(lit)][0], AGate_WAND
+            self.gatex[var(lit)][0], AGate_WideAND
         ):
-            yield 1, lit
+            yield LEAF, lit
             return
-        if self.acc.levelx[var(lit)] <= 1:
-            # yield (1, lit)      # boundary at level 1
-            # return
-            pass
-        if self.get_g(lit): 
-            yield (1, lit)
+        if self.get_g(lit):     # generate
+            yield (LEAF, lit)
             return 
-        if sign(lit):
-            yield (1, lit)
+        if sign(lit):           # inverted
+            yield (LEAF, lit)
             return
+        
         if len(self.aiger.get_fanins(lit)) != 2:
-            yield (1, lit)
+            yield (LEAF, lit)      # not an AND gate, 
             return
-        # l,r = self.aiger.get_fanins(lit)
+
+        # otherwise, keep going
         for i in self.aiger.get_fanins(lit):
             for x, j in self._extend_and_r(i):
                 yield (x, j)
                 pass
             pass
-        yield (0, lit)
+        # 0 is intermediate
+        yield (NON_LEAF, lit)
         pass
 
     def identify_xor(self, lit):
@@ -455,6 +458,6 @@ if __name__ == "__main__":
     ag = AGuessGate(a)
     outfname = str(Path(f).name[:-4]) + ".dot"
     G = ag.acc.toDot(outfname)
-    print("gen gussed dot:", "v.dot")
+    print(Path(__file__).name, "gen gussed dot:", "v.dot")
     ag.toDot("v.dot")
     pass

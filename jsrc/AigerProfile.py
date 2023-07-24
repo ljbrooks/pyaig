@@ -61,8 +61,8 @@ class AigerProfile:
         return f"{var(i)} = {ix[0]} \\cdot {ix[1]}"
 
     def get_gate_fanins(self, i):
-        if self.ag.is_gate(i, AGate_AND):
-            return self.ag.get_gate(i, AGate_AND)
+        if self.ag.is_gate(i, AGate_WideAND):
+            return self.ag.get_gate(i, AGate_WideAND)
         else:
             return self.aiger.get_fanins(i)
         pass

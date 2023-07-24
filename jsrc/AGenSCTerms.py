@@ -119,7 +119,7 @@ from scr.TermDot  import *
                 ]
                 self.code(code)
                 pass
-            elif isinstance(g, AGate_WAND):
+            elif isinstance(g, AGate_WideAND):
                 assert False
                 pass
             else:
@@ -149,11 +149,17 @@ from scr.TermDot  import *
         a, b = i[0], i[1]
         assert self.aiger.is_pi(a)
         assert self.aiger.is_pi(b)
-        x = int(self.get_id_name(a).split("[")[1][:-1])
-        y = int(self.get_id_name(b).split("[")[1][:-1])
-        if self.get_id_name(a).split("[") == "IN2":
-            x.y = y, x
+        a_name = self.get_id_name(a)
+        b_name = self.get_id_name(b)
+        try:
+            x = int(self.get_id_name(a).split("[")[1][:-1])
+            y = int(self.get_id_name(b).split("[")[1][:-1])
+            if self.get_id_name(a).split("[") == "IN2":
+                x.y = y, x
+                pass
             pass
+        except:
+            return a_name, b_name
         return x, y
 
     def identify_p_terms(self):
@@ -170,6 +176,7 @@ from scr.TermDot  import *
             if not and_all(tx):
                 continue
             x, y = self.get_pp_x_y(ix)
+            
             k = f'pp{i} = Atom("pp_{x}_{y}")   # n{i} --'
             self.lit2symbolx[i] = f"pp{i}"
             self.lit2symbolx[inv(i)] = f"~pp{i}"

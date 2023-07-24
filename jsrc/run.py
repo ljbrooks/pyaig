@@ -9,7 +9,7 @@ from scr.TermDFS import *
 import math
 from tabulate import *
 from scr.util import *
-
+from jtag3 import jtag as jjtag
 TermMgr.builder = TermBuilder
 from s import *
 
@@ -40,7 +40,7 @@ a = TermRewriter()
 # u= rewrite(xs80,a)
 
 # ux = [xs156] #xs86, xs44, xs150, xs156]
-print(pretty(pox[0]))
+jjtag("original", pretty(pox[0]))
 ux = pox
 rx = [rewrite(i, a) for i in pox]
 print("after rewrite")

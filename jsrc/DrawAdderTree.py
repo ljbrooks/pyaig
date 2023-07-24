@@ -1,7 +1,7 @@
 from autil.lit_util import *
 import pdb, pydot
 import networkx as nx
-
+from jtag3 import jtag
 default_shape = ""
 
 
@@ -23,8 +23,9 @@ class DrawAdderTree:
     def toDiGraph(self):
         m = self.marked
         G = self.G = nx.DiGraph()
+        
         for i in filter(lambda l: m[var(l)], self.acc.topox):
-            #if var(i) == 23 : pdb.set_trace()
+            assert not sign(i)
             g = self.ag.get_matched_gate(i)
             shape = default_shape
             color = self.acc.colorMap[i // 2].hash()
@@ -45,11 +46,21 @@ class DrawAdderTree:
                 fx = self.acc.aiger.get_fanins(i)
                 pass
             #assert var(i) !=23
+            
             for j in fx:
 
                 jg = self.ag.get_matched_gate(j)
                 edge_label = "" if not jg else jg.get_edge_label(j)
-                j = jg.outputx[0] if jg else j
+
+                if jg:
+                    print(j, jg.outputx)
+                    assert var(j) == var(jg.outputx[0]) or var(j)==var(jg.outputx[1])
+                    pass
+                
+                jj = jg.outputx[0] if jg else j
+                #assert var(jj) == var(j) # this is half adder?
+                j = jj ^ sign(j)
+
                 G.add_edge(
                     var(j),
                     var(i),
@@ -60,6 +71,7 @@ class DrawAdderTree:
                 )
 
                 pass
+            
             for i, (_, po_lit, po_name) in enumerate(self.aiger.iter_po_names()):
                 n = po_name.decode("utf-8")
                 G.add_node(n, penwidth=6)
@@ -71,7 +83,7 @@ class DrawAdderTree:
 
             pass
         self.toDot("x.dot")
-        print("x.dot is from DrawAdderTree.py")
+        jtag("x.dot"," is from DrawAdderTree.py")
         pass
 
     def toDot(self, fname):
@@ -115,12 +127,10 @@ class DrawAdderTree:
     def compute_marked(self):
         marked = [False] * self.acc.N
         for i in self.aiger.get_po_fanins():
-            
             marked[var(self.get_equiv(i))] = True
             pass
         for i in reversed(self.acc.topox):
-            #assert var(i) != 23
-            #if var(i) == 23 : pdb.set_trace()
+
             if not marked[var(i)]:
                 continue
             finx = (

@@ -6,6 +6,7 @@ from autil.lit_util import *
 
 
 class AGate(list):
+    penwidth = 1
     def __init__(self, inputx, outputx, covered_litx):
         list.__init__(self, inputx)
         self.covered_litx = covered_litx
@@ -18,9 +19,10 @@ class AGate(list):
     def internal_gate_cnt(self):
         return len(self.covered_litx)
 
+    @staticmethod
     def identify(self, lit):
         assert False
-
+        pass
     def get_edge_label(self, i):
         return ""
 
@@ -45,9 +47,10 @@ class AGate_OR(AGate):
     pass
 
 
-class AGate_WAND(AGate):
-    name = "WAND"
+class AGate_WideAND(AGate):
+    name = "WideAND"
     shape = "rectangle"
+    
     pass
 
 
@@ -60,19 +63,42 @@ class AGate_WideOR(AGate):
 
 class AGate_XOR(AGate):
     shape = "diamond"
-    name = "XOR"
+    name = "XNOR"
+    penwidth = 2
 
     def __init__(self, *args):
         AGate.__init__(self, *args)
         self.is_nxor = False
         pass
-
+    @staticmethod
+    def identify(aiger, lit):
+        if len(aiger.get_fanins(lit))!= 2 : return None
+        l = aiger.get_and_left(lit)
+        r = aiger.get_and_right(lit)
+        l_fanin = sorted(list(aiger.get_fanins(l)))
+        r_fanin = sorted(list(aiger.get_fanins(r)))
+        if len(l_fanin)!=2 or len(r_fanin)!=2: return None
+        ret = None
+        if sign(l) and sign(r) and inv(l_fanin) == r_fanin:
+            is_xnor = sign(l_fanin[0]) == sign(l_fanin[1])
+            G = AGate_XNOR  if is_xnor else AGate_XOR
+            ret = G( pure(l_fanin), [lit ^ is_xnor], [l,r])
+            #assert not G == AGate_XNOR
+            pass
+        
+        return ret
     pass
 
 
-class AGate_NXOR(AGate):
-    shape = "pentagon"
-    name = "NXOR"
+class AGate_XNOR(AGate):
+    shape = "diamond"
+    name = "XNOR"
+    penwidth = 4
+    def __init__(self, *args):
+        AGate.__init__(self, *args)
+        self.is_nxor = True
+        pass
+
     pass
 
 
@@ -129,7 +155,7 @@ class AGate_Majority3(AGate):  # majority function
 
     @staticmethod
     def identify(aiger, and3):
-        assert isinstance(and3, AGate_WAND)
+        assert isinstance(and3, AGate_WideAND)
         f = and3.outputx[0]  # f is the output
         ixx = list(map(lambda i: aiger.get_fanins(i), and3))  # get the trans fanins
         i2x = list(set(sum(ixx, [])))
@@ -214,7 +240,8 @@ class AGate_FA(AGate):
         return i == self[0]
 
     def get_edge_label(self, i):
-        return self.edge_label[var(i) == var(self.outputx[0])]
+        s = ssign(i)
+        return s + self.edge_label[var(i) == var(self.outputx[0])]
 
     @staticmethod
     def identify(ag):
@@ -250,10 +277,16 @@ class AGate_FA(AGate):
 class AGate_HA(AGate):
     shape = "invtriangle"
     name = "HA"
-    edge_label = ["c", "s"]
+    edge_label = ["s", "c"]
 
     def get_edge_label(self, i):
-        return self.edge_label[var(i) == var(self.outputx[0])]
+        
+        k = 0 if  var(i) == var(self.outputx[0]) else 1
+        print(i, self.outputx, k)
+        assert var(i) == var(self.outputx[k])
+        s = '~' if i != self.outputx[k] else ''
+
+        return s + self.edge_label[var(i) == var(self.outputx[0])]
 
     @staticmethod
     def identify(ag):

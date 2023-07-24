@@ -33,11 +33,12 @@ class TermReduce2:
         pass
 
     def reduce(self, a):
-        #assert isinstance(a, FuncC)
+        #if isinstance(a, FuncC) and a.is_m2: return 
+        
         # this is the rewrite 
         # 
         u = a.uid
-        is_c = lambda i: isinstance(i, FuncC)
+        is_c = lambda i: isinstance(i, FuncC) 
         is_s = lambda i: isinstance(i, FuncS)
         cx = defaultdict(list)
         csx = defaultdict(list)
