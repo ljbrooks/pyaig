@@ -93,14 +93,20 @@ for i in rx:
             jtag("Found MMS", pretty(i))
             jtag("Found MMS", short(i.mms))
             pass
-        if TermWideNOR.accept(i):
-            r, mid, leaves =  TermWideNOR.recognize(i)
-            jjtag("Found TermWideNOR",str(fmap(ustr, [r, mid, leaves]) ))
-            for j in leaves:
-                if tsign(j): j = j.termx[0]
-                rr, mmid , lleaves = list(collect_wide_and(j))
-                jjtag("Found TermWideAnd",str(fmap(ustr, [rr, mmid, lleaves]) ))
+        
+        if i.uid in [216 , 236] and TermWideNOR.accept(i):
+            r =  TermWideNOR.recognize(i)
+            assert isA(FuncWideOR) (r)
+            jjtag("Found TermWideNOR",str(fmap(ustr, [r.root, r.mids, r.termx]) ))
+            for j in r.termx:
+                if tsign(j): j = j.car
+                rr = collect_wide_and(j)
+                jjtag("Found TermWideAnd",str(fmap(ustr, [rr.root, rr.mids, rr.termx]) ))
                 pass
+            #print(i.wnor)
+            assert isA(ExprInv)(i.wnor)
+            assert isA(FuncWideOR)(i.wnor.car)
+            expand_wide_or(i.wnor.car)
             pass
         pass
     d = TermDFS(r[0])

@@ -126,7 +126,9 @@ class TermList(Term):           # 1D
         self.changed = True
         self.tx[i] = v
         pass
-
+    @property
+    def as_list(self):
+        return [i for i in self]
     def __add__(self, x):
         r = []
         self.clear()
@@ -251,7 +253,7 @@ class ExprInv(ExprUnary):
 
 class Func (Expr):
     rank = 4
-    def __init__(self, *args,tl = None, **kwargs):
+    def __init__(self, *args, tl = None, **kwargs):
         Expr.__init__(self, *args, tl=tl,**kwargs)
         assert tl is None or  isinstance(tl, TermList)
         pass
@@ -264,11 +266,30 @@ class Func (Expr):
 
 class FuncPrim(Func):
     rank = 5
+        
     pass
+
 class FuncS(FuncPrim):
     OP= F = 's'
     def re_eval(self):
         return TermMgr.builder.s(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+    pass
+
+class FuncWideAnd(Func):
+    OP= F = 'wand'
+    def re_eval(self):
+        return TermMgr.builder.wand(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
+    pass
+
+class FuncWideOR(Func):
+    OP= F = 'wor'
+    def __init__(self, *args,tl = None, **kwargs):
+        Func.__init__(self, *args, tl=tl, **kwargs)
+        self.is_m2 = False
+        pass
+
+    def re_eval(self):
+        return TermMgr.builder.wor(self.termx) #reduce(lambda a,b: a|b, self.termx[1:], self.termx[0])
     pass
 
 class FuncD(FuncPrim):
@@ -439,6 +460,14 @@ def short2(t, depth = 0):
     print_mode = 0;
     return r
 
+
+def tinv(a):
+    if isA(ExprInv)(a):
+        return a.car
+    else: 
+        return ExprInv(a)
+    pass
+    
 def l1str(a):
     return a.__l1str__()
         

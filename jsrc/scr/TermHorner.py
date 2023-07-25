@@ -1,5 +1,6 @@
 import math, pdb
 from scr.Term import *
+from scr.util import *
 
 from scr.TermRewriter import *
 # This is to recognize horner's rule, convert the expanded form into horner's rule
@@ -8,11 +9,11 @@ from scr.TermRewriter import *
 # a + bc + bcd + bcde = a + b( c+ (de))
 # NOR( abc, cde, fg, h) 
 
-class TermHorner(Term):
+class TermHorner(Func):
     
     pass
 
-class TermWideNOR(Term):
+class TermWideNOR(Func):
     
     # looking for a NOR(abc, def, ag, uv)
     
@@ -27,19 +28,21 @@ class TermWideNOR(Term):
         assert isA(FuncC)(a) and a.is_m2
         root, mids, leaves =  collect_wide_nor(a)
         assert root == a
+        #print('leaves', type(leaves))
+        assert isinstance(leaves, list)
+        u = fmap(lambda i : tinv(i), leaves)
+        print(ustr(u))
 
-        return root, mids, leaves
+        r = FuncWideOR(*tuple(u))
+        r.root = root
+        r.mids = mids
+        a.wnor = tinv(r)
+        # a.wor = 
+        return r 
         
     pass
 
-class TermHorner(Term):
-    
-    @staticmethod
-    def accept(a):
-        
-        pass
-    
-    pass
+
 
 GRAY ='GRAY'
 BLACK='BLACK'
@@ -140,10 +143,14 @@ def collect_wide_and(a):        # a is inverted m2
 
     nx = list(tree_dfs(a, nodeCondition, edgeCondition))
     
-    return ( nx[-1],            # root
-             ffilter(nodeCondition, nx[:-1]), # middle 
-             ffilter(inv_f(nodeCondition), nx[:-1]))
-
+    root, mids, leaves = ( nx[-1],            # root
+                           ffilter(nodeCondition, nx[:-1]), # middle 
+                           ffilter(inv_f(nodeCondition), nx[:-1]))
+    if len(nx)==1: leaves = nx
+    r = FuncWideAnd(*tuple(leaves))
+    r.root , r.mids = root, mids
+    a.wand = r
+    return r
 # just traverse it
 def tree_dfs(a, nodeCondition, edgeCondition):
     if nodeCondition(a):
@@ -152,4 +159,33 @@ def tree_dfs(a, nodeCondition, edgeCondition):
             pass
         pass
     yield a
+    pass
+
+def expand_wide_or(top):
+    # top is wor(x,y,z,w) and each term is a wide_and of terms, any of
+    # leaves of the wide_and is an OR gate, it will then be expanded
+    # into the top level term
+    if tsign(top): top = top.car
+
+    for i in top.termx:
+        if hasattr(i, 'wand'):
+            #assert False
+            # i is a wand term
+            for j in i.termx:
+                if isA(ExprInv)(j):
+                    #if hasattr(j, 'wnor'):
+                    # we got a wor term
+                    #assert False
+                    print('i',ustr(i), i)
+                    print('j', j)
+                    print('j.car', j.car)
+                    print('j.uid', ustr(j.car), ustr(j.car.termx.as_list))
+                    
+                    print(j.car.wnor)
+                    assert False
+                    pass
+                pass
+            pass
+        pass
+    
     pass
