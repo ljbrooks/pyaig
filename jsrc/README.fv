@@ -1,0 +1,55 @@
+# AGenSCTerms
+
+create a python code the convert the logic into SC expression 
+
+```python
+pp64 = Atom("pp_4_4")   # n64 --
+pp58 = Atom("pp_3_3")   # n58 --
+pp46 = Atom("pp_2_2")   # n46 --
+pp40 = Atom("pp_1_1")   # n40 --
+pp30 = Atom("pp_0_0")   # n30 --
+pp28 = Atom("pp_IN1[0]_carryin")   # n28 --
+pp32 = Atom("pp_IN2[0]_carryin")   # n32 --
+pp86 = Atom("pp_5_5")   # n86 --
+i26 = Atom("i13")   ## IN2[5]
+i27 = ~ i26    ## IN2[5]
+i14 = Atom("i7")   ## IN1[5]
+i15 = ~ i14    ## IN1[5]
+i2 = Atom("i1")   ## carryin
+i3 = ~ i2    ## carryin
+i16 = Atom("i8")   ## IN2[0]
+i17 = ~ i16    ## IN2[0]
+i4 = Atom("i2")   ## IN1[0]
+i5 = ~ i4    ## IN1[0]
+i18 = Atom("i9")   ## IN2[1]
+
+xc80 = scr.m2(xc78,~hc36, nid="m280")
+xc81 = ~ scr.m2(xc78,~hc36, nid="m281")
+xc82 = scr.m2(xc81,xc76, nid="m282")
+xc83 = ~ scr.m2(xc81,xc76, nid="m283")
+xs88 = scr.s(i14,i26, nid="xs88")
+xs89 = scr.s(i15,i27, nid="xs89")
+xs88 = scr.s(i14,i26, nid="xs88")
+xs89 = scr.s(i15,i27, nid="xs89")
+xs94 = scr.s(xc82,~xs88, nid="xs94")
+xs95 = scr.s(xc83,xs88, nid="xs95")
+xs94 = scr.s(xc82,~xs88, nid="xs94")
+xs95 = scr.s(xc83,xs88, nid="xs95")
+
+```
+
+# run.py  and run2.py
+
+This will process the Term tree and conduct recognization and rewriting.
+
+1. First rewrite is to rewrite/minimize the number of invertors
+
+this works for unsigned adder/multipliers,
+
+
+2. recursive rewrite of 'm x + m ( s x + y ) = m ( s + m y)'
+
+3. recognize f = x+my chain ( which creates the ripple adder chain )
+
+4. the above would work if the final stage is a ripple adder, so we
+have a need to identify ripple adder
