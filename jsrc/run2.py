@@ -6,6 +6,7 @@ from scr.TermBuilder import *
 from scr.TermRewriter import *
 from scr.TermReduce2 import *
 from scr.TermDFS import *
+from scr.TermHorner import *
 import math
 from tabulate import *
 from scr.util import *
@@ -38,14 +39,8 @@ a = TermRewriter()
 jjtag("original", pretty(pox[0]))
 ux = pox
 for u in ux:
-    #    print
     x = rewrite(u, a)
-    #   print('before --')
-    # print(pretty(u))
-    # print('after-----')
-    # print(pretty(x))
-    # print()
-# print(str(u))
+    pass
 
 rx = [rewrite(i, a) for i in pox]
 jjtag("after first rewrite", pretty(rx[-1]))
@@ -56,12 +51,10 @@ for i in pox:
     print(u)
 """
 
-
 def Open(fname, mode):
     m = {"w": "write", "r": "read", "a": "append"}
     print(f"INFO: file {m[mode]} : {fname} {mode}")
     return open(fname, mode)
-
 
 for i in rx:
     lx = [len(TermTopo(i).topoOrder())]
@@ -84,9 +77,10 @@ for i in rx:
             break
         pass
     # break
+    
     fn = FuncFoldr.recognize(FuncFoldrPlusM, tr.ht)
+    
     for i in TermTopo(r).topoOrder():
-
         if not FuncFoldrPlusM.accept(i):
             continue
         x = fn(i)
@@ -98,6 +92,15 @@ for i in rx:
         if FuncReduceMMS.accept(i):
             jtag("Found MMS", pretty(i))
             jtag("Found MMS", short(i.mms))
+            pass
+        if TermWideNOR.accept(i):
+            r, mid, leaves =  TermWideNOR.recognize(i)
+            jjtag("Found TermWideNOR",str(fmap(ustr, [r, mid, leaves]) ))
+            for j in leaves:
+                if tsign(j): j = j.termx[0]
+                rr, mmid , lleaves = list(collect_wide_and(j))
+                jjtag("Found TermWideAnd",str(fmap(ustr, [rr, mmid, lleaves]) ))
+                pass
             pass
         pass
     d = TermDFS(r[0])

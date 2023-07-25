@@ -72,7 +72,8 @@ from scr.TermDot  import *
                 assert not (sign(i))
                 self.lit2symbolx[i] = f"i{i}"
                 self.lit2symbolx[inv(i)] = f"i{inv(i)}"
-                self.code(f'i{i} = Atom("i{var(i)}")   ## ' + pi_name(self.aiger)(i))
+                iname =pi_name(self.aiger)(i)
+                self.code(f'i{i} = Atom("i{var(i)}_{iname}")   ## ' + pi_name(self.aiger)(i))
                 self.code(f"i{inv(i)} = ~ i{i}    ## " + pi_name(self.aiger)(i))
                 pass
             g = self.ag.get_adder_gate(i)

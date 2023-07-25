@@ -122,7 +122,9 @@ class TermRewriter:
 
 def tsign(term):
     return isinstance(term, ExprInv)
+
 def tneg(term):
+    assert False
     return isinstance(term, ExprNeg)
 
 

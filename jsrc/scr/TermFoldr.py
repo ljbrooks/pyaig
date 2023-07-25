@@ -137,14 +137,8 @@ class FuncFoldrMMS(FuncFoldr):
         zx, y1 = m.termx[:-1], m.termx[-1]
         x, y2 = s.termx
         if hasattr(m,'mms'): 
-            #X, YS, Z = m.mms
-            #X, YS, Z = x, [y1]+YS, Z
-            #assert y1.termx == m.mms[0]
-            #assert z == m.mms[1]
             mms = FuncFoldrMMS(TermListUnordered([x] + [i for i in m.mms]))
-
         else:
-            #X, YS, Z  = x, [y1], z
             mms = FuncFoldrMMS(TermListUnordered([x,y1.termx[0],TermList(zx)]))
             pass
         a.mms = mms

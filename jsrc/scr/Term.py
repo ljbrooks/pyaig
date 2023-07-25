@@ -14,6 +14,7 @@ from scr.TermMgr import *
 #NEG = 'negative'
 class Term:                     # base
     inf = None
+    g_visit_cnt = 0
     #nid = lambda(i):i.nid
     def __init__(self, **kwargs):
         self.nid=None
@@ -25,6 +26,7 @@ class Term:                     # base
         self.has_m2_inv_children = False    # m2 has inverted children
         TermMgr.UID+=1
         TermMgr.tmgr.append(self) # this is where it can uniquified
+        self.visit_cnt = -1
         #not 
         pass
     def __repr__(self):
@@ -422,7 +424,12 @@ def pretty(t, depth = 0, noAtom=False):
         pass
     Depth-=1
     return r
-
+def ustr(a):
+    if not isinstance(a, list):
+        return f'{a.OP}.{a.uid}'
+    else:
+        return fmap(ustr,a)
+    pass
 def short(t, depth = 0):
     return pretty(t, depth, noAtom=True)
 def short2(t, depth = 0):

@@ -544,3 +544,7 @@ macbeth 390 2023-07-24 22:15:10.336584 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 391 2023-07-24 22:15:16.003633 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_15.aig
 macbeth 392 2023-07-24 22:15:30.434066 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_15.aig
 macbeth 393 2023-07-24 22:16:09.178221 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/KS_8_multgen/KS_8_multgen.sv.aig_out_5.aig
+macbeth 394 2023-07-25 14:07:23.933905 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py examples/DT_USP_RP_8x8_noX_multgen.sv.aig_out_15.aig
+macbeth 395 2023-07-25 14:07:34.539219 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/KS_8_multgen/KS_8_multgen.sv.aig_out_5.aig
+macbeth 396 2023-07-25 16:03:34.185627 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/KS_8_multgen/KS_8_multgen.sv.aig_out_5.aig
+macbeth 397 2023-07-25 20:59:55.695343 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/KS_8_multgen/KS_8_multgen.sv.aig_out_5.aig
