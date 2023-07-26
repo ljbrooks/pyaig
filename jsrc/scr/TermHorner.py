@@ -38,7 +38,7 @@ class TermWideNOR(Func):
         r.mids = mids
         a.wnor = tinv(r)
         # a.wor = 
-        return r 
+        return ExprInv(r)
         
     pass
 
@@ -182,10 +182,73 @@ def expand_wide_or(top):
                     print('j.uid', ustr(j.car), ustr(j.car.termx.as_list))
                     
                     print(j.car.wnor)
-                    assert False
+                    #assert False
                     pass
                 pass
             pass
         pass
     
+    pass
+
+class FuncSOP(FuncWideOR):
+    pass
+
+class ReduceHorner:
+    def __init__(self, ht):
+        self.ht = ht
+        pass
+    
+    def reduce_wide_or(self, node):
+        if not ( isA(ExprInv)(node) and isA(FuncC)(node.car) and node.car.is_m2):
+            return node
+        root, mids, leaves = collect_wide_nor(node.car)
+        r = FuncWideOR(*tuple(tinv(leaves)))
+        return r
+    
+    def reduce_nor_as_SOP(self, node):
+        #node = self.reduce_not(node)
+        
+        if TermWideNOR.accept(node):
+            pdb.set_trace()
+            r = TermWideNOR.recognize(node)
+            assert isA(ExprInv)(r)
+            rx = fmap(self.reduce_wide_and, r.car.termx)
+            #r.car.termx = TermList(*tuple(rx)) # 
+            return ExprInv(FuncSOP(rx))    
+            pass
+        return node
+        
+    def reduce_wide_and(self, node):
+        node = self.reduce_not(node)
+        rr = collect_wide_and(node)
+        return rr
+    
+    def reduce_not(self, node):
+        if isA(ExprInv)(node) and isA(ExprInv)(node.car):
+            return node.car.car
+        return node
+
+    def reduce_r(self, node):   # top level reduce
+        #pdb.set_trace()
+        node = self.reduce_not(node)
+        
+        node = self.reduce_nor_as_SOP(node)
+        
+        if isA(ExprInv)(node) and isA(FuncSOP)(node.car):
+            for i in node.car.termx: # sum level
+                # this would reduce SOP as much as possible
+                i.termx = fmap(self.reduce_r, i.termx) # continue with SOP
+                while some(isA(FuncWideOR))(i.termx): 
+                    x = indexOf(isA(FuncWideOR))(i.termx)
+                    break
+                    pass
+                pass
+
+                pass
+            pass
+        else:
+            node.termx = fmap(self.reduce_r, node.termx)
+            pass
+        node = self.reduce_not(node) # possibly 
+        return node
     pass

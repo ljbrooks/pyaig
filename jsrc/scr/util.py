@@ -37,6 +37,15 @@ def some(f):
         return r
     return fn
 
+def indexOf(f):
+    
+    def fn(lx, index=0):
+        if index > len(lx) : return -1
+        if f(lx[index]): return index
+        return fn(lx, index+1)
+    return fn
+            
+
 def fmap(f, lx):
     return list(map(f, lx))
 
@@ -49,3 +58,4 @@ def args2list(*args):
         return args[0]
     return list(args)
         
+

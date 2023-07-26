@@ -95,10 +95,10 @@ for i in rx:
             pass
         
         if i.uid in [216 , 236] and TermWideNOR.accept(i):
-            r =  TermWideNOR.recognize(i)
-            assert isA(FuncWideOR) (r)
-            jjtag("Found TermWideNOR",str(fmap(ustr, [r.root, r.mids, r.termx]) ))
-            for j in r.termx:
+            s =  TermWideNOR.recognize(i)
+            assert isA(ExprInv)(s) and isA(FuncWideOR) (s.car)
+            jjtag("Found TermWideNOR",str(fmap(ustr, [s.car.root, s.car.mids, s.car.termx]) ))
+            for j in s.car.termx:
                 if tsign(j): j = j.car
                 rr = collect_wide_and(j)
                 jjtag("Found TermWideAnd",str(fmap(ustr, [rr.root, rr.mids, rr.termx]) ))
@@ -108,7 +108,12 @@ for i in rx:
             assert isA(FuncWideOR)(i.wnor.car)
             expand_wide_or(i.wnor.car)
             pass
+        
         pass
+    rh = ReduceHorner(tr.ht)
+    t = rh.reduce_r(r[0])
+    jjtag('horner-reduced', pretty(t))
+    
     d = TermDFS(r[0])
 
     jjtag("short2", str(short2(r[0])))
