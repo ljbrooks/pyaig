@@ -31,6 +31,7 @@ class ReduceHorner(Func):
             return node
         pdb.set_trace()
         terms = sum([ asList(i.termx) for i in node.termx], [])
+        if len(terms) <=1 : return node
         cnt = Counter(terms)
         print(tabulate(cnt.items()))
         ak = list(self.factorize(node.termx)) # fmap(lambda i: asList, node.termx))# (node.termx))
