@@ -119,7 +119,7 @@ for i in rx:
     rh = ReduceSOP(tr.ht)
     t = rh.reduce_r(r[0])
     jjtag('SOP-reduced', pretty(t))
-    t = ReduceHorner(tr.ht).reduce_horner_from_SOP(t)
+    t = ReduceHorner(tr.ht).reduce(t)
     jjtag('horner-reduced', pretty(t))
     
     pass

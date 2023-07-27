@@ -26,9 +26,10 @@ class ReduceHorner(Func):
         return node
 
     def reduce_horner_from_SOP(self, node):
+        assert isA(FuncSOP)(node)
         if not isA(FuncSOP)(node): 
             return node
-        
+        pdb.set_trace()
         terms = sum([ asList(i.termx) for i in node.termx], [])
         cnt = Counter(terms)
         print(tabulate(cnt.items()))

@@ -566,3 +566,7 @@ macbeth 412 2023-07-27 15:00:51.993752 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 413 2023-07-27 22:44:05.571775 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
 macbeth 413 2023-07-27 22:58:32.296474 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
 
+macbeth 415 2023-07-27 23:13:27.566544 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig_out_8.aig
+macbeth 416 2023-07-27 23:13:40.622923 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
+macbeth 417 2023-07-27 23:15:22.577171 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
+macbeth 418 2023-07-27 23:16:55.486200 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
