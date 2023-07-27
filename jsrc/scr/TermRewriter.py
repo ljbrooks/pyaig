@@ -37,11 +37,11 @@ class TermRewriter:
             return a.termx[0]
         elif isinstance(a, FuncC) and not a.is_m2:
             #~c(~x, ~y)
-            if all(tsign)(a.car.termx) or mostly(tsign)(a.car.termx):
+            if len(a.car.termx) and all(tsign)(a.car.termx) or mostly(tsign)(a.car.termx):
                 return FuncC(fmap(self.__invert__, a.car.termx))
             pass
         elif isinstance(a, FuncS):
-            if all(tsign)(a.car.termx) or mostly(tsign)(a.car.termx):
+            if len(a.car.termx) and all(tsign)(a.car.termx) or mostly(tsign)(a.car.termx):
                 return FuncS(fmap(self.__invert__, a.car.termx))
             pass
         return ExprInv(a)

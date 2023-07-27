@@ -1,5 +1,5 @@
 from functools import *
-
+import pdb
 def fremove(item):
     def fn(lx):
         lx.remove(item)
@@ -31,6 +31,7 @@ def contains(key):
 def all(f):
     def fn(lx):
         r = reduce (lambda a,b: a and f(b), lx, True)
+        #if r : pdb.set_trace()
         return r
     return fn
 
