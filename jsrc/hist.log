@@ -563,3 +563,4 @@ macbeth 409 2023-07-27 12:38:49.886826 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 410 2023-07-27 12:38:56.659348 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
 macbeth 411 2023-07-27 15:00:46.281537 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig_out_8.aig
 macbeth 412 2023-07-27 15:00:51.993752 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/LF_8_multgen/LF_8_multgen.sv.aig_out_8.aig
+macbeth 413 2023-07-27 22:58:32.296474 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_8.aig.gz
