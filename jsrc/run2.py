@@ -7,6 +7,7 @@ from scr.TermRewriter import *
 from scr.TermReduce2 import *
 from scr.TermDFS import *
 from scr.TermHorner import *
+from scr.TermSOP import *
 import math
 from tabulate import *
 from scr.util import *
@@ -115,8 +116,10 @@ for i in rx:
 
     jjtag("short2", str(short2(r[0])))
     Open("short2.txt", "w").write(short2(r[0]))
-    rh = ReduceHorner(tr.ht)
+    rh = ReduceSOP(tr.ht)
     t = rh.reduce_r(r[0])
+    jjtag('SOP-reduced', pretty(t))
+    t = ReduceHorner(tr.ht).reduce_horner_from_SOP(t)
     jjtag('horner-reduced', pretty(t))
     
     pass

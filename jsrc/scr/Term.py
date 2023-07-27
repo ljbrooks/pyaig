@@ -439,8 +439,11 @@ def pretty(t, depth = 0, noAtom=False):
         return r
     elif isinstance(t, ExprUnary):
         r = f'{t.OP}.{t.uid} %s' % (pretty_(noAtom)(t.car))
+    elif isinstance(t, tuple):
+        Depth-=1
+        return 'tuple: '+ ',\n'.join(fmap(pretty_(noAtom), filter(skip_atom(noAtom),t)))
     else:
-        print(t)
+        print('bad', t)
         assert False
         pass
     Depth-=1

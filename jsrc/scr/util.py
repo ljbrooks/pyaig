@@ -1,5 +1,11 @@
 from functools import *
 
+def fremove(item):
+    def fn(lx):
+        lx.remove(item)
+        return lx
+    return fn
+
 def split_by(f):
     def fn(lx):
         a = ffilter(f, lx)
@@ -11,10 +17,21 @@ def isA(Type):
     def fn(a):
         return isinstance(a,Type)
     return fn
+
+def maxf(f):
+    def fn(lx):
+        return max(lx, key=f)
+    return fn
+
+def contains(key):
+    def fn(lx):
+        return key in lx
+    return fn
+
 def all(f):
     def fn(lx):
-        r = reduce (lambda a,b: a and f(b), lx,True)
-        pass
+        r = reduce (lambda a,b: a and f(b), lx, True)
+        return r
     return fn
 
 def almost(f):
@@ -36,6 +53,8 @@ def some(f):
         r = reduce (lambda a,b: a or f(b), lx, False)
         return r
     return fn
+
+any = some
 
 def indexOf(f):
     
@@ -59,3 +78,7 @@ def args2list(*args):
     return list(args)
         
 
+def pick_column(n):
+    def fn(lx):
+        return [i[n] for i in lx]
+    return fn
