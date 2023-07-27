@@ -110,12 +110,13 @@ for i in rx:
             pass
         
         pass
-    rh = ReduceHorner(tr.ht)
-    t = rh.reduce_r(r[0])
-    jjtag('horner-reduced', pretty(t))
     
     d = TermDFS(r[0])
 
     jjtag("short2", str(short2(r[0])))
     Open("short2.txt", "w").write(short2(r[0]))
+    rh = ReduceHorner(tr.ht)
+    t = rh.reduce_r(r[0])
+    jjtag('horner-reduced', pretty(t))
+    
     pass

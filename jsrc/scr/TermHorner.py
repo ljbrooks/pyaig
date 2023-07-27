@@ -1,7 +1,7 @@
 import math, pdb
 from scr.Term import *
 from scr.util import *
-
+from jtag3 import jtag
 from scr.TermRewriter import *
 # This is to recognize horner's rule, convert the expanded form into horner's rule
 
@@ -191,6 +191,7 @@ def expand_wide_or(top):
     pass
 
 class FuncSOP(FuncWideOR):
+    F=OP='sop'
     pass
 
 class ReduceHorner:
@@ -209,13 +210,16 @@ class ReduceHorner:
         #node = self.reduce_not(node)
         
         if TermWideNOR.accept(node):
-            pdb.set_trace()
+            #pdb.set_trace()
             r = TermWideNOR.recognize(node)
             assert isA(ExprInv)(r)
             rx = fmap(self.reduce_wide_and, r.car.termx)
             #r.car.termx = TermList(*tuple(rx)) # 
-            return ExprInv(FuncSOP(rx))    
-            pass
+
+            r = ExprInv(FuncSOP(rx))    
+            jtag("sop", str(r))
+            return r
+
         return node
         
     def reduce_wide_and(self, node):
@@ -235,20 +239,39 @@ class ReduceHorner:
         node = self.reduce_nor_as_SOP(node)
         
         if isA(ExprInv)(node) and isA(FuncSOP)(node.car):
-            for i in node.car.termx: # sum level
-                # this would reduce SOP as much as possible
+            #assert False
+            for i in node.car.termx:
                 i.termx = fmap(self.reduce_r, i.termx) # continue with SOP
-                while some(isA(FuncWideOR))(i.termx): 
-                    x = indexOf(isA(FuncWideOR))(i.termx)
-                    break
-                    pass
                 pass
 
-                pass
+            node.termx = [self.expand_SOP(node.car)]
             pass
         else:
             node.termx = fmap(self.reduce_r, node.termx)
             pass
         node = self.reduce_not(node) # possibly 
         return node
+    def expand_SOP(self, node):
+        # expand the a(b+c) as ac + bc and move the level up
+        assert isA(FuncSOP)(node)
+        def fn():
+            for p in node.termx:                  # product term
+                px = fmap(self.reduce_r, p.termx) # continue with SOP
+                s = indexOf(isA(FuncSOP))(px)
+                if s == -1: 
+                    yield FuncWideAnd(*tuple(px)) # original 
+                else:
+                    sterm = asList(px[s].termx)
+                    px .remove(px[s]) # remove this 
+                    for j in sterm:    # the rest of the terms
+                        yield FuncWideAnd(*tuple(px + asList(j.termx)))
+                        pass
+                    pass
+                pass
+            pass
+        return FuncSOP(*tuple(list(fn())))
+    
+    
     pass
+def asList(termx):
+    return termx if isinstance(termx, list) else termx.as_list

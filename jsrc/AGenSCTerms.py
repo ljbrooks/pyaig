@@ -202,6 +202,7 @@ if __name__ == "__main__":
         f = sys.argv[1]
         pass
     asc = AGenSCTerms(f)
-    from run import *
+    from run2 import *
 
     print("INFO:", "import run.py PASSED")
+

@@ -40,7 +40,7 @@ def some(f):
 def indexOf(f):
     
     def fn(lx, index=0):
-        if index > len(lx) : return -1
+        if index >= len(lx) : return -1
         if f(lx[index]): return index
         return fn(lx, index+1)
     return fn
