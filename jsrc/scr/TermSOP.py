@@ -227,6 +227,17 @@ class ReduceSOP:
     def reduce_not(self, node):
         if isA(ExprInv)(node) and isA(ExprInv)(node.car):
             return node.car.car
+        '''
+        1    3    4    5    6    7  ~.10522 sop.10628 (
+        1    3    4    5    6    7    9  wand.10627 (
+        1    3    4    5    6    7    9    10  ~.10516 +/.8612 (
+        1    3    4    5    6    7    9    10    12  {32}pp_0_7,
+        1    3    4    5    6    7    9    10    12  {33}pp_1_6))))),
+        '''
+        
+        if isA(ExprInv)(node) and isA(FuncWideAnd)(node.car) and len(node.car.termx) == 1 and isA(ExprInv)(node.car.car):
+            assert False
+            return node.car.car
         return node
 
     def reduce_r(self, node):   # top level reduce
@@ -270,5 +281,4 @@ class ReduceSOP:
     
     
     pass
-def asList(termx):
-    return termx if isinstance(termx, list) else termx.as_list
+

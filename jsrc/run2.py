@@ -113,7 +113,11 @@ for i in rx:
         pass
     
     d = TermDFS(r[0])
-
+    
+    rf = ReduceFoldr(tr.ht)
+    a = rf.reduce(r[0])
+    print(pretty(a))
+    #abort()
     jjtag("short2", str(short2(r[0])))
     Open("short2.txt", "w").write(short2(r[0]))
     rh = ReduceSOP(tr.ht)

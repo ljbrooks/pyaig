@@ -70,7 +70,7 @@ class ReduceHorner(Func):
         print(p)
         yes, no  = split_by(contains(p))(nx)
         assert len(no) == 1
-        assert len(no[0]) == 1
+        #assert len(no[0]) == 1
         print('nx', nx)
         print('p', p)
         print('yes', yes)

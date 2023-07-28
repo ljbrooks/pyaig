@@ -473,7 +473,13 @@ def tinv(a):
     
 def l1str(a):
     return a.__l1str__()
-        
+
+def expr_level(n):
+    if isA(Atom)(n): return 0
+    return 1 + max(fmap(expr_level, n.termx))
+
+def asList(termx):
+    return termx if isinstance(termx, list) else termx.as_list        
 if __name__ == '__main__':
 
     for i in 'abcdefghijklmnopqrstuvwxyz':

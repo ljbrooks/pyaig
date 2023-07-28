@@ -55,6 +55,28 @@ def some(f):
         return r
     return fn
 
+def on_cnt(f):
+    def fn(lx):
+        return len(on_set(f)(lx))
+    return fn
+
+def off_cnt(f):
+    def fn(lx):
+        return len(off_set(f)(lx))
+    return fn
+
+def on_set(f):
+    def fn(lx):
+        r = ffilter(f, lx)
+        return r
+    return fn
+
+def off_set(f):
+    def fn(lx):
+        r = ffilter(lambda i: not f(i), lx)
+        return r
+    return fn
+
 any = some
 
 def indexOf(f):
@@ -83,3 +105,5 @@ def pick_column(n):
     def fn(lx):
         return [i[n] for i in lx]
     return fn
+
+
