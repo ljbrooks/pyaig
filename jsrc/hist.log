@@ -596,3 +596,6 @@ macbeth 441 2023-07-28 23:43:07.453890 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 macbeth 442 2023-07-28 23:43:28.291963 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_9.aig.gz
 macbeth 443 2023-07-28 23:44:15.339896 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_10.aig.gz
 macbeth 444 2023-07-28 23:57:39.196379 pwd : /home/long/uu/pyaig/jsrc cmd : AGenSCTerms.py ../../genmul/test/8_8_U_SP_WT_KS_GenMul/8_8_U_SP_WT_KS_GenMul.v.aig_out_10.aig.gz
+m3 51 2023-08-01 19:25:22.579980 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/DT_USP_RP_16x16_noX_multgen/DT_USP_RP_16x16_noX_multgen.sv.aig_out_16.aig
+m3 52 2023-08-01 19:25:44.269203 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/DT_USP_RP_16x16_noX_multgen/DT_USP_RP_16x16_noX_multgen.sv.aig_out_16.aig
+m3 53 2023-08-04 00:55:06.422756 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/DT_USP_HC_8x8_noX_multgen/DT_USP_HC_8x8_noX_multgen.sv.aig_out_8.aig

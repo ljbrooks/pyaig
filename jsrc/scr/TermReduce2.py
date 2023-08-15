@@ -61,9 +61,9 @@ class TermReduce2:
                 ax = [u for u in a.termx]
                 assert isinstance(c1.termx, TermList)
                 assert isinstance(c2.termx, TermList)
-                jtag('reduce original): ', pretty(a))
-                jtag('reduce m(x): ', pretty(c1))
-                jtag('reduce m(s(x)+ m(y)): ', pretty(c2))
+                #jtag('reduce original): ', pretty(a))
+                #jtag('reduce m(x): ', pretty(c1))
+                #jtag('reduce m(s(x)+ m(y)): ', pretty(c2))
                 c2x = [i for i in c2.termx] # this is s(x), m(y)
                 t = len(c2x)
                 c2x.remove(cs)              # 
@@ -94,7 +94,7 @@ class TermReduce2:
                 assert t ==  len(ax) +1
                 a.termx = self.ht.add_termlist(ax)
                 a = self.ht.update(a)
-                jtag('reduce result: ', pretty(a))
+                #jtag('reduce result: ', pretty(a))
                 
                 pass
             break

@@ -9,6 +9,7 @@ def left_reduce(f, e):
 
     return fn
 
+foldl = left_reduce
 
 def left_reduce1(f):
     def fn(lx):
@@ -16,7 +17,7 @@ def left_reduce1(f):
         return left_reduce(f, lx[0])(lx[1:])
 
     return fn
-
+foldl1 = left_reduce1
 
 def right_reduce(f, e):
     def fn(lx):
@@ -24,7 +25,7 @@ def right_reduce(f, e):
         return reduce(lambda a, b: f(b, a), reversed(list(lx)), e)
 
     return fn
-
+foldr = right_reduce
 
 def right_reduce1(f):
     def fn(lx):
@@ -32,7 +33,7 @@ def right_reduce1(f):
 
     return fn
 
-
+foldr1 = right_reduce1
 def accumulate_l(f, e):  # ,  lx):
     def fn(lx):
         if not lx:
@@ -92,3 +93,7 @@ zzip = fzip
 
 def freversed(lx):
     return list(reversed(lx))
+def pick_column(n):
+    def fn(lx):
+        return [i[n] for i in lx]
+    return fn
