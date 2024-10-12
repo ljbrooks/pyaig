@@ -13,6 +13,8 @@ from itertools import product
 def rca(x, y):
     # ripple adder is a combinator
 
+    # x[0] is the MSB
+
     if g((x[0], y[0])):
         x, y = [0] + x, [0] + y  # keep the carry bits
 
@@ -20,12 +22,16 @@ def rca(x, y):
 
     fx = lambda x, y: (maj(x[0], x[1], y[0]), s(x[0], x[1], y[0]))
     f = accumulate_r(lambda a, b: fx(a, b), (0, 0))(zip(x, y))[:-1]
+
+    
     print(f)
     return [i[1] for i in f]
 
 
 def cla(x, y, cin=0):
     # carry look ahead
+
+    # see adder_lib for p,g definition, p is xor, g is and
     ps = fmap(p, zip(x, y))
     gs = fmap(lambda i: g(i), zip(x, y))
 

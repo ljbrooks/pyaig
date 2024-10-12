@@ -599,3 +599,5 @@ macbeth 444 2023-07-28 23:57:39.196379 pwd : /home/long/uu/pyaig/jsrc cmd : AGen
 m3 51 2023-08-01 19:25:22.579980 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/DT_USP_RP_16x16_noX_multgen/DT_USP_RP_16x16_noX_multgen.sv.aig_out_16.aig
 m3 52 2023-08-01 19:25:44.269203 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/DT_USP_RP_16x16_noX_multgen/DT_USP_RP_16x16_noX_multgen.sv.aig_out_16.aig
 m3 53 2023-08-04 00:55:06.422756 pwd : /home/long/work/Gitee/pyaig/jsrc cmd : AGenSCTerms.py ../../multgen/test/DT_USP_HC_8x8_noX_multgen/DT_USP_HC_8x8_noX_multgen.sv.aig_out_8.aig
+Jiangs-MacBook-Air.local 0 2024-10-12 12:51:53.544789 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AigerCoiCluster.py
+Jiangs-MacBook-Air.local 1 2024-10-12 13:02:03.673104 pwd : /Users/jianglong/work/Gitee/pyaig/jsrc cmd : AigerProfile.py
