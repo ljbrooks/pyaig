@@ -1,8 +1,10 @@
-from __future__ import print_function
+#from __future__ import print_function
 
 import itertools
 from past.builtins import xrange
-from future.moves.itertools import zip_longest
+
+#from future.moves.
+from itertools import zip_longest
 
 from .aig import AIG
 from .aig_io import write_aiger
